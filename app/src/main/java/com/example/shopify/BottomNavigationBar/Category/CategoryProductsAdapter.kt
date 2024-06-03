@@ -12,7 +12,7 @@ import com.example.shopify.R
 
 class CategoryProductsAdapter(private val context: Context) : RecyclerView.Adapter<CategoryProductsAdapter.ViewHolder>() {
 
-    private val productImages = listOf(R.drawable.clothes1, R.drawable.clothes2, R.drawable.shoes2, R.drawable.clothes, R.drawable.clothes1, R.drawable.clothes2, R.drawable.shoes2, R.drawable.clothes)
+    private val productImages = listOf(R.drawable.clothes1, R.drawable.clothes2, R.drawable.shoes2, R.drawable.clothes, R.drawable.bag2, R.drawable.clothes2, R.drawable.shoes2, R.drawable.clothes)
     private val productNames = listOf("Product1", "Product2", "Product3", "Product4", "Product1", "Product2", "Product3", "Product4")
     private val productPrices = listOf("20.00", "50.00", "80.00", "60.00", "20.00", "50.00", "80.00", "60.00")
 

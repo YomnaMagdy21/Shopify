@@ -4,5 +4,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="search_icon_color">#979494</color>
     <color name="dark_gray">#6C6B6B</color>
+    <color name="blue">#4EA7EA</color>
 
 </resources>
