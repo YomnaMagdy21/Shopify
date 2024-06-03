@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".BottomNavigationBar.Category.CategoryFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+       app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/home_frag_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="30dp"
+                android:text="@string/category_title"
+                android:textColor="@color/white"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- Search Part -->
+            <EditText
+                android:id="@+id/search_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginVertical="20dp"
+                android:background="@drawable/searchview_style"
+                android:hint="@string/search"
+                android:inputType="text"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/home_frag_title"
+
+                />
+
+            <!-- Categories Part -->
+
+            <LinearLayout
+                android:id="@+id/ll_categories"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="16dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/search_edit_text">
+
+                <!-- Main Categories -->
+
+                <LinearLayout
+                    android:id="@+id/ll_main_categories"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="5dp"
+                    android:layout_marginVertical="10dp"
+                    android:orientation="horizontal"
+                    android:weightSum="4"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/ll_categories">
+
+                    <TextView
+                        android:id="@+id/tv_main_category_all"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="3dp"
+                        android:layout_marginStart="6dp"
+                        android:background="@drawable/rounded_selected_text_view"
+                        android:gravity="center"
+                        android:paddingHorizontal="10dp"
+                        android:paddingVertical="10dp"
+                        android:text="@string/all"
+                        android:weightSum="1"
+                        android:textColor="@color/white" />
+
+                    <TextView
+                        android:id="@+id/tv_main_category_women"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="3dp"
+                        android:background="@drawable/rounded_unselected_text_view"
+                        android:gravity="center"
+                        android:paddingHorizontal="10dp"
+                        android:paddingVertical="10dp"
+                        android:weightSum="1"
+                        android:text="@string/women"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/tv_main_category_men"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="3dp"
+                        android:background="@drawable/rounded_unselected_text_view"
+                        android:gravity="center"
+                        android:paddingHorizontal="10dp"
+                        android:paddingVertical="10dp"
+                        android:text="@string/men"
+                        android:weightSum="1"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/tv_main_category_kids"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="3dp"
+                        android:background="@drawable/rounded_unselected_text_view"
+                        android:gravity="center"
+                        android:paddingHorizontal="10dp"
+                        android:paddingVertical="10dp"
+                        android:text="@string/kids"
+                        android:weightSum="1"
+                        android:textColor="@color/black" />
+                </LinearLayout>
+
+                <!-- Sub Categories -->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/ll_sub_categories"
+                    android:layout_marginHorizontal="5dp"
+                    android:layout_marginVertical="10dp"
+                    android:orientation="horizontal"
+                    android:weightSum="3"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/ll_main_categories">
+
+                    <ImageView
+                        android:id="@+id/iv_sub_cat_clothes"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="10dp"
+                        android:src="@drawable/clothes"
+                        android:background="@drawable/rounded_unselected_image_view_filter"
+                        android:scaleType="centerCrop"
+                        android:clipToOutline="true" />
+
+                    <ImageView
+                        android:id="@+id/iv_sub_cat_shoes"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginHorizontal="10dp"
+                        android:src="@drawable/shoes"
+                        android:background="@drawable/rounded_unselected_image_view_filter"
+                        android:scaleType="centerCrop"
+                        android:clipToOutline="true" />
+
+                    <ImageView
+                        android:id="@+id/iv_sub_cat_bags"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginHorizontal="10dp"
+                        android:src="@drawable/bag2"
+                        android:background="@drawable/rounded_unselected_image_view_filter"
+                        android:scaleType="centerCrop"
+                        android:clipToOutline="true" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/rv_products_in_category"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ll_categories"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="75dp"
+                android:layout_marginTop="10dp"/>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
