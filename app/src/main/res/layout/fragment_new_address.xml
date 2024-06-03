@@ -5,42 +5,39 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F7F7F7"
-    tools:context=".setting.settingFragment">
+    tools:context=".setting.newAddress.newAddress">
 
     <TextView
         android:id="@+id/textViewCardList"
-        android:layout_width="249dp"
-        android:layout_height="66dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="56dp"
-        android:layout_marginEnd="137dp"
-        android:text="Setting"
+        android:layout_width="334dp"
+        android:layout_height="68dp"
+        android:layout_marginTop="52dp"
+        android:layout_marginEnd="36dp"
+        android:text="New Address"
         android:textSize="48sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="@+id/guideline3"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
+        android:id="@+id/guideline3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="25dp" />
+        app:layout_constraintGuide_end="384dp" />
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardView1Adress"
+        android:id="@+id/cardViewBuilding"
         android:layout_width="355dp"
         android:layout_height="73dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="3dp"
         android:layout_marginTop="80dp"
         android:layout_marginEnd="23dp"
         app:cardCornerRadius="12dp"
         app:cardElevation="10dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="@+id/guideline3"
         app:layout_constraintTop_toBottomOf="@+id/textViewCardList">
 
         <LinearLayout
@@ -52,33 +49,33 @@
 
             <ImageView
                 android:id="@+id/icon"
-                android:layout_width="46dp"
-                android:layout_height="49dp"
-                android:src="@drawable/address_svgrepo_com" />
+                android:layout_width="40dp"
+                android:layout_height="43dp"
+                android:src="@drawable/building_01_svgrepo_com" />
 
             <TextView
                 android:id="@+id/cardText"
                 android:layout_width="199dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:text="Adress"
+                android:text="Building"
                 android:textColor="#CFC7C7"
                 android:textSize="20sp" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardView2Currnucy"
+        android:id="@+id/cardViewCity"
         android:layout_width="355dp"
         android:layout_height="73dp"
-        android:layout_marginStart="34dp"
+        android:layout_marginStart="3dp"
         android:layout_marginTop="22dp"
         android:layout_marginEnd="23dp"
         app:cardCornerRadius="12dp"
         app:cardElevation="10dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView1Adress">
+        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        app:layout_constraintTop_toBottomOf="@+id/cardViewBuilding">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -88,34 +85,34 @@
             android:padding="16dp">
 
             <ImageView
-                android:id="@+id/iconCurruncy"
-                android:layout_width="45dp"
-                android:layout_height="36dp"
-                android:src="@drawable/currency_dollar_svgrepo_com" />
+                android:id="@+id/icon2"
+                android:layout_width="38dp"
+                android:layout_height="37dp"
+                android:src="@drawable/city_svgrepo_com" />
 
             <TextView
                 android:id="@+id/cardText2"
                 android:layout_width="199dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:text="Curruncy"
+                android:text="City"
                 android:textColor="#CFC7C7"
                 android:textSize="20sp" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardView3About"
+        android:id="@+id/cardViewCountry"
         android:layout_width="355dp"
         android:layout_height="73dp"
-        android:layout_marginStart="34dp"
+        android:layout_marginStart="3dp"
         android:layout_marginTop="22dp"
         android:layout_marginEnd="23dp"
         app:cardCornerRadius="12dp"
         app:cardElevation="10dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView2Currnucy">
+        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        app:layout_constraintTop_toBottomOf="@+id/cardViewCity">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -125,32 +122,42 @@
             android:padding="16dp">
 
             <ImageView
-                android:id="@+id/iconAbout"
-                android:layout_width="45dp"
-                android:layout_height="35dp"
-                android:src="@drawable/about_filled_svgrepo_com" />
+                android:id="@+id/icon3"
+                android:layout_width="34dp"
+                android:layout_height="37dp"
+                android:src="@drawable/country_flag_flag02_svgrepo_com" />
 
             <TextView
                 android:id="@+id/cardText3"
                 android:layout_width="199dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:text="About Us"
+                android:text="Country"
                 android:textColor="#CFC7C7"
                 android:textSize="20sp" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
     <Button
-        android:id="@+id/logOutButton"
+        android:id="@+id/confirmButton"
         android:layout_width="204dp"
         android:layout_height="49dp"
         android:layout_marginBottom="16dp"
         android:backgroundTint="#000000"
-        android:text="Log Out"
+        android:text="Confirm"
         android:textSize="20sp"
         app:cornerRadius="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/backImage"
+        android:layout_width="46dp"
+        android:layout_height="29dp"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/chevron_back_sharp_svgrepo_com"
+        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
