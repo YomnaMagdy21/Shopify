@@ -31,7 +31,7 @@ class settingFragment : Fragment() {
         cardView1Adress.setOnClickListener {
             val newFragment = myAddressFragment()
             parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, newFragment)
+                .replace(R.id.frame_layout, newFragment)
                 .addToBackStack(null)
                 .commit()
         }

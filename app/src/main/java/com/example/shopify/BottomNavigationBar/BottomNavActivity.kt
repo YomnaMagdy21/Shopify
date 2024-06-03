@@ -12,6 +12,7 @@ import com.example.shopify.BottomNavigationBar.Home.HomeFragment
 import com.example.shopify.BottomNavigationBar.Me.MeFragment
 import com.example.shopify.R
 import com.example.shopify.databinding.ActivityBottomNavBinding
+import com.example.shopify.shoppingCard.view.shoppingCardFragment
 
 
 class BottomNavActivity : AppCompatActivity() {
@@ -31,7 +32,7 @@ class BottomNavActivity : AppCompatActivity() {
             when (item.itemId) {
                 R.id.home_id -> replaceFragments(HomeFragment())
                 R.id.category_id -> replaceFragments(CategoryFragment())
-                R.id.cart_id -> replaceFragments(CartFragment())
+                R.id.cart_id -> replaceFragments(shoppingCardFragment())
                 R.id.fav_id -> replaceFragments(FavoriteFragment())
                 R.id.me_id -> replaceFragments(MeFragment())
             }

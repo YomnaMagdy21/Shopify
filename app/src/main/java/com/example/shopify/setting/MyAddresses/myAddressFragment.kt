@@ -33,7 +33,7 @@ class myAddressFragment : Fragment() {
         addNewAddress.setOnClickListener {
             val newFragment = newAddress()
             parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, newFragment)
+                .replace(R.id.frame_layout, newFragment)
                 .addToBackStack(null)
                 .commit()
         }
@@ -42,7 +42,7 @@ class myAddressFragment : Fragment() {
         back.setOnClickListener {
             val newFragment = settingFragment()
             parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, newFragment)
+                .replace(R.id.frame_layout, newFragment)
                 .addToBackStack(null)
                 .commit()
         }

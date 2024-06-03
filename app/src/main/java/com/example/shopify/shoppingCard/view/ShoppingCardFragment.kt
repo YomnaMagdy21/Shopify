@@ -47,7 +47,7 @@ class shoppingCardFragment : Fragment() {
         checkOut.setOnClickListener {
             val newFragment = paymentFragment()
             parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, newFragment)
+                .replace(R.id.frame_layout, newFragment)
                 .addToBackStack(null)
                 .commit()
         }
