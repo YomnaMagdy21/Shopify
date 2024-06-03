@@ -7,8 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import com.example.shopify.R
-import com.example.shopify.setting.settingFragment
-import com.example.shopify.shoppingCard.shoppingCardFragment
+import com.example.shopify.shoppingCard.view.shoppingCardFragment
 
 class paymentFragment : Fragment() {
     // TODO: Rename and change types of parameters

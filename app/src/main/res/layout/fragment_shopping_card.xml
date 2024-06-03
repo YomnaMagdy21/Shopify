@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F7F7F7"
-    tools:context=".shoppingCard.shoppingCardFragment">
+    tools:context=".shoppingCard.view.shoppingCardFragment">
 
     <TextView
         android:id="@+id/textView"
@@ -54,9 +54,9 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="349dp"
-        android:layout_height="187dp"
+        android:id="@+id/recyclerViewCardList"
+        android:layout_width="356dp"
+        android:layout_height="217dp"
         android:layout_marginTop="28dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.17"
