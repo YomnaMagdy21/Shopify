@@ -1,23 +1,22 @@
-package com.example.shopify.shoppingCard
+package com.example.shopify.payment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
 import com.example.shopify.R
-import com.example.shopify.payment.paymentFragment
-import com.example.shopify.setting.MyAddresses.myAddressFragment
+import com.example.shopify.setting.settingFragment
+import com.example.shopify.shoppingCard.shoppingCardFragment
 
-
-class shoppingCardFragment : Fragment() {
-
+class paymentFragment : Fragment() {
+    // TODO: Rename and change types of parameters
+    private var param1: String? = null
+    private var param2: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(
@@ -25,20 +24,19 @@ class shoppingCardFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_shopping_card, container, false)
+        return inflater.inflate(R.layout.fragment_payment, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val checkOut = view.findViewById<Button>(R.id.checkOutButton)
-        checkOut.setOnClickListener {
-            val newFragment = paymentFragment()
+        val back = view.findViewById<ImageView>(R.id.backImage)
+        back.setOnClickListener {
+            val newFragment = shoppingCardFragment()
             parentFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, newFragment)
                 .addToBackStack(null)
                 .commit()
         }
-
     }
 }
