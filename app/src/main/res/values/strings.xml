@@ -9,4 +9,10 @@
     <string name="home_title">Home</string>
     <string name="brands_title">Brands</string>
     <string name="search">Search</string>
+    <string name="category_title">Category</string>
+    <string name="all">All</string>
+    <string name="kids">Kids</string>
+    <string name="men">Men</string>
+    <string name="women">Women</string>
+    <string name="egp">EGP</string>
 </resources>

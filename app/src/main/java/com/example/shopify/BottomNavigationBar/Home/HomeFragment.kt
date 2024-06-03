@@ -9,8 +9,6 @@ import com.example.shopify.R
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-
-
 class HomeFragment : Fragment() {
 
     private lateinit var brandsRecyclerView: RecyclerView
