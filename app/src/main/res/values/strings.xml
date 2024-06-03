@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">Shopify</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
     <string name="home">Home</string>
     <string name="category">Category</string>
     <string name="favorite">Favorite</string>
@@ -15,4 +19,5 @@
     <string name="men">Men</string>
     <string name="women">Women</string>
     <string name="egp">EGP</string>
+
 </resources>
