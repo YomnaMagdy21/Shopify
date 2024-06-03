@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F7F7F7"
+    tools:context=".payment.paymentFragment" >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="415dp"
+        android:layout_height="147dp"
+        android:background="#FFFEFE"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/placeOrderButton"
+            android:layout_width="204dp"
+            android:layout_height="49dp"
+            android:layout_marginBottom="12dp"
+            android:backgroundTint="#000000"
+            android:text="Place Order"
+            android:textSize="20sp"
+            app:cornerRadius="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Total Price"
+            android:textColor="#A28E8E"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.463"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:text="2349.9 EGP"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/textView2"
+            app:layout_constraintStart_toStartOf="@+id/textView2"
+            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/textViewCardList"
+        android:layout_width="249dp"
+        android:layout_height="66dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="56dp"
+        android:layout_marginEnd="137dp"
+        android:text="Payment"
+        android:textSize="48sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/guideline5"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardViewCash"
+        android:layout_width="355dp"
+        android:layout_height="73dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="33dp"
+        android:layout_marginEnd="23dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline5"
+        app:layout_constraintTop_toBottomOf="@+id/textViewCardList">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+            <ImageView
+                android:id="@+id/iconPay"
+                android:layout_width="34dp"
+                android:layout_height="37dp"
+                android:src="@drawable/cash_svgrepo_com" />
+
+            <TextView
+                android:id="@+id/cardTextCash"
+                android:layout_width="199dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="Cash On Delivery"
+                android:textColor="#070707"
+                android:textSize="20sp" />
+
+            <CheckBox
+                android:id="@+id/checkBoxCash"
+                android:layout_width="63dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="9dp"
+                android:layout_weight="5" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardViewOnline"
+        android:layout_width="355dp"
+        android:layout_height="73dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="22dp"
+        android:layout_marginEnd="23dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline5"
+        app:layout_constraintTop_toBottomOf="@+id/cardViewCash">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+            <ImageView
+                android:id="@+id/iconPayOnline"
+                android:layout_width="34dp"
+                android:layout_height="37dp"
+                android:src="@drawable/payment_svgrepo_com__1_" />
+
+            <TextView
+                android:id="@+id/cardTextOnline"
+                android:layout_width="199dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="Online Payment"
+                android:textColor="#070707"
+                android:textSize="20sp" />
+
+            <CheckBox
+                android:id="@+id/checkBoxOnline"
+                android:layout_width="66dp"
+                android:layout_height="58dp"
+                android:layout_marginStart="9dp"
+                android:layout_weight="5" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="25dp" />
+
+    <ImageView
+        android:id="@+id/backImage"
+        android:layout_width="46dp"
+        android:layout_height="29dp"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/chevron_back_sharp_svgrepo_com"
+        app:layout_constraintStart_toStartOf="@+id/guideline5"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
