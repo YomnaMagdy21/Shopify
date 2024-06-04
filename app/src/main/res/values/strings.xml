@@ -31,5 +31,11 @@
     <string name="egp">EGP</string>
     <string name="order_list_title">Order List</string>
     <string name="created_at">Created At:</string>
+    <string name="order_item_title">Order Item</string>
+    <string name="name">Name: </string>
+    <string name="address">Address:</string>
+    <string name="phone_number">Phone Number:</string>
+    <string name="total_price">Total Price:</string>
+    <string name="payment_method">Payment Method:</string>
 
 </resources>

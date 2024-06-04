@@ -35,7 +35,7 @@ class BottomNavActivity : AppCompatActivity() {
                 R.id.home_id -> replaceFragments(HomeFragment())
                 R.id.category_id -> replaceFragments(CategoryFragment())
                 R.id.cart_id -> replaceFragments(shoppingCardFragment())
-                R.id.fav_id -> replaceFragments(OrderListFragment())
+                R.id.fav_id -> replaceFragments(FavoriteFragment())
                 R.id.me_id -> replaceFragments(MeFragment())
             }
             true

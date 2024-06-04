@@ -27,7 +27,7 @@ class OrderListAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.dateOrderCreatedAt.text = dates[position]
-        holder.priceOrder.text = "${prices[position]} $currency" // Use the currency variable
+        holder.priceOrder.text = "${prices[position]} $currency"
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/backgroundColor1"
+    tools:context=".BottomNavigationBar.orderItem.OrderItemFragment">
+
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="28dp" />
+
+    <ImageView
+        android:id="@+id/iv_backRow"
+        android:layout_width="46dp"
+        android:layout_height="29dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/chevron_back_sharp_svgrepo_com"
+        app:layout_constraintStart_toStartOf="@+id/guideline4"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/tv_order_item"
+        android:layout_width="322dp"
+        android:layout_height="69dp"
+        android:layout_marginTop="56dp"
+        android:layout_marginEnd="137dp"
+        android:text="@string/order_item_title"
+        android:textSize="48sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/guideline4"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/const_order_item_ifo"
+        android:layout_marginVertical="30dp"
+        android:layout_marginHorizontal="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:padding="10dp"
+        app:layout_constraintTop_toBottomOf="@+id/tv_order_item"
+        >
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="10dp">
+
+            <LinearLayout
+                android:padding="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/ll_info_part">
+                <!-- Name -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2"
+                android:id="@+id/ll_first_row">
+
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/client_name_title"
+                android:text="@string/name"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:layout_weight="1"
+                android:padding="10dp"/>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/client_name_value"
+                    android:text="Yomna"
+                    android:textSize="18sp"
+                    android:layout_weight="1"
+                    android:padding="10dp"/>
+            </LinearLayout>
+
+                <!-- Address -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2"
+                    android:id="@+id/ll_second_row">
+
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/client_address_title"
+                        android:text="@string/address"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:layout_weight="1"
+                        android:padding="10dp"/>
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/client_address_value"
+                        android:text="Alexandria"
+                        android:textSize="18sp"
+                        android:layout_weight="1"
+                        android:padding="10dp"/>
+                </LinearLayout>
+
+
+                <!-- Phone Number -->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2"
+                    android:id="@+id/ll_third_row">
+
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/client_phone_title"
+                        android:text="@string/phone_number"
+                        android:layout_weight="1"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:padding="10dp"/>
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/client_phone_value"
+                        android:text="012002587123"
+                        android:layout_weight="1"
+                        android:textSize="18sp"
+                        android:padding="10dp"/>
+                </LinearLayout>
+
+                <!-- Total Price -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2"
+                    android:id="@+id/ll_fourth_row">
+
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/client_total_price_title"
+                        android:text="@string/total_price"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:layout_weight="1"
+                        android:padding="10dp"/>
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/client_total_price_value"
+                        android:text="1000.00 EGP"
+                        android:textSize="18sp"
+                        android:layout_weight="1"
+                        android:padding="10dp"/>
+                </LinearLayout>
+
+
+                <!-- Payment Method -->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2"
+                    android:id="@+id/ll_fifth_row">
+
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/client_payment_method_title"
+                        android:text="@string/payment_method"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:layout_weight="1"
+                        android:padding="10dp"/>
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/client_payment_method_value"
+                        android:text="1000.00 EGP"
+                        android:textSize="18sp"
+                        android:layout_weight="1"
+                        android:padding="10dp"/>
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_order_items"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        app:layout_constraintTop_toBottomOf="@+id/const_order_item_ifo"
+        app:layout_constraintStart_toStartOf="@+id/guideline4"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
