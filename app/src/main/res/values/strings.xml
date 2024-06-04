@@ -2,6 +2,18 @@
     <string name="app_name">Shopify</string>
 
     <!-- TODO: Remove or change this placeholder text -->
+
+    <string name="create_your_account">Create Your Account</string>
+    <string name="email">Email</string>
+    <string name="signup">SIGN UP</string>
+    <string name="or">OR</string>
+    <string name="aleardy_have_an_account">Already have an account?</string>
+    <string name="sign_in">Sign In</string>
+    <string name="login">Login</string>
+    <string name="do_not_have_an_account">Don\'t have an account?</string>
+
+
+    <!-- TODO: Remove or change this placeholder text -->
     <string name="home">Home</string>
     <string name="category">Category</string>
     <string name="favorite">Favorite</string>
@@ -17,5 +29,6 @@
     <string name="men">Men</string>
     <string name="women">Women</string>
     <string name="egp">EGP</string>
+
 
 </resources>
