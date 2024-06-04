@@ -12,8 +12,8 @@ import com.example.shopify.BottomNavigationBar.Home.HomeFragment
 import com.example.shopify.BottomNavigationBar.Me.MeFragment
 import com.example.shopify.BottomNavigationBar.OrderList.OrderListFragment
 import com.example.shopify.R
+import com.example.shopify.SignInFragment
 import com.example.shopify.databinding.ActivityBottomNavBinding
-
 import com.example.shopify.shoppingCard.view.shoppingCardFragment
 
 
