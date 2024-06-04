@@ -20,17 +20,19 @@
 
             <TextView
                 android:id="@+id/home_frag_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="322dp"
+                android:layout_height="69dp"
                 android:text="@string/home_title"
-                android:textSize="30sp"
-                android:textColor="@color/white"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="30dp"
+                android:layout_marginEnd="137dp"
+                android:layout_marginStart="28dp"
+                android:textSize="48sp"
                 android:textStyle="bold"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"/>
 
             <!-- Search Part -->
             <EditText
@@ -89,7 +91,6 @@
                     android:text="@string/brands_title"
                     android:textStyle="bold"
                     android:textSize="25sp"
-                    android:textColor="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
