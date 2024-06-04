@@ -53,14 +53,16 @@
                 android:layout_height="43dp"
                 android:src="@drawable/building_01_svgrepo_com" />
 
-            <TextView
-                android:id="@+id/cardText"
-                android:layout_width="199dp"
-                android:layout_height="wrap_content"
+            <EditText
+                android:id="@+id/editTextBuilding"
+                android:layout_width="271dp"
+                android:layout_height="56dp"
                 android:layout_marginStart="16dp"
-                android:text="Building"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="text"
                 android:textColor="#CFC7C7"
-                android:textSize="20sp" />
+                android:text="Building" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -90,14 +92,17 @@
                 android:layout_height="37dp"
                 android:src="@drawable/city_svgrepo_com" />
 
-            <TextView
-                android:id="@+id/cardText2"
-                android:layout_width="199dp"
-                android:layout_height="wrap_content"
+            <EditText
+                android:id="@+id/editTextCity"
+                android:layout_width="267dp"
+                android:layout_height="57dp"
                 android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="text"
                 android:text="City"
-                android:textColor="#CFC7C7"
-                android:textSize="20sp" />
+                android:textColor="#CFC7C7" />
+
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -127,14 +132,17 @@
                 android:layout_height="37dp"
                 android:src="@drawable/country_flag_flag02_svgrepo_com" />
 
-            <TextView
-                android:id="@+id/cardText3"
-                android:layout_width="199dp"
-                android:layout_height="wrap_content"
+            <EditText
+                android:id="@+id/editTextCountry"
+                android:layout_width="273dp"
+                android:layout_height="57dp"
                 android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="text"
                 android:text="Country"
-                android:textColor="#CFC7C7"
-                android:textSize="20sp" />
+                android:textColor="#CFC7C7" />
+
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -142,7 +150,7 @@
         android:id="@+id/confirmButton"
         android:layout_width="204dp"
         android:layout_height="49dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="74dp"
         android:backgroundTint="#000000"
         android:text="Confirm"
         android:textSize="20sp"

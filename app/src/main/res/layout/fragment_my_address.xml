@@ -42,7 +42,7 @@
         android:id="@+id/AddAddressButton"
         android:layout_width="204dp"
         android:layout_height="49dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="74dp"
         android:backgroundTint="#000000"
         android:text="New Address"
         android:textSize="20sp"
