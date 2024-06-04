@@ -7,17 +7,6 @@
     android:background="#F7F7F7"
     tools:context=".BottomNavigationBar.Me.MeFragment">
 
-    <ImageView
-        android:id="@+id/imageView2settingIcon"
-        android:layout_width="43dp"
-        android:layout_height="42dp"
-        android:layout_marginTop="24dp"
-        android:src="@drawable/setting_2_svgrepo_com"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.909"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <TextView
         android:id="@+id/textViewCardList"
         android:layout_width="249dp"
@@ -110,6 +99,43 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:text="WishList"
+                android:textColor="#0B0A0A"
+                android:textSize="20sp" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardViewSetting"
+        android:layout_width="355dp"
+        android:layout_height="73dp"
+        android:layout_marginStart="34dp"
+        android:layout_marginTop="22dp"
+        android:layout_marginEnd="23dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardViewWishList">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+            <ImageView
+                android:id="@+id/iconSetting"
+                android:layout_width="45dp"
+                android:layout_height="36dp"
+                android:src="@drawable/setting_2_svgrepo_com" />
+
+            <TextView
+                android:id="@+id/cardTextsetting"
+                android:layout_width="199dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="Setting"
                 android:textColor="#0B0A0A"
                 android:textSize="20sp" />
         </LinearLayout>
