@@ -41,16 +41,6 @@ class SignInFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_sign_in, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        var logIn = view.findViewById<Button>(R.id.button)
-        logIn.setOnClickListener{
-            val intent = Intent(requireContext(), BottomNavActivity::class.java)
-            startActivity(intent)
-        }
-    }
-
     companion object {
         /**
          * Use this factory method to create a new instance of

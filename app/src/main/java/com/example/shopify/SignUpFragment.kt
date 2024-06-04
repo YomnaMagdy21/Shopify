@@ -39,19 +39,6 @@ class SignUpFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_sign_up, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        var logInback = view.findViewById<Button>(R.id.buttonSignUp)
-        logInback.setOnClickListener{
-            val newFragment = SignInFragment()
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.frame_layout, newFragment)
-                .addToBackStack(null)
-                .commit()
-        }
-    }
-
     companion object {
         /**
          * Use this factory method to create a new instance of
