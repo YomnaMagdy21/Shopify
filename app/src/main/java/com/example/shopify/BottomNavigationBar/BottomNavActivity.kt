@@ -7,7 +7,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.example.shopify.BottomNavigationBar.Cart.CartFragment
 import com.example.shopify.BottomNavigationBar.Category.CategoryFragment
-import com.example.shopify.BottomNavigationBar.Favorite.FavoriteFragment
+import com.example.shopify.BottomNavigationBar.Favorite.view.FavoriteFragment
 import com.example.shopify.BottomNavigationBar.Home.HomeFragment
 import com.example.shopify.BottomNavigationBar.Me.MeFragment
 import com.example.shopify.BottomNavigationBar.OrderList.OrderListFragment
