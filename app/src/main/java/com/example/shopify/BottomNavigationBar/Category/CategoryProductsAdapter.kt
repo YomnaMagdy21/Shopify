@@ -14,7 +14,7 @@ class CategoryProductsAdapter(private val context: Context) : RecyclerView.Adapt
 
     private val productImages = listOf(R.drawable.clothes1, R.drawable.clothes2, R.drawable.shoes2, R.drawable.clothes, R.drawable.bag2, R.drawable.clothes2, R.drawable.shoes2, R.drawable.clothes)
     private val productNames = listOf("Product1", "Product2", "Product3", "Product4", "Product1", "Product2", "Product3", "Product4")
-    private val productPrices = listOf("20.00", "50.00", "80.00", "60.00", "20.00", "50.00", "80.00", "60.00")
+    private val productPrices = listOf("20.00 EGP", "50.00 EGP", "80.00 EGP", "60.00 EGP", "20.00 EGP", "50.00 EGP", "80.00 EGP", "60.00 EGP")
 
     override fun getItemCount(): Int {
         return productImages.size
@@ -30,14 +30,12 @@ class CategoryProductsAdapter(private val context: Context) : RecyclerView.Adapt
         holder.productImage.setImageResource(productImages[position])
         holder.productName.text = productNames[position]
         holder.productPrice.text = productPrices[position]
-        holder.productCurrency.text = context.getString(R.string.egp)
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val productImage: ImageView = itemView.findViewById(R.id.iv_product_category)
         val productName: TextView = itemView.findViewById(R.id.tv_product_name_category_card)
         val productPrice: TextView = itemView.findViewById(R.id.tv_product_price_category_card)
-        val productCurrency: TextView = itemView.findViewById(R.id.tv_product_currency_category_card)
         val card: CardView = itemView.findViewById(R.id.products_card_category)
     }
 }

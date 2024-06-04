@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/card_order_list"
+    android:layout_marginTop="22dp"
+    android:layout_marginHorizontal="20dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="10dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+
+
+
+    <LinearLayout
+        android:id="@+id/ll_order_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="2"
+        android:padding="16dp">
+
+        <!-- Created At -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/ll_order_created_at_row"
+            android:orientation="horizontal"
+            android:weightSum="2"
+
+            >
+            <TextView
+                android:id="@+id/tv_created_at_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/created_at"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:weightSum="1"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="10dp"/>
+
+            <TextView
+                android:id="@+id/tv_created_at_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2023-05-31"
+                android:textSize="18sp"
+                android:weightSum="1"
+                android:layout_marginStart="50dp"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="10dp"/>
+
+        </LinearLayout>
+
+        <!-- Price -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/ll_order_price_row"
+            android:orientation="horizontal"
+            android:weightSum="3"
+
+            >
+            <TextView
+                android:id="@+id/tv_price_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Price"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:weightSum="1"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="10dp"/>
+
+            <TextView
+                android:id="@+id/tv_price_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="200.00 EGP"
+                android:textSize="18sp"
+                android:weightSum="1"
+                android:layout_marginStart="97dp"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="10dp"/>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
