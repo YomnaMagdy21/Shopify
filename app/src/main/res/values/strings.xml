@@ -29,6 +29,7 @@
     <string name="men">Men</string>
     <string name="women">Women</string>
     <string name="egp">EGP</string>
-
+    <string name="order_list_title">Order List</string>
+    <string name="created_at">Created At:</string>
 
 </resources>
