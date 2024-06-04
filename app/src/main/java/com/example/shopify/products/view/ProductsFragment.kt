@@ -1,0 +1,62 @@
+package com.example.shopify.products.view
+
+import android.os.Bundle
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.recyclerview.widget.GridLayoutManager
+import com.example.shopify.BottomNavigationBar.Favorite.model.Favorite
+import com.example.shopify.BottomNavigationBar.Favorite.view.FavoriteAdapter
+import com.example.shopify.R
+import com.example.shopify.databinding.FragmentFavoriteBinding
+import com.example.shopify.databinding.FragmentProductsBinding
+
+
+class ProductsFragment : Fragment() {
+
+
+    private lateinit var binding: FragmentProductsBinding
+    private lateinit var productAdapter: ProductAdapter
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        binding = FragmentProductsBinding.inflate(inflater, container, false)
+
+
+        setUpRecyclerView()
+        val fakeData = generateFakeProduct()
+        productAdapter.submitList(fakeData)
+        return binding.root
+    }
+
+
+    fun generateFakeProduct(): List<Favorite> {
+        return listOf(
+            Favorite(name = "Product Item 1", img = R.drawable.bag2),
+            Favorite(name = "Product Item 2", img = R.drawable.bag),
+            Favorite(name = "Product Item 3", img = R.drawable.clothes2),
+            Favorite(name = "Product Item 4", img = R.drawable.bag2),
+            Favorite(name = "Product Item 5", img = R.drawable.clothes),
+            Favorite(name = "Product Item 6", img = R.drawable.bag),
+            Favorite(name = "Product Item 7", img = R.drawable.bag2),
+            Favorite(name = "Product Item 8", img = R.drawable.clothes1)
+           // Favorite(name = "Product Item 9", img = R.drawable.clothes2)
+
+        )
+    }
+    fun setUpRecyclerView(){
+        productAdapter=ProductAdapter(requireContext())
+        val gridLayoutManager = GridLayoutManager(context, 2) // 2 columns
+
+        binding.recView.apply {
+            adapter = productAdapter
+            layoutManager = gridLayoutManager
+
+        }
+
+    }
+}

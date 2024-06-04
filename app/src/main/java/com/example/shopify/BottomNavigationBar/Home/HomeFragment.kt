@@ -5,11 +5,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import com.example.shopify.R
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.shopify.products.view.ProductsFragment
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment() , OnBrandClickListener{
 
     private lateinit var brandsRecyclerView: RecyclerView
 
@@ -45,7 +47,15 @@ class HomeFragment : Fragment() {
     private fun setupRecyclerView() {
         val gridLayoutManager = GridLayoutManager(context, 2) // 2 columns
         brandsRecyclerView.layoutManager = gridLayoutManager
-        brandsAdapter = BrandsAdapter(requireContext(), brandImages)
+        brandsAdapter = BrandsAdapter(requireContext(), brandImages,this)
         brandsRecyclerView.adapter = brandsAdapter
     }
+
+    override fun goToProducts() {
+        val transaction = (context as AppCompatActivity).supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.frame_layout, ProductsFragment() )
+        transaction.addToBackStack(null)
+        transaction.commit()
+    }
+
 }

@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shopify.BottomNavigationBar.Favorite.model.Favorite
@@ -44,9 +45,11 @@ class FavoriteFragment : Fragment() {
     }
     fun setUpRecyclerView(){
         favoriteAdapter=FavoriteAdapter(requireContext())
+        val gridLayoutManager = GridLayoutManager(context, 2) // 2 columns
+
         binding.recView.apply {
             adapter = favoriteAdapter
-            layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+            layoutManager = gridLayoutManager
 
         }
 
