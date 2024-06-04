@@ -25,7 +25,7 @@ class OrderListFragment : Fragment() {
         recyclerView = view.findViewById(R.id.rv_order_list)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        orderListAdapter = OrderListAdapter(requireContext(), dates, prices, currency)
+        orderListAdapter = OrderListAdapter(requireContext(), dates, prices, currency,parentFragmentManager)
         recyclerView.adapter = orderListAdapter
 
         return view

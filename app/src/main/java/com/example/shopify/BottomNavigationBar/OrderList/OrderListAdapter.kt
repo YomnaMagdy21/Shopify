@@ -5,14 +5,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.shopify.BottomNavigationBar.orderItem.OrderItemFragment
 import com.example.shopify.R
+import com.example.shopify.shoppingCard.view.shoppingCardFragment
 
 class OrderListAdapter(
     private val context: Context,
     private val dates: List<String>,
     private val prices: List<String>,
-    private val currency: String
+    private val currency: String,
+    private val fragmentManager: FragmentManager
 ) : RecyclerView.Adapter<OrderListAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -28,6 +32,13 @@ class OrderListAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.dateOrderCreatedAt.text = dates[position]
         holder.priceOrder.text = "${prices[position]} $currency"
+        holder.card.setOnClickListener{
+            val newFragment = OrderItemFragment()
+            fragmentManager.beginTransaction()
+                .replace(R.id.frame_layout, newFragment)
+                .addToBackStack(null)
+                .commit()
+        }
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
