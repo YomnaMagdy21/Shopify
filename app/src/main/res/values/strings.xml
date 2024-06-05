@@ -38,5 +38,8 @@
     <string name="total_price">Total Price:</string>
     <string name="payment_method">Payment Method:</string>
     <string name="products">Products</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
 
 </resources>
