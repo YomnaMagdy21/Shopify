@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F7F7F7"
-    tools:context=".setting.newAddress.newAddress">
+    tools:context=".setting.newAddress.view.newAddress">
 
     <TextView
         android:id="@+id/textViewCardList"
@@ -167,5 +167,17 @@
         android:src="@drawable/chevron_back_sharp_svgrepo_com"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="217dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="20dp"
+        android:text="choose on the map?"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        app:layout_constraintTop_toBottomOf="@+id/cardViewCountry" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

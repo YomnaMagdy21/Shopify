@@ -1,4 +1,4 @@
-package com.example.shopify.setting
+package com.example.shopify.setting.view
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.cardview.widget.CardView
 import com.example.shopify.R
-import com.example.shopify.setting.MyAddresses.myAddressFragment
+import com.example.shopify.setting.MyAddresses.view.myAddressFragment
 
 class settingFragment : Fragment() {
 

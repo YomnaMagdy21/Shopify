@@ -6,12 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shopify.R
 import com.example.shopify.payment.paymentFragment
-import com.example.shopify.setting.MyAddresses.myAddressFragment
 
 
 class shoppingCardFragment : Fragment() {

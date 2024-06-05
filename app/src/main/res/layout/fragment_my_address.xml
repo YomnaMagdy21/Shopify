@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F7F7F7"
-    tools:context=".setting.MyAddresses.myAddressFragment">
+    tools:context=".setting.MyAddresses.view.myAddressFragment">
 
     <TextView
         android:id="@+id/textViewCardList"
@@ -29,12 +29,14 @@
         app:layout_constraintGuide_begin="28dp" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="340dp"
-        android:layout_height="475dp"
+        android:id="@+id/RVAddresses"
+        android:layout_width="0dp"
+        android:layout_height="476dp"
         android:layout_marginTop="16dp"
+        android:layout_marginBottom="4dp"
+        app:layout_constraintBottom_toTopOf="@+id/AddAddressButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.162"
-        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewCardList" />
 
 

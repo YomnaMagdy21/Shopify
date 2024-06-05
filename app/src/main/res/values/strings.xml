@@ -37,5 +37,8 @@
     <string name="phone_number">Phone Number:</string>
     <string name="total_price">Total Price:</string>
     <string name="payment_method">Payment Method:</string>
+    <string name="countryName">countryName</string>
+    <string name="Country">Country</string>
+    <string name="Address">Address</string>
 
 </resources>
