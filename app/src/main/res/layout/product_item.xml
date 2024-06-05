@@ -10,6 +10,14 @@
     app:cardCornerRadius="30dp"
     android:background="@drawable/edit_text"
     app:cardElevation="10dp">
+    <ImageView
+        android:id="@+id/favImg"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/heart_unfilled"
+        />
 
     <TextView
         android:id="@+id/productName"
@@ -28,7 +36,7 @@
         android:layout_width="183dp"
         android:layout_height="110dp"
 
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="40dp"
 
         />
 

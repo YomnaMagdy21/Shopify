@@ -4,18 +4,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/backgroundColor1"
     tools:context=".products.view.ProductsFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recView"
         android:layout_width="match_parent"
         android:layout_height="600dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_edit_text" />
+
+    <com.google.android.material.slider.Slider
+        android:id="@+id/filterSlider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/recView"
+
         app:layout_constraintTop_toBottomOf="@+id/search_edit_text"
-        app:layout_constraintVertical_bias="0.0" />
+        tools:layout_editor_absoluteX="16dp" />
 
     <EditText
         android:id="@+id/search_edit_text"

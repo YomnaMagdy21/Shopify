@@ -4,25 +4,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/backgroundColor1"
     tools:context=".login.view.SignInFragment">
 
     <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="120dp"
+        android:id="@+id/textViewSignIn"
+        android:layout_width="249dp"
+        android:layout_height="66dp"
+        android:layout_marginTop="56dp"
+        android:layout_marginEnd="137dp"
         android:text="@string/sign_in"
-        android:textSize="24sp"
+        android:textSize="48sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/editTextText"
         android:layout_width="350dp"
         android:layout_height="39dp"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="100dp"
         android:background="@drawable/edit_text"
         android:ems="10"
         android:hint="@string/email"
@@ -31,7 +33,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.377"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewSignIn" />
 
     <EditText
         android:id="@+id/editTextText2"
@@ -63,7 +65,7 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="50dp"
         android:text="@string/or"
         android:textSize="24sp"
         android:textStyle="bold"
@@ -76,7 +78,7 @@
         android:id="@+id/imageView"
         android:layout_width="133dp"
         android:layout_height="88dp"
-        android:layout_marginTop="42dp"
+        android:layout_marginTop="32dp"
         android:src="@drawable/google"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -87,7 +89,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="104dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="32dp"
         android:text="@string/do_not_have_an_account"
         android:textColor="#C6BDBD"
         android:textStyle="bold"
@@ -98,7 +100,7 @@
         android:id="@+id/signup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="32dp"
         android:text="@string/signup"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/imageView"

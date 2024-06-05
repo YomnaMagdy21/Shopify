@@ -53,7 +53,7 @@ class ProductDetailsFragment : Fragment() {
 
         binding.tabLayout.setupWithViewPager(binding.photosViewpager, true)
 
-        setupTabDots()
+       // setupTabDots()
     }
 
     private fun setupTabDots() {
