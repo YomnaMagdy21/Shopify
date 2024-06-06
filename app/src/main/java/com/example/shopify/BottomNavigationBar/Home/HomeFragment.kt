@@ -12,8 +12,7 @@ import com.example.shopify.R
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shopify.products.view.ProductsFragment
-import com.example.shopify.setting.MyAddresses.myAddressFragment
-import com.example.shopify.setting.settingFragment
+
 
 
 
