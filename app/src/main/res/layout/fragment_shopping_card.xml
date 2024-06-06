@@ -55,7 +55,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewCardList"
-        android:layout_width="356dp"
+        android:layout_width="match_parent"
         android:layout_height="217dp"
         android:layout_marginTop="28dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -123,6 +123,7 @@
         android:ems="10"
         android:inputType="text"
         android:text="copoun"
+        android:paddingStart="10dp"
         app:circularflow_defaultRadius="20dp"
         app:circularflow_radiusInDP="20dp"
         app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
