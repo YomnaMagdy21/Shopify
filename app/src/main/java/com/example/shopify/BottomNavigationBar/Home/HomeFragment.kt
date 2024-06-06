@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.shopify.R
@@ -13,6 +14,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.shopify.products.view.ProductsFragment
 import com.example.shopify.setting.MyAddresses.myAddressFragment
 import com.example.shopify.setting.settingFragment
+
+
+
 
 class HomeFragment : Fragment() , OnBrandClickListener{
 

@@ -5,11 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.cardview.widget.CardView
 import com.example.shopify.BottomNavigationBar.OrderList.OrderListFragment
 import com.example.shopify.R
-import com.example.shopify.setting.settingFragment
+import com.example.shopify.setting.view.settingFragment
 
 
 class MeFragment : Fragment() {
