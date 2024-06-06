@@ -5,11 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shopify.R
 
-class BrandsAdapter(private val context: Context, private val brandImages: List<Int>) : RecyclerView.Adapter<BrandsAdapter.ViewHolder>() {
+class BrandsAdapter(private val context: Context, private val brandImages: List<Int>,var listener: OnBrandClickListener) : RecyclerView.Adapter<BrandsAdapter.ViewHolder>() {
 
     override fun getItemCount(): Int {
         return brandImages.size
@@ -24,6 +25,10 @@ class BrandsAdapter(private val context: Context, private val brandImages: List<
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val imageResource = brandImages[position]
         holder.image.setImageResource(imageResource)
+        holder.card.setOnClickListener {
+            listener.goToProducts()
+
+        }
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
