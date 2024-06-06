@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import com.example.shopify.R
+import com.example.shopify.setting.MyAddresses.view.myAddressFragment
 import com.example.shopify.shoppingCard.view.shoppingCardFragment
 
 class paymentFragment : Fragment() {
@@ -28,10 +30,19 @@ class paymentFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        //navigate to shopping card fragment
         val back = view.findViewById<ImageView>(R.id.backImage)
         back.setOnClickListener {
             val newFragment = shoppingCardFragment()
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.frame_layout, newFragment)
+                .addToBackStack(null)
+                .commit()
+        }
+        //navigate to address list fragment
+        val myCurrentAdreesText = view.findViewById<TextView>(R.id.textView10)
+        myCurrentAdreesText.setOnClickListener{
+            val newFragment = myAddressFragment()
             parentFragmentManager.beginTransaction()
                 .replace(R.id.frame_layout, newFragment)
                 .addToBackStack(null)
