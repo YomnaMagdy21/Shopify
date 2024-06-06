@@ -42,5 +42,6 @@
     <string name="password">Password</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="description">Description</string>
+    <string name="sale">Sale</string>
 
 </resources>

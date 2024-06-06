@@ -5,14 +5,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shopify.BottomNavigationBar.Favorite.model.Favorite
 import com.example.shopify.R
 import com.example.shopify.databinding.FragmentFavoriteBinding
+import com.example.shopify.productdetails.view.ProductDetailsFragment
 
-class FavoriteFragment : Fragment() {
+class FavoriteFragment : Fragment() ,onFavoriteClickListener{
     private lateinit var binding: FragmentFavoriteBinding
     private lateinit var favoriteAdapter: FavoriteAdapter
 
@@ -44,7 +46,7 @@ class FavoriteFragment : Fragment() {
         )
     }
     fun setUpRecyclerView(){
-        favoriteAdapter=FavoriteAdapter(requireContext())
+        favoriteAdapter=FavoriteAdapter(requireContext(),this)
         val gridLayoutManager = GridLayoutManager(context, 2) // 2 columns
 
         binding.recView.apply {
@@ -53,6 +55,13 @@ class FavoriteFragment : Fragment() {
 
         }
 
+    }
+
+    override fun onFavClick() {
+        val transaction = (context as AppCompatActivity).supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.frame_layout, ProductDetailsFragment() )
+        transaction.addToBackStack(null)
+        transaction.commit()
     }
 
 }

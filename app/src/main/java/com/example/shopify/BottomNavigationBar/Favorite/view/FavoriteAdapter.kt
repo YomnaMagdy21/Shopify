@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.shopify.BottomNavigationBar.Favorite.model.Favorite
 import com.example.shopify.databinding.FavItemBinding
 
-class FavoriteAdapter(var context: Context):
+class FavoriteAdapter(var context: Context, var listener: onFavoriteClickListener):
     ListAdapter<Favorite, FavoriteAdapter.DayViewHolder>(DayDiffUtil()) {
 
 
@@ -30,7 +30,9 @@ class FavoriteAdapter(var context: Context):
 
         holder.binding.productName.text = current.name
         holder.binding.productImg.setImageResource(current.img)
-
+        holder.binding.cardView.setOnClickListener {
+            listener.onFavClick()
+        }
 
     }
 }
