@@ -35,6 +35,20 @@ class ProductsFragment : Fragment() ,OnProductClickListener{
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.filter.setOnClickListener {
+
+            if(binding.filterSlider.visibility == View.GONE){
+                binding.filterSlider.visibility = View.VISIBLE
+                binding.filter.setImageResource(R.drawable.unfilter)
+            }
+            else{
+                binding.filterSlider.visibility = View.GONE
+                binding.filter.setImageResource(R.drawable.filter)
+            }
+        }
+    }
 
     fun generateFakeProduct(): List<Favorite> {
         return listOf(
