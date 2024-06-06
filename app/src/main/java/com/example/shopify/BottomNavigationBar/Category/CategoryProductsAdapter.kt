@@ -10,7 +10,7 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shopify.R
 
-class CategoryProductsAdapter(private val context: Context) : RecyclerView.Adapter<CategoryProductsAdapter.ViewHolder>() {
+class CategoryProductsAdapter(private val context: Context, var listener: OnCategoryClickListener) : RecyclerView.Adapter<CategoryProductsAdapter.ViewHolder>() {
 
     private val productImages = listOf(R.drawable.clothes1, R.drawable.clothes2, R.drawable.shoes2, R.drawable.clothes, R.drawable.bag2, R.drawable.clothes2, R.drawable.shoes2, R.drawable.clothes)
     private val productNames = listOf("Product1", "Product2", "Product3", "Product4", "Product1", "Product2", "Product3", "Product4")
@@ -30,6 +30,9 @@ class CategoryProductsAdapter(private val context: Context) : RecyclerView.Adapt
         holder.productImage.setImageResource(productImages[position])
         holder.productName.text = productNames[position]
         holder.productPrice.text = productPrices[position]
+        holder.card.setOnClickListener {
+            listener.onCategoryClick()
+        }
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

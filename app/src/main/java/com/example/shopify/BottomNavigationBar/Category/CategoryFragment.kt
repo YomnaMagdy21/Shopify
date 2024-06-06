@@ -8,11 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.shopify.productdetails.view.ProductDetailsFragment
 
-class CategoryFragment : Fragment() {
+class CategoryFragment : Fragment() ,OnCategoryClickListener{
 
     private lateinit var tvAll: TextView
     private lateinit var tvWomen: TextView
@@ -40,7 +42,7 @@ class CategoryFragment : Fragment() {
         ivBags = view.findViewById(R.id.iv_sub_cat_bags)
 
         recyclerView = view.findViewById(R.id.rv_products_in_category)
-        adapter = CategoryProductsAdapter(requireContext())
+        adapter = CategoryProductsAdapter(requireContext(),this)
         recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
         recyclerView.adapter = adapter
 
@@ -80,5 +82,12 @@ class CategoryFragment : Fragment() {
         }
 
         selectedImageView.setBackgroundResource(R.drawable.rounded_selected_image_view_filter)
+    }
+
+    override fun onCategoryClick() {
+        val transaction = (context as AppCompatActivity).supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.frame_layout, ProductDetailsFragment() )
+        transaction.addToBackStack(null)
+        transaction.commit()
     }
 }

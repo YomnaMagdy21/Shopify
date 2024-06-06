@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.cardview.widget.CardView
+import com.example.shopify.BottomNavigationBar.Favorite.view.FavoriteFragment
 import com.example.shopify.BottomNavigationBar.OrderList.OrderListFragment
 import com.example.shopify.R
 import com.example.shopify.setting.view.settingFragment
@@ -37,6 +38,14 @@ class MeFragment : Fragment() {
         var orderListFragment = view.findViewById<CardView>(R.id.cardViewOrders)
         orderListFragment.setOnClickListener{
             val newFragment = OrderListFragment()
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.frame_layout, newFragment)
+                .addToBackStack(null)
+                .commit()
+        }
+        var wishListFragment = view.findViewById<CardView>(R.id.cardViewWishList)
+        wishListFragment.setOnClickListener{
+            val newFragment = FavoriteFragment()
             parentFragmentManager.beginTransaction()
                 .replace(R.id.frame_layout, newFragment)
                 .addToBackStack(null)
