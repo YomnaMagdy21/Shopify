@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 
-class ShopifyRemoteDataSourceImp {//:ShopifyRemoteDataSource {
+class ShopifyRemoteDataSourceImp :ShopifyRemoteDataSource {
     val shopifyService:ShopifyService by lazy {
         RetrofitHelper.retrofitInstance.create(ShopifyService::class.java)
     }
@@ -20,11 +20,11 @@ class ShopifyRemoteDataSourceImp {//:ShopifyRemoteDataSource {
             }
         }
     }
-//    override fun createNewCustomer(customer: Customer): Flow<Customer?> {
-//        return  flow {
-//            emit(shopifyService.addNewCustomer(customer).body())
-//        }
-//    }
+    override fun createNewCustomer(customer: Customer): Flow<Customer?> {
+        return  flow {
+            emit(shopifyService.addNewCustomer(customer).body())
+        }
+    }
 
 
 }

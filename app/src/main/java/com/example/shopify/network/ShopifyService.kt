@@ -10,7 +10,7 @@ import retrofit2.http.POST
 
 interface ShopifyService {
 
-//    @Headers("X-Shopify-Access-Token: ${Constants.adminApiAccessToken}")
-//    @POST("admin/api/2024-04/customers.json")
-//    suspend fun addNewCustomer(@Body customer: Customer):Response<Customer>
+    @Headers("X-Shopify-Access-Token: ${Constants.adminApiAccessToken}")
+    @POST("admin/api/2024-04/customers.json")
+    suspend fun addNewCustomer(@Body customer: Customer):Response<Customer>
 }
