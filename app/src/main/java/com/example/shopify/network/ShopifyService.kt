@@ -1,6 +1,7 @@
 package com.example.shopify.network
 
 import com.example.shopify.model.Customer
+import com.example.shopify.model.createCustomerRequest
 import com.example.shopify.utility.Constants
 import retrofit2.Response
 import retrofit2.http.Body
@@ -12,5 +13,5 @@ interface ShopifyService {
 
     @Headers("X-Shopify-Access-Token: ${Constants.adminApiAccessToken}")
     @POST("admin/api/2024-04/customers.json")
-    suspend fun addNewCustomer(@Body customer: Customer):Response<Customer>
+    suspend fun addNewCustomer(@Body customer: createCustomerRequest):Response<createCustomerRequest>
 }
