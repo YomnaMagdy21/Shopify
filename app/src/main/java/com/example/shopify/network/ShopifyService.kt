@@ -18,7 +18,6 @@ interface ShopifyService {
 
     @Headers("X-Shopify-Access-Token: ${Constants.adminApiAccessToken}")
     @POST("admin/api/2024-04/customers.json")
-
     suspend fun addNewCustomer(@Body customer: createCustomerRequest):Response<createCustomerRequest>
 
     @Headers("X-Shopify-Access-Token: ${Constants.adminApiAccessToken}")

@@ -1,16 +1,24 @@
 package com.example.shopify.setting.view
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.cardview.widget.CardView
+import com.example.shopify.BottomNavigationBar.BottomNavActivity
+import com.example.shopify.MainActivity
 import com.example.shopify.R
+import com.example.shopify.databinding.FragmentSettingBinding
+import com.example.shopify.databinding.FragmentSignUpBinding
+import com.example.shopify.firebase.Firebase
+import com.example.shopify.login.view.SignInFragment
 import com.example.shopify.setting.MyAddresses.view.myAddressFragment
 
 class settingFragment : Fragment() {
 
+    private lateinit var binding: FragmentSettingBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -21,7 +29,9 @@ class settingFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_setting, container, false)
+        binding = FragmentSettingBinding.inflate(inflater, container, false)
+
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -33,6 +43,13 @@ class settingFragment : Fragment() {
             parentFragmentManager.beginTransaction()
                 .replace(R.id.frame_layout, newFragment)
                 .addToBackStack(null)
+                .commit()
+        }
+
+        binding.logOutButton.setOnClickListener {
+            Firebase(requireContext()).logout()
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.home_fragment, SignInFragment())
                 .commit()
         }
     }

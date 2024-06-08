@@ -16,4 +16,9 @@
     <string name="sale">Sale</string>
     <string name="first_name">Firstname</string>
     <string name="second_name">Secondname</string>
+    <string name="building_num">Building No,street</string>
+    <string name="building_number">Building No,Street</string>
+    <string name="city">City</string>
+    <string name="country">Country</string>
+    <string name="phone_no">Phone Number</string>
 </resources>

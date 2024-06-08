@@ -17,6 +17,7 @@ import com.example.shopify.R
 import com.example.shopify.databinding.FragmentSignUpBinding
 import com.example.shopify.firebase.Firebase
 import com.example.shopify.login.view.SignInFragment
+import com.example.shopify.model.Address
 import com.example.shopify.model.Customer
 import com.example.shopify.model.ShopifyRepositoryImp
 import com.example.shopify.model.createCustomerRequest
@@ -124,6 +125,11 @@ class SignUpFragment : Fragment() {
             lastname = binding.secondname.text.toString()
             password_confirmation = binding.confirm.text.toString()
 
+            var street = binding.buildingNo.text.toString()
+            var city = binding.city.text.toString()
+            var country = binding.country.text.toString()
+            var phone = binding.phone.text.toString()
+
 
             if (firstname.isEmpty()) {
                 binding.firstname.error = "First name cannot be empty"
@@ -156,7 +162,29 @@ class SignUpFragment : Fragment() {
                 binding.confirm.requestFocus()
                 return@setOnClickListener
             }
-            Firebase().createCustomerAccount(email, password) { user, error ->
+            if (street.isEmpty()) {
+                binding.buildingNo.error = "Email cannot be empty"
+                binding.buildingNo.requestFocus()
+                return@setOnClickListener
+            }
+
+            if (city.isEmpty()) {
+                binding.city.error = "Password cannot be empty"
+                binding.city.requestFocus()
+                return@setOnClickListener
+            }
+            if (country.isEmpty()) {
+                binding.country.error = "Password confirmation cannot be empty"
+                binding.country.requestFocus()
+                return@setOnClickListener
+            }
+            if (phone.isEmpty()) {
+                binding.phone.error = "Password confirmation cannot be empty"
+                binding.phone.requestFocus()
+                return@setOnClickListener
+            }
+
+            Firebase(requireContext()).createCustomerAccount(email, password) { user, error ->
                 if (user != null) {
 
                     user.sendEmailVerification().addOnCompleteListener { emailTask ->
@@ -164,13 +192,14 @@ class SignUpFragment : Fragment() {
                             Log.i(TAG, "Verification email sent to ${user.email}")
                             Toast.makeText(context, "Verification email sent. Please check your email.", Toast.LENGTH_LONG).show()
 
+                            var adresses = listOf<Address>(Address(0,0,firstname,lastname,street,null,city,null,country,null,phone,null,null,null,country,true))
 
                             val customer = Customer(
                                 0, user.email, null, null, firstname, lastname, password, password_confirmation, 0, null, null,
-                                true, null, null, null, null
+                                true, null, null, addresses = adresses, null
                             )
                             val client = createCustomerRequest(customer)
-                            Firebase().writeNewUser(customer)
+                            Firebase(requireContext()).writeNewUser(customer)
                             signUpViewModel.registerCustomerInAPI(client)
 
                             lifecycleScope.launch {
@@ -243,7 +272,7 @@ class SignUpFragment : Fragment() {
                             if (emailTask.isSuccessful) {
                                 Log.i(TAG, "Verification email sent to ${user.email}")
 
-                                Firebase().checkIfUserExists(user.uid) { exists ->
+                                Firebase(requireContext()).checkIfUserExists(user.uid) { exists ->
                                     if (exists) {
                                         startActivity(Intent(context, BottomNavActivity::class.java))
                                         Toast.makeText(context, "Welcome back! Verification email sent.", Toast.LENGTH_LONG).show()
@@ -252,7 +281,7 @@ class SignUpFragment : Fragment() {
                                             0, user.email, null, null, "", "", "", "", 0, null, null,
                                             true, null, null, null, null
                                         )
-                                        Firebase().writeNewUser(customer)
+                                        Firebase(requireContext()).writeNewUser(customer)
 
                                         val client = createCustomerRequest(customer)
                                         signUpViewModel.registerCustomerInAPI(client)
