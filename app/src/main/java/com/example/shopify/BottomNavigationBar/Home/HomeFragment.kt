@@ -5,24 +5,35 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
-import android.widget.ImageView
+import android.os.Handler
+import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import com.example.shopify.R
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.example.shopify.products.view.ProductsFragment
-
-
 
 
 
 class HomeFragment : Fragment() , OnBrandClickListener{
 
+    private lateinit var viewPager: ViewPager2
+    private lateinit var imageSliderAdapter: ImageSliderAdapter
+    private lateinit var handler: Handler
+    private lateinit var runnable: Runnable
+
     private lateinit var brandsRecyclerView: RecyclerView
 
 
     private lateinit var brandsAdapter: BrandsAdapter
+
+
+   private val images = listOf(
+        R.drawable.ads2,
+        R.drawable.ads3,
+        R.drawable.ads4
+   )
 
 
     private val brandImages = listOf(
@@ -41,14 +52,34 @@ class HomeFragment : Fragment() , OnBrandClickListener{
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
-
+        viewPager = view.findViewById(R.id.viewPager)
         brandsRecyclerView = view.findViewById(R.id.rv_brands_in_home)
 
         setupRecyclerView()
-
+        setupImageSlider()
         return view
     }
+    private fun setupImageSlider() {
+        imageSliderAdapter = ImageSliderAdapter(images)
+        viewPager.adapter = imageSliderAdapter
 
+        handler = Handler(Looper.getMainLooper())
+        runnable = Runnable {
+            var currentItem = viewPager.currentItem
+            val itemCount = imageSliderAdapter.itemCount
+
+            if (currentItem == itemCount - 1) {
+                currentItem = 0
+            } else {
+                currentItem++
+            }
+
+            viewPager.setCurrentItem(currentItem, true)
+            handler.postDelayed(runnable, 3000)
+        }
+
+        handler.postDelayed(runnable, 3000)
+    }
 
 
     private fun setupRecyclerView() {
