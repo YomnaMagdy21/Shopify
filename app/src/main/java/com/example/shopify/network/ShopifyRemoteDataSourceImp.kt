@@ -1,6 +1,7 @@
 package com.example.shopify.network
 
 import com.example.shopify.model.Customer
+import com.example.shopify.model.createCustomerRequest
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
@@ -20,7 +21,7 @@ class ShopifyRemoteDataSourceImp :ShopifyRemoteDataSource {
             }
         }
     }
-    override fun createNewCustomer(customer: Customer): Flow<Customer?> {
+    override fun createNewCustomer(customer: createCustomerRequest): Flow<createCustomerRequest?> {
         return  flow {
             emit(shopifyService.addNewCustomer(customer).body())
         }
