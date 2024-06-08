@@ -65,12 +65,11 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/search_edit_text">
 
-                <ImageView
+                <androidx.viewpager2.widget.ViewPager2
                     android:id="@+id/viewPager"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/shopping" />
+                    android:layout_height="match_parent" />
+
             </androidx.cardview.widget.CardView>
 
             <!-- Brands Part -->
