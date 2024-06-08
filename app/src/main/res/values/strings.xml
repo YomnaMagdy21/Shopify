@@ -48,6 +48,9 @@
     <string name="countryName">countryName</string>
     <string name="Country">Country</string>
     <string name="Address">Address</string>
+    <string name="first_name">Firstname</string>
+    <string name="second_name">Lastname</string>
 
+    <string name="clientID">828681279025-l3vqdrrh527h4vhhsb1dk4n40ljo471b.apps.googleusercontent.com</string>
 
 </resources>

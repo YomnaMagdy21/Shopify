@@ -18,7 +18,7 @@ class ShopifyRepositoryImp(private var shopifyRemoteDataSource: ShopifyRemoteDat
             }
         }
     }
-    override fun createNewCustomer(customer: Customer): Flow<Customer?> {
+    override fun createNewCustomer(customer: createCustomerRequest): Flow<createCustomerRequest?> {
        return shopifyRemoteDataSource.createNewCustomer(customer)
     }
 
