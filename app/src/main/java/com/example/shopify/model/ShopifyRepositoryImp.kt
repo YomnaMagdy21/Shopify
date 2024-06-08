@@ -1,5 +1,6 @@
 package com.example.shopify.model
 
+import com.example.shopify.Models.products.CollectProductsModel
 import com.example.shopify.model.Brands.BrandModel
 import com.example.shopify.network.ShopifyRemoteDataSource
 import kotlinx.coroutines.flow.Flow
@@ -23,8 +24,14 @@ class ShopifyRepositoryImp(private var shopifyRemoteDataSource: ShopifyRemoteDat
        return shopifyRemoteDataSource.createNewCustomer(customer)
     }
 
+
     override suspend fun getBrands(): Flow<BrandModel?> {
         return shopifyRemoteDataSource.getBrands()
     }
+
+    override suspend fun getAllProducts(): Flow<CollectProductsModel?> {
+        return shopifyRemoteDataSource.getAllProducts()
+    }
+
 
 }
