@@ -156,7 +156,7 @@ class SignUpFragment : Fragment() {
                 binding.confirm.requestFocus()
                 return@setOnClickListener
             }
-            Firebase().createCustomerAccount(email, password) { user, error ->
+            Firebase(requireContext()).createCustomerAccount(email, password) { user, error ->
                 if (user != null) {
 
                     user.sendEmailVerification().addOnCompleteListener { emailTask ->
@@ -170,7 +170,7 @@ class SignUpFragment : Fragment() {
                                 true, null, null, null, null
                             )
                             val client = createCustomerRequest(customer)
-                            Firebase().writeNewUser(customer)
+                            Firebase(requireContext()).writeNewUser(customer)
                             signUpViewModel.registerCustomerInAPI(client)
 
                             lifecycleScope.launch {
@@ -243,7 +243,7 @@ class SignUpFragment : Fragment() {
                             if (emailTask.isSuccessful) {
                                 Log.i(TAG, "Verification email sent to ${user.email}")
 
-                                Firebase().checkIfUserExists(user.uid) { exists ->
+                                Firebase(requireContext()).checkIfUserExists(user.uid) { exists ->
                                     if (exists) {
                                         startActivity(Intent(context, BottomNavActivity::class.java))
                                         Toast.makeText(context, "Welcome back! Verification email sent.", Toast.LENGTH_LONG).show()
@@ -252,7 +252,7 @@ class SignUpFragment : Fragment() {
                                             0, user.email, null, null, "", "", "", "", 0, null, null,
                                             true, null, null, null, null
                                         )
-                                        Firebase().writeNewUser(customer)
+                                        Firebase(requireContext()).writeNewUser(customer)
 
                                         val client = createCustomerRequest(customer)
                                         signUpViewModel.registerCustomerInAPI(client)
