@@ -1,4 +1,4 @@
-package com.example.shopify.model.brands
+package com.example.shopify.model.Brands
 
 data class SmartCollection(
     val admin_graphql_api_id: String,

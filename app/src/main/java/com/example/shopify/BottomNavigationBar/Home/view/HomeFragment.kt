@@ -18,8 +18,8 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.shopify.BottomNavigationBar.Home.viewModel.HomeViewModel
 import com.example.shopify.BottomNavigationBar.Home.viewModel.HomeViewModelFactory
 import com.example.shopify.model.ShopifyRepositoryImp
-import com.example.shopify.model.brands.BrandModel
-import com.example.shopify.model.brands.SmartCollection
+import com.example.shopify.model.Brands.BrandModel
+import com.example.shopify.model.Brands.SmartCollection
 import com.example.shopify.network.ShopifyRemoteDataSourceImp
 import com.example.shopify.products.view.ProductsFragment
 import com.example.shopify.utility.ApiState

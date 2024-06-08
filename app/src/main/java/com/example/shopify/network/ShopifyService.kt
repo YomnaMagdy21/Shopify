@@ -1,16 +1,14 @@
 package com.example.shopify.network
 
 import com.example.shopify.model.Customer
-import com.example.shopify.model.brands.BrandModel
+import com.example.shopify.model.Brands.BrandModel
 import com.example.shopify.shoppingCard.view.model.PriceRulesResponse
 import com.example.shopify.utility.Constants
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
-import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.POST
-import retrofit2.http.Path
 
 interface ShopifyService {
 

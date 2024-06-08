@@ -1,6 +1,6 @@
 package com.example.shopify.model
 
-import com.example.shopify.model.brands.BrandModel
+import com.example.shopify.model.Brands.BrandModel
 import com.example.shopify.network.ShopifyRemoteDataSource
 import kotlinx.coroutines.flow.Flow
 

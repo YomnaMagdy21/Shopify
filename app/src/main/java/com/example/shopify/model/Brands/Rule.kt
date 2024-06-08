@@ -1,4 +1,4 @@
-package com.example.shopify.model.brands
+package com.example.shopify.model.Brands
 
 data class Rule(
     val column: String,

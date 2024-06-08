@@ -1,4 +1,4 @@
-package com.example.shopify.model.brands
+package com.example.shopify.model.Brands
 
 data class Image(
     val alt: Any?,
