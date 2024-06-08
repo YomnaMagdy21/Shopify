@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F7F7F7"
-    tools:context=".BottomNavigationBar.Home.HomeFragment">
+    tools:context=".BottomNavigationBar.Home.view.HomeFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -107,6 +107,17 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/brands_title_in_home" />
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="@+id/rv_brands_in_home"
+                    app:layout_constraintBottom_toBottomOf="@+id/rv_brands_in_home"
+                    app:layout_constraintEnd_toEndOf="@+id/rv_brands_in_home"
+                    app:layout_constraintStart_toStartOf="@+id/rv_brands_in_home"
+                    android:visibility="gone" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

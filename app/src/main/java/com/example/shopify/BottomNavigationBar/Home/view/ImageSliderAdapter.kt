@@ -1,4 +1,4 @@
-package com.example.shopify.BottomNavigationBar.Home
+package com.example.shopify.BottomNavigationBar.Home.view
 
 import android.view.LayoutInflater
 import android.view.View

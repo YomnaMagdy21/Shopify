@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.shopify.BottomNavigationBar.BottomNavActivity
-import com.example.shopify.BottomNavigationBar.Home.HomeFragment
 import com.example.shopify.R
 
 import com.example.shopify.databinding.FragmentSignInBinding
