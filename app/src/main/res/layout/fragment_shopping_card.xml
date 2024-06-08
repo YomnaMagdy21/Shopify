@@ -117,8 +117,9 @@
         android:id="@+id/editTextText"
         android:layout_width="250dp"
         android:layout_height="43dp"
+        android:layout_marginStart="5dp"
         android:layout_marginEnd="4dp"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="44dp"
         android:background="@drawable/edittext_border"
         android:ems="10"
         android:inputType="text"
@@ -128,10 +129,8 @@
         app:circularflow_radiusInDP="20dp"
         app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
         app:layout_constraintEnd_toStartOf="@+id/textView8"
-        app:layout_constraintHorizontal_bias="0.094"
-        app:layout_constraintStart_toStartOf="@+id/guideline4"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerViewCardList"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/guideline4" />
 
     <TextView
         android:id="@+id/textView4"

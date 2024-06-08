@@ -82,10 +82,10 @@ class shoppingCardFragment : Fragment() {
     private fun validateCoupon(coupon: String, textView: TextView) {
         val matchingRule = viewModel.validateCoupon(coupon)
         if (matchingRule != null) {
-            textView.text = "Valid coupon! Discount value: ${matchingRule.value}"
+            textView.text = "Valid"
             textView.setTextColor(Color.GREEN)
         } else {
-            textView.text = "Invalid coupon"
+            textView.text = "Invalid"
             textView.setTextColor(Color.RED)
         }
     }
