@@ -1,22 +1,40 @@
 package com.example.shopify.shoppingCard.view
 
+import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shopify.R
+import com.example.shopify.network.RetrofitHelper
 import com.example.shopify.payment.paymentFragment
+import com.example.shopify.shoppingCard.view.model.ShoppingCardRepo
+import com.example.shopify.shoppingCard.view.viewModel.PriceRuleViewModelFactory
+import com.example.shopify.shoppingCard.view.viewModel.ShoppingCardViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class shoppingCardFragment : Fragment() {
 
-
+    private lateinit var viewModel: ShoppingCardViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val factory = PriceRuleViewModelFactory(ShoppingCardRepo())
+        viewModel = ViewModelProvider(this, factory).get(ShoppingCardViewModel::class.java)
+        viewModel.fetchPriceRules()
 
     }
 
@@ -49,6 +67,27 @@ class shoppingCardFragment : Fragment() {
                 .addToBackStack(null)
                 .commit()
         }
+        val editText = view.findViewById<EditText>(R.id.editTextText)
+        val applyButton = view.findViewById<Button>(R.id.applyButton)
+        val textView = view.findViewById<TextView>(R.id.textView8)
+
+        applyButton.setOnClickListener {
+            val inputText = editText.text.toString()
+            if (inputText.isNotEmpty()) {
+                validateCoupon(inputText, textView)
+            }
+        }
 
     }
+    private fun validateCoupon(coupon: String, textView: TextView) {
+        val matchingRule = viewModel.validateCoupon(coupon)
+        if (matchingRule != null) {
+            textView.text = "Valid coupon! Discount value: ${matchingRule.value}"
+            textView.setTextColor(Color.GREEN)
+        } else {
+            textView.text = "Invalid coupon"
+            textView.setTextColor(Color.RED)
+        }
+    }
+
 }
