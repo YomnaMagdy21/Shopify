@@ -4,6 +4,6 @@ object Constants {
 
     const val adminApiAccessToken = ""
 
-    const val storeURL = ""
+    const val storeURL =  ""
       
 }

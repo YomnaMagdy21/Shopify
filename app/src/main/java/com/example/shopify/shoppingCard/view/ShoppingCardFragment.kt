@@ -1,15 +1,22 @@
 package com.example.shopify.shoppingCard.view
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shopify.R
+import com.example.shopify.network.RetrofitHelper
 import com.example.shopify.payment.paymentFragment
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class shoppingCardFragment : Fragment() {
@@ -50,5 +57,22 @@ class shoppingCardFragment : Fragment() {
                 .commit()
         }
 
+        getDiscountCodeCount()
+    }
+
+    private fun getDiscountCodeCount() {
+        lifecycleScope.launch {
+            try {
+                val response = withContext(Dispatchers.IO) {
+                    RetrofitHelper.apiService.getDiscountCodes()
+                }
+                Toast.makeText(context, "Discount Code Count: ${response}", Toast.LENGTH_LONG)
+                    .show()
+                Log.i("dis", "getDiscountCodeCount: " + response)
+            } catch (e: Exception) {
+                Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_LONG).show()
+                Log.i("dis", "getDiscountCodeCount: "+"Error: ${e.message}")
+            }
+        }
     }
 }
