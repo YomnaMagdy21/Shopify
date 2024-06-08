@@ -1,6 +1,7 @@
 package com.example.shopify.network
 
 import com.example.shopify.model.Customer
+import com.example.shopify.model.brands.BrandModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
@@ -24,6 +25,10 @@ class ShopifyRemoteDataSourceImp :ShopifyRemoteDataSource {
         return  flow {
             emit(shopifyService.addNewCustomer(customer).body())
         }
+    }
+
+    override suspend fun getBrands(): Flow<BrandModel?> {
+        return flowOf(shopifyService.getBrands().body())
     }
 
 

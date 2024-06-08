@@ -1,6 +1,7 @@
 package com.example.shopify.network
 
 import com.example.shopify.model.Customer
+import com.example.shopify.model.brands.BrandModel
 import com.example.shopify.shoppingCard.view.model.PriceRulesResponse
 import com.example.shopify.utility.Constants
 import retrofit2.Response
@@ -20,5 +21,11 @@ interface ShopifyService {
     @Headers("X-Shopify-Access-Token: ${Constants.adminApiAccessToken}")
     @GET("admin/api/2024-04/price_rules.json")
     suspend fun getPriceRules(): Response<PriceRulesResponse>
+
+
+    //Get Brands
+    @Headers("X-Shopify-Access-Token: ${Constants.adminApiAccessToken}")
+    @GET("/admin/api/2024-04/smart_collections.json")
+    suspend fun getBrands() : Response<BrandModel>
 
 }

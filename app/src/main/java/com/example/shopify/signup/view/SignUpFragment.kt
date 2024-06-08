@@ -8,10 +8,8 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.shopify.BottomNavigationBar.BottomNavActivity
-import com.example.shopify.BottomNavigationBar.Home.HomeFragment
 
 import com.example.shopify.R
-import com.example.shopify.databinding.FragmentSignInBinding
 import com.example.shopify.databinding.FragmentSignUpBinding
 import com.example.shopify.login.view.SignInFragment
 

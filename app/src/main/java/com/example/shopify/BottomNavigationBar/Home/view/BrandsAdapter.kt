@@ -1,19 +1,26 @@
-package com.example.shopify.BottomNavigationBar.Home
+package com.example.shopify.BottomNavigationBar.Home.view
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.appcompat.app.AppCompatActivity
+import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.shopify.R
+import com.example.shopify.model.brands.SmartCollection
+import org.w3c.dom.Text
 
-class BrandsAdapter(private val context: Context, private val brandImages: List<Int>,var listener: OnBrandClickListener) : RecyclerView.Adapter<BrandsAdapter.ViewHolder>() {
+class BrandsAdapter(private val context: Context, var brands: List<SmartCollection>, var listener: OnBrandClickListener) : RecyclerView.Adapter<BrandsAdapter.ViewHolder>() {
 
+    fun setBrandsList(brandsList: List<SmartCollection>) {
+        this.brands = brandsList
+        notifyDataSetChanged()
+    }
     override fun getItemCount(): Int {
-        return brandImages.size
+        return brands.size
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -23,8 +30,7 @@ class BrandsAdapter(private val context: Context, private val brandImages: List<
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val imageResource = brandImages[position]
-        holder.image.setImageResource(imageResource)
+        Glide.with(context).load(brands[position].image.src).into(holder.brandImg)
         holder.card.setOnClickListener {
             listener.goToProducts()
 
@@ -32,7 +38,7 @@ class BrandsAdapter(private val context: Context, private val brandImages: List<
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val image: ImageView = itemView.findViewById(R.id.iv_brand_home)
+        val brandImg: ImageView = itemView.findViewById(R.id.iv_brand_home)
         val card: CardView = itemView.findViewById(R.id.brands_card)
     }
 }
