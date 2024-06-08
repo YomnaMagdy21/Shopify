@@ -1,27 +1,29 @@
 package com.example.shopify.model
 
 data class Customer(
-    val id: Long,
-    val email: String,
-    val createdAt: String,
-    val updatedAt: String,
-    val firstName: String,
-    val lastName: String,
-    val ordersCount: Int,
-    val state: String,
-    val totalSpent: String,
-    val verifiedEmail: Boolean,
-    val currency: String,
+    val id: Long?,
+    val email: String?,
+    val createdAt: String?,
+    val updatedAt: String?,
+    val first_name: String,
+    val last_name: String,
+    val password: String,
+    val password_confirmation : String?,
+    val ordersCount: Int?,
+    val state: String?,
+    val totalSpent: String?,
+    val verified_email: Boolean,
+    val currency: String?,
     val phone: String?,
-    val addresses: List<Address>,
-    val defaultAddress: Address
+    val addresses: List<Address>?,
+    val defaultAddress: Address?
 )
 
 data class Address(
     val id: Long,
     val customerId: Long,
-    val firstName: String,
-    val lastName: String,
+    val first_name: String,
+    val last_name: String,
     val address1: String,
     val address2: String?,
     val city: String,
@@ -36,6 +38,6 @@ data class Address(
     val default: Boolean
 )
 
-data class CustomerResponse(
-    val customers: List<Customer>
+data class createCustomerRequest(
+    val customer: Customer
 )
