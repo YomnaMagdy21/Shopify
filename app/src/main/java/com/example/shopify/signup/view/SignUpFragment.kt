@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -17,6 +18,8 @@ import com.example.shopify.R
 import com.example.shopify.databinding.FragmentSignUpBinding
 import com.example.shopify.firebase.Firebase
 import com.example.shopify.login.view.SignInFragment
+import com.example.shopify.login.viewmodel.SignInViewModel
+import com.example.shopify.login.viewmodel.SignInViewModelFactory
 import com.example.shopify.model.Customer
 import com.example.shopify.model.ShopifyRepositoryImp
 import com.example.shopify.model.createCustomerRequest
@@ -31,6 +34,7 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -49,6 +53,11 @@ class SignUpFragment : Fragment() {
     lateinit var signUpViewModelFactory: SignUpViewModelFactory
     val TAG = "ID"
     private val RC_SIGN_IN = 123
+
+
+    lateinit var signInViewModel: SignInViewModel
+    lateinit var signInViewModelFactory: SignInViewModelFactory
+
 
     lateinit var mGoogleSignInClient: GoogleSignInClient
     private var isPasswordVisible = false
@@ -77,6 +86,14 @@ class SignUpFragment : Fragment() {
         )
 
         signUpViewModel = ViewModelProvider(this, signUpViewModelFactory).get(SignUpViewModel::class.java)
+
+        signInViewModelFactory = SignInViewModelFactory(
+            ShopifyRepositoryImp.getInstance(
+                ShopifyRemoteDataSourceImp.getInstance()
+            )
+        )
+
+        signInViewModel = ViewModelProvider(this, signInViewModelFactory).get(SignInViewModel::class.java)
 
 
         return binding.root
@@ -140,6 +157,11 @@ class SignUpFragment : Fragment() {
                 binding.email.requestFocus()
                 return@setOnClickListener
             }
+            if(!isValidEmail(email)){
+                binding.email.error = "Invalid Email "
+                binding.email.requestFocus()
+                return@setOnClickListener
+            }
 
             if (password.isEmpty()) {
                 binding.password.error = "Password cannot be empty"
@@ -156,6 +178,7 @@ class SignUpFragment : Fragment() {
                 binding.confirm.requestFocus()
                 return@setOnClickListener
             }
+            binding.progressBar.visibility = View.VISIBLE
             Firebase().createCustomerAccount(email, password) { user, error ->
                 if (user != null) {
 
@@ -176,26 +199,37 @@ class SignUpFragment : Fragment() {
                             lifecycleScope.launch {
                                 signUpViewModel.register.collectLatest { result ->
                                     when (result) {
+                                        is ApiState.Loading ->{
+                                            binding.progressBar.visibility = View.VISIBLE
+                                        }
                                         is ApiState.Success<*> -> {
                                             val person = result.data as? createCustomerRequest
                                             Log.i(TAG, "Customer ID: ${person?.customer?.id}")
-                                            startActivity(Intent(context, BottomNavActivity::class.java))
+                                            var id = person?.customer?.id
+
+                                            parentFragmentManager.beginTransaction().replace(R.id.fragment_container,SignInFragment()).commit()
+                                        //    startActivity(Intent(context, BottomNavActivity::class.java))
                                             Toast.makeText(context, "User registered successfully", Toast.LENGTH_LONG).show()
                                         }
                                         else -> {
 
                                         }
                                     }
+                                    binding.progressBar.visibility = View.GONE
                                 }
                             }
                         } else {
                             Log.e(TAG, "Failed to send verification email.", emailTask.exception)
                             Toast.makeText(context, "Failed to send verification email.", Toast.LENGTH_LONG).show()
+                            binding.progressBar.visibility = View.GONE
+
                         }
                     }
                 } else {
                     Log.e(TAG, "Account creation failed: $error")
                     Toast.makeText(context, "Account creation failed: $error", Toast.LENGTH_LONG).show()
+                    binding.progressBar.visibility = View.GONE
+
                 }
             }
         }
@@ -208,6 +242,10 @@ class SignUpFragment : Fragment() {
 
 
     }
+    private fun isValidEmail(email: String): Boolean {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == RC_SIGN_IN) {
@@ -216,6 +254,8 @@ class SignUpFragment : Fragment() {
                 val account = task.getResult(ApiException::class.java)
                 if (account != null && account.idToken != null) {
                     handleSignInResult(account.idToken!!)
+                    binding.progressBar.visibility = View.VISIBLE
+
                     Toast.makeText(context, "login with google successfully", Toast.LENGTH_SHORT)
                         .show()
                 } else {
@@ -238,52 +278,72 @@ class SignUpFragment : Fragment() {
                 if (task.isSuccessful) {
                     val user = mAuth.currentUser
                     if (user != null) {
+                        Firebase().checkIfEmailExists(user.email!!) { exists ->
+                            if (exists) {
 
-                        user.sendEmailVerification().addOnCompleteListener { emailTask ->
-                            if (emailTask.isSuccessful) {
-                                Log.i(TAG, "Verification email sent to ${user.email}")
-
-                                Firebase().checkIfUserExists(user.uid) { exists ->
-                                    if (exists) {
-                                        startActivity(Intent(context, BottomNavActivity::class.java))
-                                        Toast.makeText(context, "Welcome back! Verification email sent.", Toast.LENGTH_LONG).show()
-                                    } else {
-                                        val customer = Customer(
-                                            0, user.email, null, null, "", "", "", "", 0, null, null,
-                                            true, null, null, null, null
-                                        )
-                                        Firebase().writeNewUser(customer)
-
-                                        val client = createCustomerRequest(customer)
-                                        signUpViewModel.registerCustomerInAPI(client)
-
-                                        lifecycleScope.launch {
-                                            signUpViewModel.register.collectLatest { result ->
-                                                when (result) {
-                                                    is ApiState.Success<*> -> {
-                                                        val person = result.data as? createCustomerRequest
-                                                        Log.i(TAG, "Customer ID: ${person?.customer?.id}")
-                                                        startActivity(Intent(context, BottomNavActivity::class.java))
-                                                        Toast.makeText(context, "User logged in with Google successfully. Verification email sent.", Toast.LENGTH_LONG).show()
-                                                    }
-                                                    else -> {
-
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
+                                proceedToNextPage(user)
+                                signInViewModel.getCustomerByEmail(user.email!!)
                             } else {
-                                Log.e(TAG, "Failed to send verification email.", emailTask.exception)
-                                Toast.makeText(context, "Failed to send verification email.", Toast.LENGTH_LONG).show()
+
+                                user.sendEmailVerification().addOnCompleteListener { emailTask ->
+                                    if (emailTask.isSuccessful) {
+                                        Log.i(TAG, "Verification email sent to ${user.email}")
+                                        proceedToNextPage(user)
+                                    } else {
+                                        Log.e(TAG, "Failed to send verification email.", emailTask.exception)
+                                        Toast.makeText(context, "Failed to send verification email.", Toast.LENGTH_LONG).show()
+                                    }
+                                    binding.progressBar.visibility = View.GONE
+
+                                }
                             }
                         }
                     }
                 } else {
                     Log.e(TAG, "Google sign-in failed", task.exception)
+                    binding.progressBar.visibility = View.GONE
+
                 }
             }
+    }
+
+    private fun proceedToNextPage(user: FirebaseUser) {
+        Firebase().checkIfUserExists(user.uid) { userExists ->
+            if (userExists) {
+                startActivity(Intent(context, BottomNavActivity::class.java))
+                Toast.makeText(context, "Welcome back!", Toast.LENGTH_LONG).show()
+            } else {
+                val customer = Customer(
+                    0, user.email, null, null, "", "", "", "", 0, null, null,
+                    true, null, null, null, null
+                )
+                Firebase().writeNewUser(customer)
+
+                val client = createCustomerRequest(customer)
+                signUpViewModel.registerCustomerInAPI(client)
+
+                lifecycleScope.launch {
+                    signUpViewModel.register.collectLatest { result ->
+                        when (result) {
+                            is ApiState.Loading ->{
+                                binding.progressBar.visibility = View.VISIBLE
+                            }
+                            is ApiState.Success<*> -> {
+                                val person = result.data as? createCustomerRequest
+                                Log.i(TAG, "Customer ID: ${person?.customer?.id}")
+                                startActivity(Intent(context, BottomNavActivity::class.java))
+                                Toast.makeText(context, "User logged in with Google successfully.", Toast.LENGTH_LONG).show()
+                            }
+                            else -> {
+                                // Handle other API states if needed
+                            }
+                        }
+                        binding.progressBar.visibility = View.GONE
+
+                    }
+                }
+            }
+        }
     }
 
 

@@ -6,6 +6,7 @@ import com.example.shopify.model.Customer
 import com.example.shopify.model.Brands.BrandModel
 
 import com.example.shopify.model.createCustomerRequest
+import com.example.shopify.model.createCustomersResponse
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -38,6 +39,18 @@ class ShopifyRemoteDataSourceImp :ShopifyRemoteDataSource {
 
     override suspend fun getBrands(): Flow<BrandModel?> {
         return flowOf(shopifyService.getBrands().body())
+    }
+
+    override fun getCustomerByEmail(email: String): Flow<createCustomersResponse?> {
+        return flow {
+            emit(shopifyService.getCustomerWithEmail(email).body())
+        }
+    }
+
+    override fun getCustomerById(customerId: Long): Flow<createCustomerRequest?> {
+        return flow {
+            emit(shopifyService.getCustomerWithID(customerId).body())
+        }
     }
 
 

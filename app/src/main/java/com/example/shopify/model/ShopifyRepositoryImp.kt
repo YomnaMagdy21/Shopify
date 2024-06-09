@@ -33,5 +33,13 @@ class ShopifyRepositoryImp(private var shopifyRemoteDataSource: ShopifyRemoteDat
         return shopifyRemoteDataSource.getAllProducts()
     }
 
+    override fun getCustomerByEmail(email: String): Flow<createCustomersResponse?> {
+        return shopifyRemoteDataSource.getCustomerByEmail(email)
+    }
+
+    override fun getCustomerById(customerId: Long): Flow<createCustomerRequest?> {
+        return shopifyRemoteDataSource.getCustomerById(customerId)
+    }
+
 
 }

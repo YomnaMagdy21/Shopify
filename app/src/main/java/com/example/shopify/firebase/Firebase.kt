@@ -60,33 +60,31 @@ class Firebase {
             }
         })
     }
-  //  private fun loginClient(email: String, password: String) {
-//        val Email: String = email.getText().toString()
-//        val Password: String = password.getText().toString()
-//        if (TextUtils.isEmpty(Email)) {
-//            email.setError("Email cannot be empty")
-//            email.requestFocus()
-//        } else if (TextUtils.isEmpty(Password)) {
-//            password.setError("Password cannot be empty")
-//            password.requestFocus()
-//        } else {
-  fun loginClient(context: Context, email: String, password: String) {
-//      if (TextUtils.isEmpty(email)) {
-//          Toast.makeText(context, "Email cannot be empty", Toast.LENGTH_LONG).show()
-//          return
-//      }
-//      if (TextUtils.isEmpty(password)) {
-//          Toast.makeText(context, "Password cannot be empty", Toast.LENGTH_LONG).show()
-//          return
-//      }
+    fun checkIfEmailExists(email: String, callback: (Boolean) -> Unit) {
+        mDatabase = FirebaseDatabase.getInstance().reference.child("Customer")
+        mDatabase.orderByChild("email").equalTo(email).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                callback(dataSnapshot.exists())
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                callback(false)
+            }
+        })
+    }
+
+  fun loginClient(context: Context, email: String, password: String, onComplete: (Boolean) -> Unit) {
+
 
       firebaseAuth.signInWithEmailAndPassword(email, password)
           .addOnCompleteListener(OnCompleteListener<AuthResult?> { task ->
               if (task.isSuccessful) {
                   Toast.makeText(context, "User logged in successfully", Toast.LENGTH_LONG).show()
                   context.startActivity(Intent(context, BottomNavActivity::class.java))
+                  onComplete(true)
               } else {
                   Toast.makeText(context, "Login Error: " + task.exception!!.message, Toast.LENGTH_LONG).show()
+                  onComplete(false)
               }
           })
   }

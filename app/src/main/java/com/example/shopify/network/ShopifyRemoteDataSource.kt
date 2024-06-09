@@ -5,6 +5,7 @@ import com.example.shopify.model.Customer
 
 import com.example.shopify.model.Brands.BrandModel
 import com.example.shopify.model.createCustomerRequest
+import com.example.shopify.model.createCustomersResponse
 import kotlinx.coroutines.flow.Flow
 
 interface ShopifyRemoteDataSource {
@@ -16,5 +17,10 @@ interface ShopifyRemoteDataSource {
 
     // get all products of category
     suspend fun getAllProducts(): Flow<CollectProductsModel?>
+
+    fun getCustomerByEmail(email: String):Flow<createCustomersResponse?>
+
+    fun getCustomerById(customerId: Long):Flow<createCustomerRequest?>
+
 
 }

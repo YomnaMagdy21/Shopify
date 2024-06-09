@@ -12,4 +12,7 @@ interface ShopifyRepository {
 
     // get all products of category
     suspend fun getAllProducts(): Flow<CollectProductsModel?>
+
+    fun getCustomerByEmail(email: String):Flow<createCustomersResponse?>
+    fun getCustomerById(customerId: Long):Flow<createCustomerRequest?>
 }
