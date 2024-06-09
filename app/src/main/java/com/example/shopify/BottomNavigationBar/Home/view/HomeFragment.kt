@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -150,9 +151,14 @@ class HomeFragment : Fragment() , OnBrandClickListener {
         brandsRecyclerView.adapter = brandsAdapter
     }
 
-    override fun goToProducts() {
+    override fun goToProducts(brandId: Long) {
+        val bundle = Bundle()
+        bundle.putLong("BRAND_ID", brandId)
+        Log.d("HomeFragment============================", "send ID: $brandId")
+        val fragment = ProductsFragment()
+        fragment.arguments = bundle
         val transaction = (context as AppCompatActivity).supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.frame_layout, ProductsFragment() )
+        transaction.replace(R.id.frame_layout, fragment)
         transaction.addToBackStack(null)
         transaction.commit()
     }

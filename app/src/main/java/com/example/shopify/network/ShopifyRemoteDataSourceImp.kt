@@ -40,5 +40,8 @@ class ShopifyRemoteDataSourceImp :ShopifyRemoteDataSource {
         return flowOf(shopifyService.getBrands().body())
     }
 
+    override suspend fun getCollectionProducts(id: Long): Flow<CollectProductsModel?> {
+        return flowOf(shopifyService.getCollectionProducts(id).body())
 
+    }
 }

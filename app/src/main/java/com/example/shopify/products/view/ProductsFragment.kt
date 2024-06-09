@@ -1,85 +1,118 @@
 package com.example.shopify.products.view
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
+import android.widget.ImageView
+import android.widget.ProgressBar
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.shopify.BottomNavigationBar.Favorite.model.Favorite
-import com.example.shopify.BottomNavigationBar.Favorite.view.FavoriteAdapter
+import androidx.recyclerview.widget.RecyclerView
+import com.example.shopify.Models.products.CollectProductsModel
 import com.example.shopify.R
-import com.example.shopify.databinding.FragmentFavoriteBinding
-import com.example.shopify.databinding.FragmentProductsBinding
-import com.example.shopify.productdetails.view.ProductDetailsFragment
+import com.example.shopify.model.ShopifyRepositoryImp
+import com.example.shopify.model.productDetails.Product
+import com.example.shopify.network.ShopifyRemoteDataSourceImp
+import com.example.shopify.products.viewModel.ProductsOfBrandViewModel
+import com.example.shopify.products.viewModel.ProductsOfBrandViewModelFactory
+import com.example.shopify.utility.ApiState
+import com.google.android.material.slider.Slider
+import kotlinx.coroutines.launch
 
 
-class ProductsFragment : Fragment() ,OnProductClickListener{
+class ProductsFragment : Fragment() ,OnProductClickListener {
+
+    private var brandId: Long? = null
+    private lateinit var productsOfBrandAdapter: ProductAdapter
+    private lateinit var productsRecyclerView: RecyclerView
+    private lateinit var progressBar: ProgressBar
 
 
-    private lateinit var binding: FragmentProductsBinding
-    private lateinit var productAdapter: ProductAdapter
+    lateinit var viewModel: ProductsOfBrandViewModel
+    lateinit var factory: ProductsOfBrandViewModelFactory
+    lateinit var collectProducts: List<Product>
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        binding = FragmentProductsBinding.inflate(inflater, container, false)
+        val view = inflater.inflate(R.layout.fragment_products, container, false)
+        collectProducts = listOf()
+        factory = ProductsOfBrandViewModelFactory(
+            ShopifyRepositoryImp.getInstance(
+                ShopifyRemoteDataSourceImp.getInstance()
+            )
+        )
+        viewModel = ViewModelProvider(
+            this,
+            factory
+        ).get(ProductsOfBrandViewModel::class.java)
 
+        productsRecyclerView = view.findViewById(R.id.recView)
+        progressBar = view.findViewById(R.id.progressBar)
 
-        setUpRecyclerView()
-        val fakeData = generateFakeProduct()
-        productAdapter.submitList(fakeData)
-        return binding.root
+        return view
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            brandId = it.getLong("BRAND_ID")
+            Log.d("ProductsOfBrandFragment", "Received ID: $brandId")
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.filter.setOnClickListener {
-
-            if(binding.filterSlider.visibility == View.GONE){
-                binding.filterSlider.visibility = View.VISIBLE
-                binding.filter.setImageResource(R.drawable.unfilter)
-            }
-            else{
-                binding.filterSlider.visibility = View.GONE
-                binding.filter.setImageResource(R.drawable.filter)
-            }
-        }
-    }
-
-    fun generateFakeProduct(): List<Favorite> {
-        return listOf(
-            Favorite(name = "Product Item 1", img = R.drawable.bag2),
-            Favorite(name = "Product Item 2", img = R.drawable.bag),
-            Favorite(name = "Product Item 3", img = R.drawable.clothes2),
-            Favorite(name = "Product Item 4", img = R.drawable.bag2),
-            Favorite(name = "Product Item 5", img = R.drawable.clothes),
-            Favorite(name = "Product Item 6", img = R.drawable.bag),
-            Favorite(name = "Product Item 7", img = R.drawable.bag2),
-            Favorite(name = "Product Item 8", img = R.drawable.clothes1)
-            // Favorite(name = "Product Item 9", img = R.drawable.clothes2)
-
-        )
-    }
-    fun setUpRecyclerView(){
-        productAdapter=ProductAdapter(requireContext(),this)
+        productsOfBrandAdapter = ProductAdapter(requireContext(), listOf(), this)
         val gridLayoutManager = GridLayoutManager(context, 2) // 2 columns
+        productsRecyclerView.layoutManager = gridLayoutManager
+        productsRecyclerView.adapter = productsOfBrandAdapter
 
-        binding.recView.apply {
-            adapter = productAdapter
-            layoutManager = gridLayoutManager
-
+        brandId?.let {
+            viewModel.getProductsOfBrands(it)
+            setBrandData()
         }
 
+
     }
+
+    fun setBrandData() {
+        lifecycleScope.launch {
+            viewModel.accessProductsList.collect { result ->
+                when (result) {
+                    is ApiState.Success<*> -> {
+                        progressBar.visibility = View.GONE
+                        productsRecyclerView.visibility = View.VISIBLE
+
+                        val products = result.data as CollectProductsModel
+                        collectProducts = products?.products ?: listOf()
+
+                        Log.d("ProductsOfBrandFragment", "Retrieved data: ${collectProducts.size}")
+
+                        productsOfBrandAdapter.setProductsBrandsList(collectProducts)
+                    }
+                    is ApiState.Failure -> {
+                        progressBar.visibility = View.GONE
+                        productsRecyclerView.visibility = View.GONE
+                    }
+                    is ApiState.Loading -> {
+                        progressBar.visibility = View.VISIBLE
+                        productsRecyclerView.visibility = View.GONE
+                    }
+                }
+            }
+        }
+    }
+
 
     override fun goToDetails() {
-        val transaction = (context as AppCompatActivity).supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.frame_layout, ProductDetailsFragment() )
-        transaction.addToBackStack(null)
-        transaction.commit()
+        // Implementation for goToDetails
     }
 }

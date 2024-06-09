@@ -17,4 +17,7 @@ interface ShopifyRemoteDataSource {
     // get all products of category
     suspend fun getAllProducts(): Flow<CollectProductsModel?>
 
+    // get all products of brand
+    suspend fun getCollectionProducts(id: Long): Flow<CollectProductsModel?>
+
 }
