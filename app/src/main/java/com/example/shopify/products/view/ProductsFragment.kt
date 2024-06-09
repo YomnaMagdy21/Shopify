@@ -30,7 +30,8 @@ class ProductsFragment : Fragment() ,OnProductClickListener {
     private lateinit var productsOfBrandAdapter: ProductAdapter
     private lateinit var productsRecyclerView: RecyclerView
     private lateinit var progressBar: ProgressBar
-
+    private lateinit var filterImg : ImageView
+    private lateinit var filterSlider : Slider
 
     lateinit var viewModel: ProductsOfBrandViewModel
     lateinit var factory: ProductsOfBrandViewModelFactory
@@ -56,6 +57,8 @@ class ProductsFragment : Fragment() ,OnProductClickListener {
 
         productsRecyclerView = view.findViewById(R.id.recView)
         progressBar = view.findViewById(R.id.progressBar)
+        filterImg = view.findViewById(R.id.filter)
+        filterSlider = view.findViewById(R.id.filterSlider)
 
         return view
     }
@@ -78,6 +81,23 @@ class ProductsFragment : Fragment() ,OnProductClickListener {
         brandId?.let {
             viewModel.getProductsOfBrands(it)
             setBrandData()
+        }
+
+        // filter
+        filterImg.setOnClickListener {
+            if(filterSlider.visibility == View.GONE){
+                filterSlider.visibility = View.VISIBLE
+                filterImg.setImageResource(R.drawable.unfilter)
+            }
+            else{
+                filterSlider.visibility = View.GONE
+                filterImg.setImageResource(R.drawable.filter)
+            }
+        }
+
+        // change in slider listener
+        filterSlider.addOnChangeListener { slider, value, fromUser ->
+            filterProductsByPrice(value)
         }
 
 
@@ -111,6 +131,15 @@ class ProductsFragment : Fragment() ,OnProductClickListener {
         }
     }
 
+
+    // filter
+    fun filterProductsByPrice(price: Float) {
+        val filteredProducts = collectProducts.filter { product ->
+            val productPrice = product.variants?.firstOrNull()?.price?.toFloatOrNull()
+            productPrice != null && productPrice <= price
+        }
+        productsOfBrandAdapter.setProductsBrandsList(filteredProducts)
+    }
 
     override fun goToDetails() {
         // Implementation for goToDetails
