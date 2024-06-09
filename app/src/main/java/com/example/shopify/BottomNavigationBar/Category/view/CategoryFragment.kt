@@ -1,4 +1,4 @@
-package com.example.shopify.BottomNavigationBar.Category
+package com.example.shopify.BottomNavigationBar.Category.view
 
 
 import com.example.shopify.R
@@ -7,14 +7,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.shopify.BottomNavigationBar.Category.viewModel.CategoryViewModel
+import com.example.shopify.BottomNavigationBar.Category.viewModel.CategoryViewModelFactory
+import com.example.shopify.Models.products.CollectProductsModel
+import com.example.shopify.model.ShopifyRepositoryImp
+import com.example.shopify.model.productDetails.Product
+import com.example.shopify.network.ShopifyRemoteDataSourceImp
 import com.example.shopify.productdetails.view.ProductDetailsFragment
+import com.example.shopify.utility.ApiState
+import kotlinx.coroutines.launch
 
-class CategoryFragment : Fragment() ,OnCategoryClickListener{
+class CategoryFragment : Fragment() , OnCategoryClickListener {
 
     private lateinit var tvAll: TextView
     private lateinit var tvWomen: TextView
@@ -26,6 +37,12 @@ class CategoryFragment : Fragment() ,OnCategoryClickListener{
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: CategoryProductsAdapter
+
+    lateinit var myProducts: List<Product>
+    lateinit var categoryViewModel: CategoryViewModel
+    lateinit var categoryViewModelFactory: CategoryViewModelFactory
+    private lateinit var progressBar: ProgressBar
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,9 +59,9 @@ class CategoryFragment : Fragment() ,OnCategoryClickListener{
         ivBags = view.findViewById(R.id.iv_sub_cat_bags)
 
         recyclerView = view.findViewById(R.id.rv_products_in_category)
-        adapter = CategoryProductsAdapter(requireContext(),this)
-        recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
-        recyclerView.adapter = adapter
+
+        progressBar = view.findViewById(R.id.progressBar2)
+
 
         // Click listeners for TextViews
         tvAll.setOnClickListener { selectCategory(tvAll) }
@@ -61,8 +78,67 @@ class CategoryFragment : Fragment() ,OnCategoryClickListener{
         selectCategory(tvAll)
         selectImageView(ivClothes)
 
+
+        categoryViewModelFactory = CategoryViewModelFactory(
+            ShopifyRepositoryImp.getInstance(
+                ShopifyRemoteDataSourceImp.getInstance()
+            )
+        )
+        categoryViewModel = ViewModelProvider(
+            requireActivity(),
+            categoryViewModelFactory
+        ).get(CategoryViewModel::class.java)
+
         return view
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        myProducts = listOf()
+        adapter = CategoryProductsAdapter(requireContext() , this ,  listOf())
+        adapter = CategoryProductsAdapter(requireContext() , this ,  listOf())
+        recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
+        recyclerView.adapter = adapter
+        setProductList()
+        categoryViewModel.getAllProducts()
+
+
+    }
+
+    fun setProductList() {
+        lifecycleScope.launch {
+            categoryViewModel.accessAllProductList.collect { result ->
+                when (result) {
+                    is ApiState.Success<*> -> {
+                        progressBar.visibility = View.GONE
+                        recyclerView.visibility = View.VISIBLE
+
+
+                        var products = result.data as CollectProductsModel?
+                        products?.let {
+                            myProducts = it.products
+                            adapter.updateData(it.products)
+                        }
+                    }
+
+                    is ApiState.Failure -> {
+                        progressBar.visibility = View.GONE
+                        recyclerView.visibility = View.GONE
+
+                    }
+
+                    is ApiState.Loading -> {
+                        progressBar.visibility = View.VISIBLE
+                        recyclerView.visibility = View.GONE
+
+                    }
+
+                }
+
+            }
+        }
+    }
+
 
     private fun selectCategory(selectedTextView: TextView) {
         val categories = listOf(tvAll, tvWomen, tvMen, tvKids)

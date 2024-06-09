@@ -1,5 +1,6 @@
 package com.example.shopify.network
 
+import com.example.shopify.Models.products.CollectProductsModel
 import com.example.shopify.model.Customer
 
 import com.example.shopify.model.Brands.BrandModel
@@ -31,6 +32,11 @@ interface ShopifyService {
     @Headers("X-Shopify-Access-Token: ${Constants.adminApiAccessToken}")
     @GET("/admin/api/2024-04/smart_collections.json")
     suspend fun getBrands() : Response<BrandModel>
+
+    // get all products in category
+    @Headers("X-Shopify-Access-Token: ${Constants.adminApiAccessToken}")
+    @GET("admin/api/2023-04/products.json")
+    suspend fun getAllProducts() : Response<CollectProductsModel>
 
 
 }

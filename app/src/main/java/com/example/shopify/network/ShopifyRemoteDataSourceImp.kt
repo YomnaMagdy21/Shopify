@@ -1,5 +1,6 @@
 package com.example.shopify.network
 
+import com.example.shopify.Models.products.CollectProductsModel
 import com.example.shopify.model.Customer
 
 import com.example.shopify.model.Brands.BrandModel
@@ -29,6 +30,10 @@ class ShopifyRemoteDataSourceImp :ShopifyRemoteDataSource {
         return  flow {
             emit(shopifyService.addNewCustomer(customer).body())
         }
+    }
+
+    override suspend fun getAllProducts(): Flow<CollectProductsModel?> {
+        return flowOf(shopifyService.getAllProducts().body())
     }
 
     override suspend fun getBrands(): Flow<BrandModel?> {
