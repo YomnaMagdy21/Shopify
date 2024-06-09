@@ -3,12 +3,14 @@ package com.example.shopify.BottomNavigationBar.Category.view
 
 import com.example.shopify.R
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -18,11 +20,21 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.shopify.BottomNavigationBar.Category.viewModel.CategoryViewModel
 import com.example.shopify.BottomNavigationBar.Category.viewModel.CategoryViewModelFactory
 import com.example.shopify.Models.products.CollectProductsModel
+import com.example.shopify.model.Address
+import com.example.shopify.model.Customer
 import com.example.shopify.model.ShopifyRepositoryImp
+import com.example.shopify.model.draftModel.DraftOrder
+import com.example.shopify.model.draftModel.DraftOrderResponse
+import com.example.shopify.model.draftModel.LineItem
+import com.example.shopify.model.draftModel.NoteAttribute
 import com.example.shopify.model.productDetails.Product
 import com.example.shopify.network.ShopifyRemoteDataSourceImp
 import com.example.shopify.productdetails.view.ProductDetailsFragment
+import com.example.shopify.shoppingCard.view.model.ShoppingCardRepo
+import com.example.shopify.shoppingCard.view.viewModel.PriceRuleViewModelFactory
+import com.example.shopify.shoppingCard.view.viewModel.ShoppingCardViewModel
 import com.example.shopify.utility.ApiState
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 
 class CategoryFragment : Fragment() , OnCategoryClickListener {
@@ -42,6 +54,8 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
     lateinit var categoryViewModel: CategoryViewModel
     lateinit var categoryViewModelFactory: CategoryViewModelFactory
     private lateinit var progressBar: ProgressBar
+
+    private lateinit var shoppingCartViewModel: ShoppingCardViewModel
 
 
     override fun onCreateView(
@@ -89,20 +103,66 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
             categoryViewModelFactory
         ).get(CategoryViewModel::class.java)
 
+        //shopping card view model initilization
+        val factory = PriceRuleViewModelFactory(ShoppingCardRepo())
+        shoppingCartViewModel = ViewModelProvider(this, factory).get(ShoppingCardViewModel::class.java)
+
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         myProducts = listOf()
-        adapter = CategoryProductsAdapter(requireContext() , this ,  listOf())
-        adapter = CategoryProductsAdapter(requireContext() , this ,  listOf())
+        adapter = CategoryProductsAdapter(requireContext() , this ,  listOf()){ product ->
+            addProductToCart(product)
+        }
         recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
         recyclerView.adapter = adapter
         setProductList()
         categoryViewModel.getAllProducts()
 
 
+    }
+
+    //still we need to check not to add twic and to choose the size and color
+    private fun addProductToCart(product: Product) {
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        val userEmail = currentUser?.email
+
+        if (currentUser != null) {
+
+            var order = DraftOrder()
+            order.email = userEmail
+            var draft_orders = DraftOrderResponse()
+            order.note = "cart"
+            var lineItems = LineItem()
+            lineItems.quantity = 1
+            lineItems.variant_id = product.variants!![0].id
+            order.line_items = listOf(lineItems)
+            var note_attribute = NoteAttribute()
+            note_attribute.name = "image"
+            note_attribute.value = product.images!![0].src
+            order.note_attributes = listOf(note_attribute)
+            draft_orders = DraftOrderResponse(order)
+
+
+            Log.d("DraftOrder", "Creating Draft Order: $draft_orders")
+
+            shoppingCartViewModel.createDraftOrder(draft_orders)
+
+            lifecycleScope.launch {
+                shoppingCartViewModel.draftOrderResponse.collect { draftOrderResponse ->
+                    if (draftOrderResponse != null) {
+                        Toast.makeText(requireContext(), "Added to cart", Toast.LENGTH_LONG).show()
+                    } else {
+                        Toast.makeText(requireContext(), "Failed to add to cart", Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
+
+        } else {
+            Toast.makeText(requireContext(), "User not logged in", Toast.LENGTH_SHORT).show()
+        }
     }
 
     fun setProductList() {
@@ -166,4 +226,5 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
         transaction.addToBackStack(null)
         transaction.commit()
     }
+
 }

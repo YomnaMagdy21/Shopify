@@ -21,7 +21,10 @@ import com.example.shopify.payment.paymentFragment
 import com.example.shopify.shoppingCard.view.model.ShoppingCardRepo
 import com.example.shopify.shoppingCard.view.viewModel.PriceRuleViewModelFactory
 import com.example.shopify.shoppingCard.view.viewModel.ShoppingCardViewModel
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -29,6 +32,7 @@ import kotlinx.coroutines.withContext
 class shoppingCardFragment : Fragment() {
 
     private lateinit var viewModel: ShoppingCardViewModel
+    private lateinit var adapter: ShoppingCardAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -49,16 +53,34 @@ class shoppingCardFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val items = listOf(
-            Item("Product 1", "10.99 EGP", 1, R.drawable.tshirt),
-            Item("Product 2", "20.99 EGP", 2, R.drawable.tshirt),
-            Item("Product 3", "30.99 EGP", 3, R.drawable.tshirt)
-        )
-
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerViewCardList)
         recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.adapter = ShoppingCardAdapter(items)
+        adapter = ShoppingCardAdapter(emptyList())
+        recyclerView.adapter = adapter
 
+        //cards
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        val userEmail = currentUser?.email.toString()
+        viewModel.getDraftOrders(userEmail)
+
+        lifecycleScope.launch {
+            viewModel.draftOrderList.collectLatest { draftOrders ->
+                val items = draftOrders?.map { draftOrder ->
+                    Item(
+                        title = draftOrder.line_items?.get(0)?.title ?: "No Name",
+                        price = draftOrder.total_price ?: "0.0",
+                        numberOfItems = draftOrder.line_items?.sumOf {
+                            it.quantity ?: 0
+                        } ?: 0,
+                        imageResId = R.drawable.tshirt
+                    )
+                } ?: emptyList()
+                adapter.updateItems(items)
+               }
+            }
+
+
+       //navigationg to checkout fragment
         val checkOut = view.findViewById<Button>(R.id.checkOutButton)
         checkOut.setOnClickListener {
             val newFragment = paymentFragment()
@@ -67,6 +89,8 @@ class shoppingCardFragment : Fragment() {
                 .addToBackStack(null)
                 .commit()
         }
+
+        //coupone validation
         val editText = view.findViewById<EditText>(R.id.editTextText)
         val applyButton = view.findViewById<Button>(R.id.applyButton)
         val textView = view.findViewById<TextView>(R.id.textView8)

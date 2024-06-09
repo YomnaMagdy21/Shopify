@@ -55,12 +55,11 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewCardList"
-        android:layout_width="match_parent"
-        android:layout_height="217dp"
-        android:layout_marginTop="28dp"
+        android:layout_width="409dp"
+        android:layout_height="268dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.17"
-        app:layout_constraintStart_toStartOf="@+id/guideline4"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -139,7 +138,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginBottom="9dp"
         android:text="Sub total:"
-        android:textSize="24sp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/editTextText"
         app:layout_constraintStart_toStartOf="@+id/guideline4"
         app:layout_constraintTop_toTopOf="@+id/recyclerViewCardList"
@@ -153,7 +152,7 @@
         android:layout_marginTop="12dp"
         android:layout_marginBottom="15dp"
         android:text="Discount"
-        android:textSize="24sp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
         app:layout_constraintStart_toStartOf="@+id/guideline4"
         app:layout_constraintTop_toBottomOf="@+id/editTextText" />
@@ -164,7 +163,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="28dp"
         android:text="2377.89 EGP"
-        android:textSize="24sp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/textView4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -179,7 +178,7 @@
         android:layout_marginEnd="28dp"
         android:layout_marginBottom="15dp"
         android:text="0.0 EGP"
-        android:textSize="24sp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -192,8 +191,8 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="28dp"
         android:text="Valid"
-        android:textColor="#FB0404"
-        android:textSize="24sp"
+        android:textColor="#0E0E0E"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/editTextText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/editTextText" />

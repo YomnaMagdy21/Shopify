@@ -9,7 +9,7 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shopify.R
 
-class ShoppingCardAdapter(private val items: List<Item>) : RecyclerView.Adapter<ShoppingCardAdapter.ShoppingCardViewHolder>() {
+class ShoppingCardAdapter(private var items: List<Item>) : RecyclerView.Adapter<ShoppingCardAdapter.ShoppingCardViewHolder>() {
 
     class ShoppingCardViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val cardView: CardView = view.findViewById(R.id.myCardList)
@@ -36,6 +36,11 @@ class ShoppingCardAdapter(private val items: List<Item>) : RecyclerView.Adapter<
     }
 
     override fun getItemCount(): Int = items.size
+
+    fun updateItems(newItems: List<Item>) {
+        items = newItems
+        notifyDataSetChanged()
+    }
 }
 
 data class Item(
