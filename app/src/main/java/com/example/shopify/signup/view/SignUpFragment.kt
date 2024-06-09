@@ -179,7 +179,7 @@ class SignUpFragment : Fragment() {
                 return@setOnClickListener
             }
             binding.progressBar.visibility = View.VISIBLE
-            Firebase().createCustomerAccount(email, password) { user, error ->
+            Firebase(requireContext()).createCustomerAccount(email, password) { user, error ->
                 if (user != null) {
 
                     user.sendEmailVerification().addOnCompleteListener { emailTask ->
@@ -193,7 +193,7 @@ class SignUpFragment : Fragment() {
                                 true, null, null, null, null
                             )
                             val client = createCustomerRequest(customer)
-                            Firebase().writeNewUser(customer)
+                            Firebase(requireContext()).writeNewUser(customer)
                             signUpViewModel.registerCustomerInAPI(client)
 
                             lifecycleScope.launch {
@@ -278,11 +278,12 @@ class SignUpFragment : Fragment() {
                 if (task.isSuccessful) {
                     val user = mAuth.currentUser
                     if (user != null) {
-                        Firebase().checkIfEmailExists(user.email!!) { exists ->
+                        Firebase(requireContext()).checkIfEmailExists(user.email!!) { exists ->
                             if (exists) {
 
                                 proceedToNextPage(user)
                                 signInViewModel.getCustomerByEmail(user.email!!)
+                                Firebase(requireContext()).saveLoginState(true)
                             } else {
 
                                 user.sendEmailVerification().addOnCompleteListener { emailTask ->
@@ -308,7 +309,7 @@ class SignUpFragment : Fragment() {
     }
 
     private fun proceedToNextPage(user: FirebaseUser) {
-        Firebase().checkIfUserExists(user.uid) { userExists ->
+        Firebase(requireContext()).checkIfUserExists(user.uid) { userExists ->
             if (userExists) {
                 startActivity(Intent(context, BottomNavActivity::class.java))
                 Toast.makeText(context, "Welcome back!", Toast.LENGTH_LONG).show()
@@ -317,7 +318,7 @@ class SignUpFragment : Fragment() {
                     0, user.email, null, null, "", "", "", "", 0, null, null,
                     true, null, null, null, null
                 )
-                Firebase().writeNewUser(customer)
+                Firebase(requireContext()).writeNewUser(customer)
 
                 val client = createCustomerRequest(customer)
                 signUpViewModel.registerCustomerInAPI(client)

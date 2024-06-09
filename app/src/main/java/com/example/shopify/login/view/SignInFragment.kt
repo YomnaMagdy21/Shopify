@@ -111,7 +111,7 @@ class SignInFragment : Fragment() {
 
 
             binding.progressBar.visibility = View.VISIBLE
-            Firebase().loginClient(requireContext(), email, password) {isSuccess ->
+            Firebase(requireContext()).loginClient(requireContext(), email, password) {isSuccess ->
                 binding.progressBar.visibility = View.GONE
                 if (!isSuccess) {
                     binding.password.error = "Incorrect password"
@@ -196,11 +196,13 @@ class SignInFragment : Fragment() {
                 if (task.isSuccessful) {
                     val user = mAuth.currentUser
                     if (user != null) {
-                        Firebase().checkIfEmailExists(user.email!!) { exists ->
+                        Firebase(requireContext()).checkIfEmailExists(user.email!!) { exists ->
                             if (exists) {
 
                                 proceedToNextPage(user)
                                 signInViewModel.getCustomerByEmail(user.email!!)
+
+                                Firebase(requireContext()).saveLoginState(true)
                             } else {
 
                                 user.sendEmailVerification().addOnCompleteListener { emailTask ->
@@ -223,7 +225,7 @@ class SignInFragment : Fragment() {
     }
 
     private fun proceedToNextPage(user: FirebaseUser) {
-        Firebase().checkIfUserExists(user.uid) { userExists ->
+        Firebase(requireContext()).checkIfUserExists(user.uid) { userExists ->
             if (userExists) {
                 startActivity(Intent(context, BottomNavActivity::class.java))
                 Toast.makeText(context, "Welcome back!", Toast.LENGTH_LONG).show()
@@ -232,7 +234,7 @@ class SignInFragment : Fragment() {
                     0, user.email, null, null, "", "", "", "", 0, null, null,
                     true, null, null, null, null
                 )
-                Firebase().writeNewUser(customer)
+                Firebase(requireContext()).writeNewUser(customer)
 
                 val client = createCustomerRequest(customer)
                 signUpViewModel.registerCustomerInAPI(client)

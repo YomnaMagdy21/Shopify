@@ -3,6 +3,7 @@ package com.example.shopify.firebase
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.text.TextUtils
 import android.widget.Toast
 import com.example.shopify.BottomNavigationBar.BottomNavActivity
@@ -17,9 +18,12 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
-class Firebase {
+class Firebase(private val context: Context) {
      var firebaseAuth = FirebaseAuth.getInstance()
      lateinit var mDatabase: DatabaseReference
+    private val sharedPreferences: SharedPreferences =
+        context.getSharedPreferences("ShopifyPrefs", Context.MODE_PRIVATE)
+
     fun createCustomerAccount(email: String, password: String, callback: (FirebaseUser?, String?) -> Unit) {
         firebaseAuth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener {
@@ -81,6 +85,7 @@ class Firebase {
               if (task.isSuccessful) {
                   Toast.makeText(context, "User logged in successfully", Toast.LENGTH_LONG).show()
                   context.startActivity(Intent(context, BottomNavActivity::class.java))
+                  saveLoginState(true)
                   onComplete(true)
               } else {
                   Toast.makeText(context, "Login Error: " + task.exception!!.message, Toast.LENGTH_LONG).show()
@@ -88,4 +93,18 @@ class Firebase {
               }
           })
   }
+    fun saveLoginState(isLoggedIn: Boolean) {
+        val editor = sharedPreferences.edit()
+        editor.putBoolean("isLoggedIn", isLoggedIn)
+        editor.apply()
+    }
+
+    fun getLoginState(): Boolean {
+        return sharedPreferences.getBoolean("isLoggedIn", false)
+    }
+    fun logout() {
+        firebaseAuth.signOut()
+        saveLoginState(false)
+    }
+
 }
