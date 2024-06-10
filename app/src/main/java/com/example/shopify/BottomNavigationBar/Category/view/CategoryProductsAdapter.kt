@@ -34,7 +34,7 @@ class CategoryProductsAdapter(private val context: Context, var listener: OnCate
         holder.productPrice.text = product.variants?.get(0)?.price + " EGP"
         Glide.with(context).load(product.image?.src).into(holder.productImage)
         holder.card.setOnClickListener {
-            listener.onCategoryClick()
+            listener.onCategoryClick(product.id?: 8663275405476)
         }
     }
 
