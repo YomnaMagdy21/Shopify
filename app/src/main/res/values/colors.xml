@@ -7,4 +7,9 @@
     <color name="blue">#4EA7EA</color>
     <color name="backgroundColor1">#F7F7F7</color>
 
+    <color name="custom_rating_color">#FFA500</color>
+
+    <color name="border_color">#3C91D5</color>
+
+
 </resources>

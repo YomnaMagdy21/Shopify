@@ -17,6 +17,8 @@ import com.example.shopify.R
 
 import com.example.shopify.databinding.FragmentSignInBinding
 import com.example.shopify.firebase.Firebase
+import com.example.shopify.login.viewmodel.SignInViewModel
+import com.example.shopify.login.viewmodel.SignInViewModelFactory
 import com.example.shopify.model.Customer
 import com.example.shopify.model.ShopifyRepositoryImp
 import com.example.shopify.model.createCustomerRequest
@@ -32,6 +34,7 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -47,6 +50,9 @@ class SignInFragment : Fragment() {
     val TAG = "ID"
     lateinit var signUpViewModel: SignUpViewModel
     lateinit var signUpViewModelFactory: SignUpViewModelFactory
+
+    lateinit var signInViewModel: SignInViewModel
+    lateinit var signInViewModelFactory: SignInViewModelFactory
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,6 +79,14 @@ class SignInFragment : Fragment() {
 
         signUpViewModel = ViewModelProvider(this, signUpViewModelFactory).get(SignUpViewModel::class.java)
 
+        signInViewModelFactory = SignInViewModelFactory(
+            ShopifyRepositoryImp.getInstance(
+                ShopifyRemoteDataSourceImp.getInstance()
+            )
+        )
+
+        signInViewModel = ViewModelProvider(this, signInViewModelFactory).get(SignInViewModel::class.java)
+
 
 
         return binding.root
@@ -96,8 +110,33 @@ class SignInFragment : Fragment() {
             }
 
 
-        Firebase().loginClient(requireContext(),email,password)
-//            val intent= Intent(requireContext(), BottomNavActivity::class.java)
+            binding.progressBar.visibility = View.VISIBLE
+            Firebase(requireContext()).loginClient(requireContext(), email, password) {isSuccess ->
+                binding.progressBar.visibility = View.GONE
+                if (!isSuccess) {
+                    binding.password.error = "Incorrect password"
+                    binding.password.requestFocus()
+                }
+            }
+
+            lifecycleScope.launch {
+                signInViewModel.login.collectLatest {result->
+                    when(result){
+                        is ApiState.Loading ->{
+                            binding.progressBar.visibility= View.VISIBLE
+                        }
+                        is ApiState.Success<*> ->{
+
+                            signInViewModel.getCustomerByEmail(email)
+                        }
+                        else ->{
+
+                        }
+                    }
+
+                }
+            }
+        //            val intent= Intent(requireContext(), BottomNavActivity::class.java)
 //            startActivity(intent)
         }
         binding.signup.setOnClickListener {
@@ -122,6 +161,7 @@ class SignInFragment : Fragment() {
         binding.logo.setOnClickListener {
             val signInIntent = mGoogleSignInClient.signInIntent
             startActivityForResult(signInIntent, RC_SIGN_IN)
+            binding.progressBar.visibility = View.VISIBLE
         }
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -143,6 +183,8 @@ class SignInFragment : Fragment() {
                 Log.e(TAG,
                     "Google sign-in failed: " + e.statusCode
                 )
+            }finally {
+                binding.progressBar.visibility = View.GONE
             }
         }
     }
@@ -154,52 +196,70 @@ class SignInFragment : Fragment() {
                 if (task.isSuccessful) {
                     val user = mAuth.currentUser
                     if (user != null) {
+                        Firebase(requireContext()).checkIfEmailExists(user.email!!) { exists ->
+                            if (exists) {
 
-                        user.sendEmailVerification().addOnCompleteListener { emailTask ->
-                            if (emailTask.isSuccessful) {
-                                Log.i(TAG, "Verification email sent to ${user.email}")
+                                proceedToNextPage(user)
+                                signInViewModel.getCustomerByEmail(user.email!!)
 
-                                Firebase().checkIfUserExists(user.uid) { exists ->
-                                    if (exists) {
-                                        startActivity(Intent(context, BottomNavActivity::class.java))
-                                        Toast.makeText(context, "Welcome back! Verification email sent.", Toast.LENGTH_LONG).show()
+                                Firebase(requireContext()).saveLoginState(true)
+                            } else {
+
+                                user.sendEmailVerification().addOnCompleteListener { emailTask ->
+                                    if (emailTask.isSuccessful) {
+                                        Log.i(TAG, "Verification email sent to ${user.email}")
+                                        proceedToNextPage(user)
                                     } else {
-                                        val customer = Customer(
-                                            0, user.email, null, null, "", "", "", "", 0, null, null,
-                                            true, null, null, null, null
-                                        )
-                                        Firebase().writeNewUser(customer)
-
-                                        val client = createCustomerRequest(customer)
-                                        signUpViewModel.registerCustomerInAPI(client)
-
-                                        lifecycleScope.launch {
-                                            signUpViewModel.register.collectLatest { result ->
-                                                when (result) {
-                                                    is ApiState.Success<*> -> {
-                                                        val person = result.data as? createCustomerRequest
-                                                        Log.i(TAG, "Customer ID: ${person?.customer?.id}")
-                                                        startActivity(Intent(context, BottomNavActivity::class.java))
-                                                        Toast.makeText(context, "User logged in with Google successfully. Verification email sent.", Toast.LENGTH_LONG).show()
-                                                    }
-                                                    else -> {
-
-                                                    }
-                                                }
-                                            }
-                                        }
+                                        Log.e(TAG, "Failed to send verification email.", emailTask.exception)
+                                        Toast.makeText(context, "Failed to send verification email.", Toast.LENGTH_LONG).show()
                                     }
                                 }
-                            } else {
-                                Log.e(TAG, "Failed to send verification email.", emailTask.exception)
-                                Toast.makeText(context, "Failed to send verification email.", Toast.LENGTH_LONG).show()
                             }
                         }
                     }
                 } else {
                     Log.e(TAG, "Google sign-in failed", task.exception)
                 }
+                binding.progressBar.visibility = View.GONE
             }
+    }
+
+    private fun proceedToNextPage(user: FirebaseUser) {
+        Firebase(requireContext()).checkIfUserExists(user.uid) { userExists ->
+            if (userExists) {
+                startActivity(Intent(context, BottomNavActivity::class.java))
+                Toast.makeText(context, "Welcome back!", Toast.LENGTH_LONG).show()
+            } else {
+                val customer = Customer(
+                    0, user.email, null, null, "", "", "", "", 0, null, null,
+                    true, null, null, null, null
+                )
+                Firebase(requireContext()).writeNewUser(customer)
+
+                val client = createCustomerRequest(customer)
+                signUpViewModel.registerCustomerInAPI(client)
+
+                lifecycleScope.launch {
+                    signUpViewModel.register.collectLatest { result ->
+                        when (result) {
+                            is ApiState.Loading ->{
+                                binding.progressBar.visibility = View.VISIBLE
+                            }
+                            is ApiState.Success<*> -> {
+                                val person = result.data as? createCustomerRequest
+                                Log.i(TAG, "Customer ID: ${person?.customer?.id}")
+                                startActivity(Intent(context, BottomNavActivity::class.java))
+                                Toast.makeText(context, "User logged in with Google successfully.", Toast.LENGTH_LONG).show()
+                            }
+                            else -> {
+                                // Handle other API states if needed
+                            }
+                        }
+                        binding.progressBar.visibility = View.GONE
+                    }
+                }
+            }
+        }
     }
 
 
