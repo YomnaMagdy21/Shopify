@@ -1,5 +1,6 @@
 package com.example.shopify.network
 
+import com.example.shopify.Models.products.CollectProductsModel
 import com.example.shopify.model.Customer
 
 import com.example.shopify.model.Brands.BrandModel
@@ -31,9 +32,24 @@ class ShopifyRemoteDataSourceImp :ShopifyRemoteDataSource {
         }
     }
 
+    override suspend fun getAllProducts(): Flow<CollectProductsModel?> {
+        return flowOf(shopifyService.getAllProducts().body())
+    }
+
     override suspend fun getBrands(): Flow<BrandModel?> {
         return flowOf(shopifyService.getBrands().body())
     }
 
+    override suspend fun getCollectionProducts(id: Long): Flow<CollectProductsModel?> {
+        return flowOf(shopifyService.getCollectionProducts(id).body())
+
+    }
+
+    override suspend fun getProducts(
+        collectionId: Long?,
+        productType: String?
+    ): Flow<CollectProductsModel?> {
+        return flowOf(shopifyService.getProducts(collectionId , productType).body())
+    }
 
 }
