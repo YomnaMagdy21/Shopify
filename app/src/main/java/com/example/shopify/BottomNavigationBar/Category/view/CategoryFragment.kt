@@ -19,6 +19,7 @@ import com.example.shopify.BottomNavigationBar.Category.viewModel.CategoryViewMo
 import com.example.shopify.BottomNavigationBar.Category.viewModel.CategoryViewModelFactory
 import com.example.shopify.Models.products.CollectProductsModel
 import com.example.shopify.model.ShopifyRepositoryImp
+import com.example.shopify.model.category.CustomCollection
 import com.example.shopify.model.productDetails.Product
 import com.example.shopify.network.ShopifyRemoteDataSourceImp
 import com.example.shopify.productdetails.view.ProductDetailsFragment
@@ -31,6 +32,8 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
     private lateinit var tvWomen: TextView
     private lateinit var tvMen: TextView
     private lateinit var tvKids: TextView
+    private lateinit var tvSale: TextView
+
     private lateinit var ivClothes: ImageView
     private lateinit var ivShoes: ImageView
     private lateinit var ivBags: ImageView
@@ -38,7 +41,6 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: CategoryProductsAdapter
 
-    lateinit var myProducts: List<Product>
     lateinit var categoryViewModel: CategoryViewModel
     lateinit var categoryViewModelFactory: CategoryViewModelFactory
     private lateinit var progressBar: ProgressBar
@@ -51,6 +53,7 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
         val view = inflater.inflate(R.layout.fragment_category, container, false)
 
         tvAll = view.findViewById(R.id.tv_main_category_all)
+        tvSale = view.findViewById(R.id.tv_main_category_sale)
         tvWomen = view.findViewById(R.id.tv_main_category_women)
         tvMen = view.findViewById(R.id.tv_main_category_men)
         tvKids = view.findViewById(R.id.tv_main_category_kids)
@@ -62,22 +65,9 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
 
         progressBar = view.findViewById(R.id.progressBar2)
 
-
-        // Click listeners for TextViews
-        tvAll.setOnClickListener { selectCategory(tvAll) }
-        tvWomen.setOnClickListener { selectCategory(tvWomen) }
-        tvMen.setOnClickListener { selectCategory(tvMen) }
-        tvKids.setOnClickListener { selectCategory(tvKids) }
-
-        // Click listeners for ImageViews
-        ivClothes.setOnClickListener { selectImageView(ivClothes) }
-        ivShoes.setOnClickListener { selectImageView(ivShoes) }
-        ivBags.setOnClickListener { selectImageView(ivBags) }
-
-        // Default selections
-        selectCategory(tvAll)
-        selectImageView(ivClothes)
-
+        adapter = CategoryProductsAdapter(requireContext() , this ,  listOf())
+        recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
+        recyclerView.adapter = adapter
 
         categoryViewModelFactory = CategoryViewModelFactory(
             ShopifyRepositoryImp.getInstance(
@@ -89,20 +79,56 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
             categoryViewModelFactory
         ).get(CategoryViewModel::class.java)
 
+        // Click listeners for main category
+        ivClothes.setOnClickListener { selectImageView(ivClothes) }
+        ivShoes.setOnClickListener { selectImageView(ivShoes) }
+        ivBags.setOnClickListener { selectImageView(ivBags) }
+
+        setClickListeners()
+        setProductList()
+
+        // Default selection
+        tvAll.performClick()
+        selectImageView(ivClothes)
+
+
         return view
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        myProducts = listOf()
-        adapter = CategoryProductsAdapter(requireContext() , this ,  listOf())
-        adapter = CategoryProductsAdapter(requireContext() , this ,  listOf())
-        recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
-        recyclerView.adapter = adapter
-        setProductList()
+    private fun setClickListeners() {
+        tvAll.setOnClickListener { fetchAllProducts(it) }
+        tvSale.setOnClickListener { fetchProducts(CustomCollection.SALE.id, it) }
+        tvWomen.setOnClickListener { fetchProducts(CustomCollection.WOMEN.id, it) }
+        tvMen.setOnClickListener { fetchProducts(CustomCollection.MEN.id, it) }
+        tvKids.setOnClickListener { fetchProducts(CustomCollection.KID.id, it) }
+    }
+
+    private fun fetchAllProducts(view: View) {
+        updateTextViewStyles(view)
+        progressBar.visibility = View.VISIBLE
+        recyclerView.visibility = View.GONE
         categoryViewModel.getAllProducts()
+    }
 
+    private fun fetchProducts(collectionId: Long, view: View) {
+        updateTextViewStyles(view)
+        progressBar.visibility = View.VISIBLE
+        recyclerView.visibility = View.GONE
+        categoryViewModel.getCollectionProducts(collectionId)
+    }
 
+    private fun updateTextViewStyles(selectedView: View) {
+        val textViews = listOf(tvAll, tvSale, tvWomen, tvMen, tvKids)
+        for (textView in textViews) {
+            if (textView == selectedView) {
+                textView.setBackgroundResource(R.drawable.rounded_selected_text_view)
+                textView.setTextColor(resources.getColor(R.color.white, null))
+            } else {
+                textView.setBackgroundResource(R.drawable.rounded_unselected_text_view)
+                textView.setTextColor(resources.getColor(R.color.black, null))
+            }
+        }
     }
 
     fun setProductList() {
@@ -116,7 +142,6 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
 
                         var products = result.data as CollectProductsModel?
                         products?.let {
-                            myProducts = it.products
                             adapter.updateData(it.products)
                         }
                     }
@@ -140,16 +165,7 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
     }
 
 
-    private fun selectCategory(selectedTextView: TextView) {
-        val categories = listOf(tvAll, tvWomen, tvMen, tvKids)
-        categories.forEach { textView ->
-            textView.setBackgroundResource(R.drawable.rounded_unselected_text_view)
-            textView.setTextColor(resources.getColor(R.color.black))
-        }
 
-        selectedTextView.setBackgroundResource(R.drawable.rounded_selected_text_view)
-        selectedTextView.setTextColor(resources.getColor(R.color.white))
-    }
 
     private fun selectImageView(selectedImageView: ImageView) {
         val imageViews = listOf(ivClothes, ivShoes, ivBags)

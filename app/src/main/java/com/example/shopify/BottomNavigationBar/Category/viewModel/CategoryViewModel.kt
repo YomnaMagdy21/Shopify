@@ -25,8 +25,16 @@ class CategoryViewModel (var repository: ShopifyRepository) : ViewModel() {
                 _allProductList.value = ApiState.Success(brands)
             }
         }
+    }
 
-
+    fun getCollectionProducts(collectionId: Long) {
+        viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
+            repository.getCollectionProducts(collectionId).catch { error ->
+                _allProductList.value = ApiState.Failure(error)
+            }.collect { products ->
+                _allProductList.value = ApiState.Success(products)
+            }
+        }
     }
 
 }
