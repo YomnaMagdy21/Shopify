@@ -11,8 +11,9 @@ import com.bumptech.glide.Glide
 import com.example.shopify.R
 import com.example.shopify.databinding.FragmentProductDetailsBinding
 import com.example.shopify.databinding.ViewpagerItemBinding
+import com.example.shopify.model.productDetails.Image
 
-class ImageAdapter(private val context: Context, private val imageUrls: List<Int>) : PagerAdapter() {
+class ImageAdapter(private val context: Context, private val imageUrls: List<String>) : PagerAdapter() {
 
 
     private lateinit var binding: ViewpagerItemBinding

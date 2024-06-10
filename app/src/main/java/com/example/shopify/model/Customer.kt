@@ -41,3 +41,4 @@ data class Address(
 data class createCustomerRequest(
     val customer: Customer
 )
+data class createCustomersResponse(var customers:List<Customer>)

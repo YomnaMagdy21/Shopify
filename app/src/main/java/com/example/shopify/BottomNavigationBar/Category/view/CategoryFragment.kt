@@ -3,6 +3,7 @@ package com.example.shopify.BottomNavigationBar.Category.view
 
 import com.example.shopify.R
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
+
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shopify.BottomNavigationBar.Category.viewModel.CategoryViewModel
@@ -207,10 +211,20 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
         selectedImageView.setBackgroundResource(R.drawable.rounded_selected_image_view_filter)
     }
 
-    override fun onCategoryClick() {
-        val transaction = (context as AppCompatActivity).supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.frame_layout, ProductDetailsFragment() )
-        transaction.addToBackStack(null)
-        transaction.commit()
+    override fun onCategoryClick(id:Long) {
+
+        val bundle = Bundle()
+        bundle.putLong("product_id",id)
+        val fragmentDetails = ProductDetailsFragment()
+        fragmentDetails.arguments = bundle
+
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.frame_layout, fragmentDetails)
+            .addToBackStack(null)
+            .commit()
+//            val transaction = (context as AppCompatActivity).supportFragmentManager.beginTransaction()
+//        transaction.replace(R.id.frame_layout, ProductDetailsFragment() )
+//        transaction.addToBackStack(null)
+//        transaction.commit()
     }
 }

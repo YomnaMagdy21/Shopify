@@ -2,6 +2,7 @@ package com.example.shopify.model
 
 import com.example.shopify.Models.products.CollectProductsModel
 import com.example.shopify.model.Brands.BrandModel
+import com.example.shopify.model.productDetails.ProductModel
 import com.example.shopify.network.ShopifyRemoteDataSource
 import kotlinx.coroutines.flow.Flow
 
@@ -36,7 +37,20 @@ class ShopifyRepositoryImp(private var shopifyRemoteDataSource: ShopifyRemoteDat
     override suspend fun getCollectionProducts(id: Long): Flow<CollectProductsModel?> {
         return shopifyRemoteDataSource.getCollectionProducts(id)
 
+
+    override fun getCustomerByEmail(email: String): Flow<createCustomersResponse?> {
+        return shopifyRemoteDataSource.getCustomerByEmail(email)
     }
+
+    override fun getCustomerById(customerId: Long): Flow<createCustomerRequest?> {
+        return shopifyRemoteDataSource.getCustomerById(customerId)
+    }
+
+    override fun getProductInfo(product_id: Long): Flow<ProductModel?> {
+        return shopifyRemoteDataSource.getProductInfo(product_id)
+    }
+
+
 
     override suspend fun getProducts(
         collectionId: Long?,

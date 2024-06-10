@@ -3,6 +3,7 @@ package com.example.shopify.firebase
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.text.TextUtils
 import android.widget.Toast
 import com.example.shopify.BottomNavigationBar.BottomNavActivity
@@ -17,9 +18,12 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
-class Firebase {
+class Firebase(private val context: Context) {
      var firebaseAuth = FirebaseAuth.getInstance()
      lateinit var mDatabase: DatabaseReference
+    private val sharedPreferences: SharedPreferences =
+        context.getSharedPreferences("ShopifyPrefs", Context.MODE_PRIVATE)
+
     fun createCustomerAccount(email: String, password: String, callback: (FirebaseUser?, String?) -> Unit) {
         firebaseAuth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener {
@@ -60,34 +64,47 @@ class Firebase {
             }
         })
     }
-  //  private fun loginClient(email: String, password: String) {
-//        val Email: String = email.getText().toString()
-//        val Password: String = password.getText().toString()
-//        if (TextUtils.isEmpty(Email)) {
-//            email.setError("Email cannot be empty")
-//            email.requestFocus()
-//        } else if (TextUtils.isEmpty(Password)) {
-//            password.setError("Password cannot be empty")
-//            password.requestFocus()
-//        } else {
-  fun loginClient(context: Context, email: String, password: String) {
-//      if (TextUtils.isEmpty(email)) {
-//          Toast.makeText(context, "Email cannot be empty", Toast.LENGTH_LONG).show()
-//          return
-//      }
-//      if (TextUtils.isEmpty(password)) {
-//          Toast.makeText(context, "Password cannot be empty", Toast.LENGTH_LONG).show()
-//          return
-//      }
+    fun checkIfEmailExists(email: String, callback: (Boolean) -> Unit) {
+        mDatabase = FirebaseDatabase.getInstance().reference.child("Customer")
+        mDatabase.orderByChild("email").equalTo(email).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                callback(dataSnapshot.exists())
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                callback(false)
+            }
+        })
+    }
+
+  fun loginClient(context: Context, email: String, password: String, onComplete: (Boolean) -> Unit) {
+
 
       firebaseAuth.signInWithEmailAndPassword(email, password)
           .addOnCompleteListener(OnCompleteListener<AuthResult?> { task ->
               if (task.isSuccessful) {
                   Toast.makeText(context, "User logged in successfully", Toast.LENGTH_LONG).show()
                   context.startActivity(Intent(context, BottomNavActivity::class.java))
+                  saveLoginState(true)
+                  onComplete(true)
               } else {
                   Toast.makeText(context, "Login Error: " + task.exception!!.message, Toast.LENGTH_LONG).show()
+                  onComplete(false)
               }
           })
   }
+    fun saveLoginState(isLoggedIn: Boolean) {
+        val editor = sharedPreferences.edit()
+        editor.putBoolean("isLoggedIn", isLoggedIn)
+        editor.apply()
+    }
+
+    fun getLoginState(): Boolean {
+        return sharedPreferences.getBoolean("isLoggedIn", false)
+    }
+    fun logout() {
+        firebaseAuth.signOut()
+        saveLoginState(false)
+    }
+
 }

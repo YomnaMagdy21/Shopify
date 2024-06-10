@@ -5,14 +5,31 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.cardview.widget.CardView
 import com.example.shopify.R
+import com.example.shopify.databinding.FragmentSettingBinding
+import com.example.shopify.firebase.Firebase
+import com.example.shopify.login.view.SignInFragment
 import com.example.shopify.setting.MyAddresses.view.myAddressFragment
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 
 class settingFragment : Fragment() {
 
+    private lateinit var binding: FragmentSettingBinding
+
+    lateinit var mGoogleSignInClient: GoogleSignInClient
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.clientID))
+            .requestEmail()
+            .build()
+        mGoogleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
 
     }
 
@@ -21,7 +38,9 @@ class settingFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_setting, container, false)
+        binding = FragmentSettingBinding.inflate(inflater, container, false)
+
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -35,6 +54,26 @@ class settingFragment : Fragment() {
                 .addToBackStack(null)
                 .commit()
         }
+        binding.logOutButton.setOnClickListener {
+            Firebase(requireContext()).logout()
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.home_fragment, SignInFragment())
+                .commit()
+            signOut()
+        }
+
     }
+
+    fun signOut() {
+        val account = GoogleSignIn.getLastSignedInAccount(requireContext())
+        if (account != null) {
+            mGoogleSignInClient.signOut()
+                .addOnCompleteListener(requireActivity()) {
+
+                }
+        }
+    }
+
+
 
 }
