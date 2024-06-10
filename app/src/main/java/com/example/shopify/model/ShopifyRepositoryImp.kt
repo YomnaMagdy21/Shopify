@@ -32,6 +32,16 @@ class ShopifyRepositoryImp(private var shopifyRemoteDataSource: ShopifyRemoteDat
     override suspend fun getAllProducts(): Flow<CollectProductsModel?> {
         return shopifyRemoteDataSource.getAllProducts()
     }
+    // get all products of chosen brand
+    override suspend fun getCollectionProducts(id: Long): Flow<CollectProductsModel?> {
+        return shopifyRemoteDataSource.getCollectionProducts(id)
 
+    }
 
+    override suspend fun getProducts(
+        collectionId: Long?,
+        productType: String?
+    ): Flow<CollectProductsModel?> {
+        return shopifyRemoteDataSource.getProducts(collectionId , productType)
+    }
 }

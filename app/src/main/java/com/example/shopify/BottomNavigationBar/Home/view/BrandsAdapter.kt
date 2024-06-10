@@ -32,7 +32,7 @@ class BrandsAdapter(private val context: Context, var brands: List<SmartCollecti
         Glide.with(context).load(brands[position].image.src).into(holder.brandImg)
         holder.brandTitle.text = brands[position].title
         holder.card.setOnClickListener {
-            listener.goToProducts()
+            listener.goToProducts(brands[position].id)
 
         }
     }
