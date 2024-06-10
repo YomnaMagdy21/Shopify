@@ -17,19 +17,9 @@ class CategoryViewModel (var repository: ShopifyRepository) : ViewModel() {
     val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
         throwable.printStackTrace()
     }
-    fun getAllProducts() {
-        viewModelScope.launch(Dispatchers.IO+coroutineExceptionHandler) {
-            repository.getAllProducts().catch { error ->
-                _allProductList.value = ApiState.Failure(error)
-            }.collect { brands ->
-                _allProductList.value = ApiState.Success(brands)
-            }
-        }
-    }
-
-    fun getCollectionProducts(collectionId: Long) {
+    fun getProducts(collectionId: Long?, productType: String?) {
         viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
-            repository.getCollectionProducts(collectionId).catch { error ->
+            repository.getProducts(collectionId, productType).catch { error ->
                 _allProductList.value = ApiState.Failure(error)
             }.collect { products ->
                 _allProductList.value = ApiState.Success(products)

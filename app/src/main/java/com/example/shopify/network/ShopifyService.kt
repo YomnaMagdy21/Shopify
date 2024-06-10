@@ -45,4 +45,13 @@ interface ShopifyService {
     @GET("admin/api/2024-04/products.json")
     suspend fun getCollectionProducts(@Query("collection_id") collectionId: Long): Response<CollectProductsModel>
 
+
+    // get category products according to the main and sub categories
+    @Headers("X-Shopify-Access-Token: ${Constants.adminApiAccessToken}")
+    @GET("admin/api/2024-04/products.json")
+    suspend fun getProducts(
+        @Query("collection_id") collectionId: Long?,
+        @Query("product_type") productType: String?
+    ): Response<CollectProductsModel>
+
 }

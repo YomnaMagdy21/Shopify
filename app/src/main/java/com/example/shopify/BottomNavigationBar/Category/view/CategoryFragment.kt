@@ -20,6 +20,7 @@ import com.example.shopify.BottomNavigationBar.Category.viewModel.CategoryViewMo
 import com.example.shopify.Models.products.CollectProductsModel
 import com.example.shopify.model.ShopifyRepositoryImp
 import com.example.shopify.model.category.CustomCollection
+import com.example.shopify.model.category.SubCustomCollections
 import com.example.shopify.model.productDetails.Product
 import com.example.shopify.network.ShopifyRemoteDataSourceImp
 import com.example.shopify.productdetails.view.ProductDetailsFragment
@@ -34,9 +35,10 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
     private lateinit var tvKids: TextView
     private lateinit var tvSale: TextView
 
-    private lateinit var ivClothes: ImageView
+    private lateinit var ivTShirts: ImageView
     private lateinit var ivShoes: ImageView
-    private lateinit var ivBags: ImageView
+    private lateinit var ivAccessories: ImageView
+    private lateinit var ivBlock: ImageView
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: CategoryProductsAdapter
@@ -45,7 +47,8 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
     lateinit var categoryViewModelFactory: CategoryViewModelFactory
     private lateinit var progressBar: ProgressBar
 
-
+    private var selectedCollectionId: Long? = null
+    private var selectedProductType: SubCustomCollections? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -57,9 +60,10 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
         tvWomen = view.findViewById(R.id.tv_main_category_women)
         tvMen = view.findViewById(R.id.tv_main_category_men)
         tvKids = view.findViewById(R.id.tv_main_category_kids)
-        ivClothes = view.findViewById(R.id.iv_sub_cat_clothes)
+        ivTShirts = view.findViewById(R.id.iv_sub_cat_clothes)
         ivShoes = view.findViewById(R.id.iv_sub_cat_shoes)
-        ivBags = view.findViewById(R.id.iv_sub_cat_bags)
+        ivAccessories = view.findViewById(R.id.iv_sub_cat_bags)
+        ivBlock = view.findViewById(R.id.iv_sub_cat_block)
 
         recyclerView = view.findViewById(R.id.rv_products_in_category)
 
@@ -79,43 +83,70 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
             categoryViewModelFactory
         ).get(CategoryViewModel::class.java)
 
-        // Click listeners for main category
-        ivClothes.setOnClickListener { selectImageView(ivClothes) }
-        ivShoes.setOnClickListener { selectImageView(ivShoes) }
-        ivBags.setOnClickListener { selectImageView(ivBags) }
+        // Click listeners for sub category
+        ivTShirts.setOnClickListener {
+            selectedProductType = SubCustomCollections.T_SHIRTS
+            selectImageView(ivTShirts)
+            fetchProducts()
+        }
+        ivShoes.setOnClickListener {
+            selectedProductType = SubCustomCollections.SHOES
+            selectImageView(ivShoes)
+            fetchProducts()
+        }
+        ivAccessories.setOnClickListener {
+            selectedProductType = SubCustomCollections.ACCESSORIES
+            selectImageView(ivAccessories)
+            fetchProducts()
+        }
+
+        ivBlock.setOnClickListener {
+            selectedProductType = null
+            selectImageView(ivBlock)
+            fetchProducts()
+        }
 
         setClickListeners()
         setProductList()
 
-        // Default selection
-        tvAll.performClick()
-        selectImageView(ivClothes)
+        // Default selection: get all products "without any filtration"
+        fetchProducts()
 
 
         return view
     }
 
 
+    // Click listeners for main category
     private fun setClickListeners() {
-        tvAll.setOnClickListener { fetchAllProducts(it) }
-        tvSale.setOnClickListener { fetchProducts(CustomCollection.SALE.id, it) }
-        tvWomen.setOnClickListener { fetchProducts(CustomCollection.WOMEN.id, it) }
-        tvMen.setOnClickListener { fetchProducts(CustomCollection.MEN.id, it) }
-        tvKids.setOnClickListener { fetchProducts(CustomCollection.KID.id, it) }
+        tvAll.setOnClickListener {
+            selectedCollectionId = null
+            fetchProducts(view = it)
+        }
+        tvSale.setOnClickListener {
+            selectedCollectionId = CustomCollection.SALE.id
+            fetchProducts(view = it)
+        }
+        tvWomen.setOnClickListener {
+            selectedCollectionId = CustomCollection.WOMEN.id
+            fetchProducts(view = it)
+        }
+        tvMen.setOnClickListener {
+            selectedCollectionId = CustomCollection.MEN.id
+            fetchProducts(view = it)
+        }
+        tvKids.setOnClickListener {
+            selectedCollectionId = CustomCollection.KID.id
+            fetchProducts(view = it)
+        }
     }
 
-    private fun fetchAllProducts(view: View) {
-        updateTextViewStyles(view)
-        progressBar.visibility = View.VISIBLE
-        recyclerView.visibility = View.GONE
-        categoryViewModel.getAllProducts()
-    }
 
-    private fun fetchProducts(collectionId: Long, view: View) {
-        updateTextViewStyles(view)
+    private fun fetchProducts(collectionId: Long? = selectedCollectionId, view: View? = null) {
+        view?.let { updateTextViewStyles(it) }
         progressBar.visibility = View.VISIBLE
         recyclerView.visibility = View.GONE
-        categoryViewModel.getCollectionProducts(collectionId)
+        categoryViewModel.getProducts(collectionId, selectedProductType?.type)
     }
 
     private fun updateTextViewStyles(selectedView: View) {
@@ -168,7 +199,7 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
 
 
     private fun selectImageView(selectedImageView: ImageView) {
-        val imageViews = listOf(ivClothes, ivShoes, ivBags)
+        val imageViews = listOf(ivTShirts, ivShoes, ivAccessories , ivBlock)
         imageViews.forEach { imageView ->
             imageView.setBackgroundResource(R.drawable.rounded_unselected_image_view_filter)
         }

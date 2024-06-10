@@ -15,4 +15,8 @@ interface ShopifyRepository {
 
     // get all products of chosen brand
     suspend fun getCollectionProducts(id:Long) : Flow<CollectProductsModel?>
+
+    // get category products according to the main and sub categories
+    suspend fun getProducts(collectionId: Long?, productType: String?) : Flow<CollectProductsModel?>
+
 }
