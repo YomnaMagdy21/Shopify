@@ -52,7 +52,7 @@ class ProductAdapter(var context: Context, var productsOfBrand: List<Product>, v
             Glide.with(context).load(it.image?.src).into(holder.productImg)
 
             holder.card.setOnClickListener {
-                listener.goToDetails()
+                listener.goToDetails(current.id?: 8663275405476)
             }
         }
     }
