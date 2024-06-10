@@ -43,6 +43,7 @@ class ShopifyRemoteDataSourceImp :ShopifyRemoteDataSource {
         return flowOf(shopifyService.getBrands().body())
     }
 
+
     override fun getCustomerByEmail(email: String): Flow<createCustomersResponse?> {
         return flow {
             emit(shopifyService.getCustomerWithEmail(email).body())
@@ -59,6 +60,18 @@ class ShopifyRemoteDataSourceImp :ShopifyRemoteDataSource {
         return flow {
             emit(shopifyService.getProductInfo(product_id).body())
         }
+    }
+
+    override suspend fun getCollectionProducts(id: Long): Flow<CollectProductsModel?> {
+        return flowOf(shopifyService.getCollectionProducts(id).body())
+
+    }
+
+    override suspend fun getProducts(
+        collectionId: Long?,
+        productType: String?
+    ): Flow<CollectProductsModel?> {
+        return flowOf(shopifyService.getProducts(collectionId , productType).body())
     }
 
 

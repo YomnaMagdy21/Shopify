@@ -16,7 +16,9 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.POST
+
 import retrofit2.http.Path
+
 import retrofit2.http.Query
 
 interface ShopifyService {
@@ -42,6 +44,20 @@ interface ShopifyService {
     @GET("admin/api/2023-04/products.json")
     suspend fun getAllProducts() : Response<CollectProductsModel>
 
+    // get all products of chosen brand
+
+    @Headers("X-Shopify-Access-Token: ${Constants.adminApiAccessToken}")
+    @GET("admin/api/2024-04/products.json")
+    suspend fun getCollectionProducts(@Query("collection_id") collectionId: Long): Response<CollectProductsModel>
+
+
+    // get category products according to the main and sub categories
+    @Headers("X-Shopify-Access-Token: ${Constants.adminApiAccessToken}")
+    @GET("admin/api/2024-04/products.json")
+    suspend fun getProducts(
+        @Query("collection_id") collectionId: Long?,
+        @Query("product_type") productType: String?
+    ): Response<CollectProductsModel>
 
     @Headers("X-Shopify-Access-Token: ${Constants.adminApiAccessToken}")
     @GET("customers/search.json")
