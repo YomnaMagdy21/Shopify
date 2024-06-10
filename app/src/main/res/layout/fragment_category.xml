@@ -166,9 +166,9 @@
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_marginHorizontal="10dp"
-                        android:src="@drawable/clothes"
+                        android:src="@drawable/clothes2222"
                         android:background="@drawable/rounded_unselected_image_view_filter"
-                        android:scaleType="centerCrop"
+                        android:scaleType="centerInside"
                         android:clipToOutline="true" />
 
                     <ImageView
@@ -176,9 +176,9 @@
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_marginHorizontal="10dp"
-                        android:src="@drawable/shoes"
+                        android:src="@drawable/shoess2222"
                         android:background="@drawable/rounded_unselected_image_view_filter"
-                        android:scaleType="centerCrop"
+                        android:scaleType="centerInside"
                         android:clipToOutline="true" />
 
                     <ImageView
@@ -186,9 +186,9 @@
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_marginHorizontal="10dp"
-                        android:src="@drawable/bag2"
+                        android:src="@drawable/bag22222"
                         android:background="@drawable/rounded_unselected_image_view_filter"
-                        android:scaleType="centerCrop"
+                        android:scaleType="centerInside"
                         android:clipToOutline="true" />
                 </LinearLayout>
             </LinearLayout>
