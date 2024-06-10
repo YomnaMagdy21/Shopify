@@ -15,8 +15,8 @@ import com.example.shopify.model.productDetails.Product
 
 class CategoryProductsAdapter(private val context: Context,
                               var listener: OnCategoryClickListener,
-                              private var myProducts: List<Product>,
-                              private val onAddToCartClick: (Product) -> Unit) : RecyclerView.Adapter<CategoryProductsAdapter.ViewHolder>() {
+                              private var myProducts: List<Product>
+                              /*private val onAddToCartClick: (Product) -> Unit*/) : RecyclerView.Adapter<CategoryProductsAdapter.ViewHolder>() {
     fun updateData(myNewProducts: List<Product>){
         this.myProducts = myNewProducts
         notifyDataSetChanged()
@@ -40,9 +40,9 @@ class CategoryProductsAdapter(private val context: Context,
         holder.card.setOnClickListener {
             listener.onCategoryClick(product.id?: 8663275405476)
         }
-        holder.addToCartButton.setOnClickListener {
+        /*holder.addToCartButton.setOnClickListener {
             onAddToCartClick(product)
-        }
+        }*/
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

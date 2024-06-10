@@ -15,8 +15,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.Navigation
-import androidx.navigation.fragment.findNavController
 
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -87,12 +85,11 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
         recyclerView = view.findViewById(R.id.rv_products_in_category)
 
         progressBar = view.findViewById(R.id.progressBar2)
-        
-        myProducts = listOf()
+
       
-        adapter = CategoryProductsAdapter(requireContext() , this ,  listOf()){ product ->
+        adapter = CategoryProductsAdapter(requireContext() , this ,  listOf())/*{ product ->
             addProductToCart(product)
-        }
+        }*/
        
         recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
         recyclerView.adapter = adapter
@@ -194,56 +191,56 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
     }
 
     
-    private fun addProductToCart(product: Product) {
-        val currentUser = FirebaseAuth.getInstance().currentUser
-        val userEmail = currentUser?.email
-
-        Log.d("AddToCart", "Attempting to add product to cart: $product")
-
-        if (currentUser != null) {
-            val variantId = product.variants?.get(0)?.id
-            if (variantId != null && !categoryViewModel.addedProductIds.contains(variantId)) {
-                Log.d("AddToCart", "Product not already in cart. Proceeding to add.")
-                var order = DraftOrder()
-                order.email = userEmail
-                var draft_orders = DraftOrderResponse()
-                order.note = "cart"
-                var lineItems = LineItem()
-                lineItems.quantity = 1
-                lineItems.variant_id = product.variants!![0].id
-                order.line_items = listOf(lineItems)
-                var note_attribute = NoteAttribute()
-                note_attribute.name = "image"
-                note_attribute.value = product.images!![0].src
-                order.note_attributes = listOf(note_attribute)
-                draft_orders = DraftOrderResponse(order)
-
-
-                Log.d("DraftOrder", "Creating Draft Order: $draft_orders")
-
-                shoppingCartViewModel.createDraftOrder(draft_orders)
-
-                lifecycleScope.launch {
-                    shoppingCartViewModel.draftOrderResponse.collect { draftOrderResponse ->
-                        if (draftOrderResponse != null) {
-                            //add the id
-                            variantId.let { categoryViewModel.addedProductIds.add(it) }
-                            Toast.makeText(requireContext(), "Added to cart", Toast.LENGTH_LONG)
-                                .show()
-                        } else {
-                            Toast.makeText(
-                                requireContext(),
-                                "Failed to add to cart",
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
-                    }
-                }
-            }
-        } else {
-            Toast.makeText(requireContext(), "User not logged in", Toast.LENGTH_SHORT).show()
-        }
-    }
+//    private fun addProductToCart(product: Product) {
+//        val currentUser = FirebaseAuth.getInstance().currentUser
+//        val userEmail = currentUser?.email
+//
+//        Log.d("AddToCart", "Attempting to add product to cart: $product")
+//
+//        if (currentUser != null) {
+//            val variantId = product.variants?.get(0)?.id
+//            if (variantId != null && !categoryViewModel.addedProductIds.contains(variantId)) {
+//                Log.d("AddToCart", "Product not already in cart. Proceeding to add.")
+//                var order = DraftOrder()
+//                order.email = userEmail
+//                var draft_orders = DraftOrderResponse()
+//                order.note = "cart"
+//                var lineItems = LineItem()
+//                lineItems.quantity = 1
+//                lineItems.variant_id = product.variants!![0].id
+//                order.line_items = listOf(lineItems)
+//                var note_attribute = NoteAttribute()
+//                note_attribute.name = "image"
+//                note_attribute.value = product.images!![0].src
+//                order.note_attributes = listOf(note_attribute)
+//                draft_orders = DraftOrderResponse(order)
+//
+//
+//                Log.d("DraftOrder", "Creating Draft Order: $draft_orders")
+//
+//                shoppingCartViewModel.createDraftOrder(draft_orders)
+//
+//                lifecycleScope.launch {
+//                    shoppingCartViewModel.draftOrderResponse.collect { draftOrderResponse ->
+//                        if (draftOrderResponse != null) {
+//                            //add the id
+//                            variantId.let { categoryViewModel.addedProductIds.add(it) }
+//                            Toast.makeText(requireContext(), "Added to cart", Toast.LENGTH_LONG)
+//                                .show()
+//                        } else {
+//                            Toast.makeText(
+//                                requireContext(),
+//                                "Failed to add to cart",
+//                                Toast.LENGTH_LONG
+//                            ).show()
+//                        }
+//                    }
+//                }
+//            }
+//        } else {
+//            Toast.makeText(requireContext(), "User not logged in", Toast.LENGTH_SHORT).show()
+//        }
+//    }
 
     fun setProductList() {
         lifecycleScope.launch {

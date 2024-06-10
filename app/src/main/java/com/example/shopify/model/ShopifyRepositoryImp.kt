@@ -35,27 +35,27 @@ class ShopifyRepositoryImp(private var shopifyRemoteDataSource: ShopifyRemoteDat
     }
     // get all products of chosen brand
     override suspend fun getCollectionProducts(id: Long): Flow<CollectProductsModel?> {
-        return shopifyRemoteDataSource.getCollectionProducts(id)
+        return shopifyRemoteDataSource.getCollectionProducts(id)}
 
 
-    override fun getCustomerByEmail(email: String): Flow<createCustomersResponse?> {
-        return shopifyRemoteDataSource.getCustomerByEmail(email)
-    }
+        override fun getCustomerByEmail(email: String): Flow<createCustomersResponse?> {
+            return shopifyRemoteDataSource.getCustomerByEmail(email)
+        }
 
-    override fun getCustomerById(customerId: Long): Flow<createCustomerRequest?> {
-        return shopifyRemoteDataSource.getCustomerById(customerId)
-    }
+        override fun getCustomerById(customerId: Long): Flow<createCustomerRequest?> {
+            return shopifyRemoteDataSource.getCustomerById(customerId)
+        }
 
-    override fun getProductInfo(product_id: Long): Flow<ProductModel?> {
-        return shopifyRemoteDataSource.getProductInfo(product_id)
-    }
+        override fun getProductInfo(product_id: Long): Flow<ProductModel?> {
+            return shopifyRemoteDataSource.getProductInfo(product_id)
+        }
 
 
+        override suspend fun getProducts(
+            collectionId: Long?,
+            productType: String?
+        ): Flow<CollectProductsModel?> {
+            return shopifyRemoteDataSource.getProducts(collectionId, productType)
+        }
 
-    override suspend fun getProducts(
-        collectionId: Long?,
-        productType: String?
-    ): Flow<CollectProductsModel?> {
-        return shopifyRemoteDataSource.getProducts(collectionId , productType)
-    }
 }
