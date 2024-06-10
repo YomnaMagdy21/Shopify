@@ -3,8 +3,8 @@ package com.example.shopify.shoppingCard.view.model
 import android.util.Log
 import com.example.shopify.model.draftModel.DraftOrder
 import com.example.shopify.model.draftModel.DraftOrderResponse
-import com.example.shopify.model.draftModel.Draft_orders_list
 import com.example.shopify.network.RetrofitHelper
+import kotlin.math.log
 
 class ShoppingCardRepo {
     suspend fun getPriceRules(): List<PriceRule> {
@@ -15,13 +15,17 @@ class ShoppingCardRepo {
             throw Exception("Failed to fetch price rules")
         }
     }
+
     suspend fun createDraftOrder(draftOrder: DraftOrderResponse): DraftOrderResponse? {
         return try {
             val response = RetrofitHelper.apiService.postDraftOrders(draftOrder)
             if (response.isSuccessful) {
                 response.body()
             } else {
-                Log.e("ShoppingCardRepo", "Failed to create draft order: ${response.errorBody()?.string()}")
+                Log.e(
+                    "ShoppingCardRepo",
+                    "Failed to create draft order: ${response.errorBody()?.string()}"
+                )
                 null
             }
         } catch (e: Exception) {
@@ -30,14 +34,35 @@ class ShoppingCardRepo {
         }
     }
 
-    suspend fun getDraftOrders():List<DraftOrder>?{
+    suspend fun getDraftOrders(): List<DraftOrder>? {
         val response = RetrofitHelper.apiService.getDraftOrders()
-        if(response.isSuccessful){
+        if (response.isSuccessful) {
             return response.body()?.draft_orders
-        }else{
+        } else {
             throw Exception("failed to get draft orders")
         }
-
     }
 
+    // Delete draft order
+    suspend fun deleteDraftOrder(id: String): Boolean {
+        val response = RetrofitHelper.apiService.deleteProductFromDraftOrder(id)
+        if (response.isSuccessful) {
+            return response.isSuccessful
+            Log.i("del", "deleteDraftOrder: "+response.isSuccessful)
+        } else {
+            throw Exception("failed to delete")
+        }
+    }
+
+    // Update draft order
+    suspend fun updateDraftOrder(id: String, draftOrder: DraftOrderResponse): DraftOrderResponse? {
+        val response = RetrofitHelper.apiService.updateDraftOrder(id, draftOrder)
+        if (response.isSuccessful) {
+           return response.body()
+            Log.i("del", "updateDraftOrder: "+response.body())
+        } else {
+            throw Exception("failed to update")
+        }
+    }
 }
+

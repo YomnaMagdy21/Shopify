@@ -131,6 +131,13 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
 
         if (currentUser != null) {
 
+            val productAlreadyInCart = myProducts.any { it.variants?.get(0)?.id == product.variants?.get(0)?.id }
+
+            if (productAlreadyInCart) {
+                Toast.makeText(requireContext(), "Product is already in the cart", Toast.LENGTH_SHORT).show()
+                return
+            }
+
             var order = DraftOrder()
             order.email = userEmail
             var draft_orders = DraftOrderResponse()

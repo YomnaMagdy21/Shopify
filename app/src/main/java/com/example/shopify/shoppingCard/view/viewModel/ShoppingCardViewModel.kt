@@ -6,9 +6,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.shopify.model.draftModel.DraftOrder
 import com.example.shopify.model.draftModel.DraftOrderResponse
-import com.example.shopify.model.draftModel.Draft_orders_list
 import com.example.shopify.shoppingCard.view.model.PriceRule
 import com.example.shopify.shoppingCard.view.model.ShoppingCardRepo
+import com.google.android.gms.common.api.Response
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -26,6 +26,14 @@ class ShoppingCardViewModel(private val repo: ShoppingCardRepo) : ViewModel() {
     //get draft orders
     private val _getDraftOrderList = MutableStateFlow<List<DraftOrder>?>(emptyList())
     val draftOrderList : StateFlow<List<DraftOrder>?> = _getDraftOrderList
+
+    //update draft order
+    private val _updateDraftOrderList = MutableStateFlow<DraftOrderResponse?>(null)
+    val updateDraftOrderList : StateFlow<DraftOrderResponse?> = _updateDraftOrderList
+
+    //delete product
+    private val _deleteDraftOrderList = MutableStateFlow<DraftOrderResponse?>(null)
+    val deleteDraftOrderList : StateFlow<DraftOrderResponse?> = _deleteDraftOrderList
 
     fun fetchPriceRules() {
         viewModelScope.launch {
@@ -63,6 +71,40 @@ class ShoppingCardViewModel(private val repo: ShoppingCardRepo) : ViewModel() {
                 _getDraftOrderList.value = draftOrders?.filter { it.email == email } ?: emptyList()
             } catch (e: Exception) {
                 Log.e("ShoppingCardViewModel", "Failed to fetch draft orders", e)
+            }
+        }
+    }
+
+    fun deleteDraftOrder(id: String) {
+        viewModelScope.launch {
+            try {
+                val success = repo.deleteDraftOrder(id)
+                if (success) {
+                    _getDraftOrderList.value = _getDraftOrderList.value?.filter { it.id.toString() != id }
+                    Log.i("modeli", "deleteDraftOrder: "+_deleteDraftOrderList.value)
+                } else {
+                    Log.e("ShoppingCardViewModel", "Failed to delete draft order")
+                }
+            } catch (e: Exception) {
+                Log.e("ShoppingCardViewModel", "Exception deleting draft order", e)
+            }
+        }
+    }
+
+    fun updateDraftOrder(id: String, draftOrder: DraftOrderResponse) {
+        viewModelScope.launch {
+            try {
+                val updatedOrder = repo.updateDraftOrder(id, draftOrder)
+                if (updatedOrder != null) {
+                    _getDraftOrderList.value = _getDraftOrderList.value?.map {
+                        if (it.id.toString() == id) updatedOrder.draft_order!! else it
+                    }
+                    Log.i("modeli", "updateDraftOrder: "+_deleteDraftOrderList.value)
+                } else {
+                    Log.e("ShoppingCardViewModel", "Failed to update draft order")
+                }
+            } catch (e: Exception) {
+                Log.e("ShoppingCardViewModel", "Exception updating draft order", e)
             }
         }
     }
