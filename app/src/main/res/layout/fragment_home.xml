@@ -119,6 +119,32 @@
                     app:layout_constraintStart_toStartOf="@+id/rv_brands_in_home"
                     android:visibility="gone" />
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="282dp"
+                android:layout_height="21dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="5dp"
+                android:text="Sale up to 50% "
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/adv_in_home"
+                app:layout_constraintStart_toStartOf="@+id/search_edit_text"
+                app:layout_constraintTop_toBottomOf="@+id/search_edit_text"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <TextView
+                android:id="@+id/textView18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="3dp"
+                android:text="Press on Photo!"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/const_brands_in_home"
+                app:layout_constraintStart_toStartOf="@+id/adv_in_home"
+                app:layout_constraintTop_toBottomOf="@+id/adv_in_home"
+                app:layout_constraintVertical_bias="1.0" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 

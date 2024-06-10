@@ -58,6 +58,8 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
     private lateinit var shoppingCartViewModel: ShoppingCardViewModel
 
 
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -129,44 +131,48 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
         val currentUser = FirebaseAuth.getInstance().currentUser
         val userEmail = currentUser?.email
 
+        Log.d("AddToCart", "Attempting to add product to cart: $product")
+
         if (currentUser != null) {
-
-            val productAlreadyInCart = myProducts.any { it.variants?.get(0)?.id == product.variants?.get(0)?.id }
-
-            if (productAlreadyInCart) {
-                Toast.makeText(requireContext(), "Product is already in the cart", Toast.LENGTH_SHORT).show()
-                return
-            }
-
-            var order = DraftOrder()
-            order.email = userEmail
-            var draft_orders = DraftOrderResponse()
-            order.note = "cart"
-            var lineItems = LineItem()
-            lineItems.quantity = 1
-            lineItems.variant_id = product.variants!![0].id
-            order.line_items = listOf(lineItems)
-            var note_attribute = NoteAttribute()
-            note_attribute.name = "image"
-            note_attribute.value = product.images!![0].src
-            order.note_attributes = listOf(note_attribute)
-            draft_orders = DraftOrderResponse(order)
+            val variantId = product.variants?.get(0)?.id
+            if (variantId != null && !categoryViewModel.addedProductIds.contains(variantId)) {
+                Log.d("AddToCart", "Product not already in cart. Proceeding to add.")
+                var order = DraftOrder()
+                order.email = userEmail
+                var draft_orders = DraftOrderResponse()
+                order.note = "cart"
+                var lineItems = LineItem()
+                lineItems.quantity = 1
+                lineItems.variant_id = product.variants!![0].id
+                order.line_items = listOf(lineItems)
+                var note_attribute = NoteAttribute()
+                note_attribute.name = "image"
+                note_attribute.value = product.images!![0].src
+                order.note_attributes = listOf(note_attribute)
+                draft_orders = DraftOrderResponse(order)
 
 
-            Log.d("DraftOrder", "Creating Draft Order: $draft_orders")
+                Log.d("DraftOrder", "Creating Draft Order: $draft_orders")
 
-            shoppingCartViewModel.createDraftOrder(draft_orders)
+                shoppingCartViewModel.createDraftOrder(draft_orders)
 
-            lifecycleScope.launch {
-                shoppingCartViewModel.draftOrderResponse.collect { draftOrderResponse ->
-                    if (draftOrderResponse != null) {
-                        Toast.makeText(requireContext(), "Added to cart", Toast.LENGTH_LONG).show()
-                    } else {
-                        Toast.makeText(requireContext(), "Failed to add to cart", Toast.LENGTH_LONG).show()
+                lifecycleScope.launch {
+                    shoppingCartViewModel.draftOrderResponse.collect { draftOrderResponse ->
+                        if (draftOrderResponse != null) {
+                            //add the id
+                            variantId.let { categoryViewModel.addedProductIds.add(it) }
+                            Toast.makeText(requireContext(), "Added to cart", Toast.LENGTH_LONG)
+                                .show()
+                        } else {
+                            Toast.makeText(
+                                requireContext(),
+                                "Failed to add to cart",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
                     }
                 }
             }
-
         } else {
             Toast.makeText(requireContext(), "User not logged in", Toast.LENGTH_SHORT).show()
         }

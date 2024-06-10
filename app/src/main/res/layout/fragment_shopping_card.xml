@@ -57,8 +57,9 @@
         android:id="@+id/recyclerViewCardList"
         android:layout_width="409dp"
         android:layout_height="268dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
@@ -70,7 +71,9 @@
         android:background="#FFFEFE"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerViewCardList"
+        app:layout_constraintVertical_bias="1.0">
 
         <Button
             android:id="@+id/checkOutButton"
@@ -118,7 +121,6 @@
         android:layout_height="43dp"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="4dp"
-        android:layout_marginBottom="80dp"
         android:background="@drawable/edittext_border"
         android:ems="10"
         android:inputType="text"
@@ -128,8 +130,10 @@
         app:circularflow_radiusInDP="20dp"
         app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
         app:layout_constraintEnd_toStartOf="@+id/textView8"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/guideline4" />
+        app:layout_constraintHorizontal_bias="0.056"
+        app:layout_constraintStart_toStartOf="@+id/guideline4"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintVertical_bias="0.792" />
 
     <TextView
         android:id="@+id/textView5"
