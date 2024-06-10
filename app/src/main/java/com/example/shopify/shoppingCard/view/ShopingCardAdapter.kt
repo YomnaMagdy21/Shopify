@@ -8,8 +8,13 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shopify.R
+import com.example.shopify.model.draftModel.DraftOrder
+import com.example.shopify.model.draftModel.DraftOrderResponse
+import com.example.shopify.model.draftModel.LineItem
 
-class ShoppingCardAdapter(private val items: List<Item>) : RecyclerView.Adapter<ShoppingCardAdapter.ShoppingCardViewHolder>() {
+class ShoppingCardAdapter(private var items: List<Item>,
+                          private val onAddProduct: (Item) -> Unit,
+                          private val onRemoveProduct: (Item) -> Unit) : RecyclerView.Adapter<ShoppingCardAdapter.ShoppingCardViewHolder>() {
 
     class ShoppingCardViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val cardView: CardView = view.findViewById(R.id.myCardList)
@@ -33,14 +38,29 @@ class ShoppingCardAdapter(private val items: List<Item>) : RecyclerView.Adapter<
         holder.priceTextView.text = item.price
         holder.numberOfItemsTextView.text = item.numberOfItems.toString()
         holder.imageView.setImageResource(item.imageResId)
+
+        holder.plusTextView.setOnClickListener {
+            onAddProduct(item)
+        }
+
+        holder.reduceTextView.setOnClickListener {
+            onRemoveProduct(item)
+        }
+
     }
 
     override fun getItemCount(): Int = items.size
+
+    fun updateItems(newItems: List<Item>) {
+        items = newItems
+        notifyDataSetChanged()
+    }
 }
+
 
 data class Item(
     val title: String,
     val price: String,
-    val numberOfItems: Int,
+    var numberOfItems: Int,
     val imageResId: Int
 )
