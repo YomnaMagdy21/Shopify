@@ -90,8 +90,15 @@ class ProductsFragment : Fragment() ,OnProductClickListener {
                 filterImg.setImageResource(R.drawable.unfilter)
             }
             else{
+
+                // to reset the value of slider after unfilter the filterImg
+                filterSlider.value = filterSlider.valueFrom
+
                 filterSlider.visibility = View.GONE
                 filterImg.setImageResource(R.drawable.filter)
+
+                // to show all products after unfilter the filterImg
+                productsOfBrandAdapter.setProductsBrandsList(collectProducts)
             }
         }
 
