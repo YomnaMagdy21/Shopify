@@ -31,5 +31,7 @@ interface ShopifyRepository {
 
     suspend fun addAddress(customerId:Long, addresse: Address): Flow<AddressesModel?>
 
+    suspend fun removeAddresses(customerId :Long , addressId :Long)
+
 
 }

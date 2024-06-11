@@ -33,7 +33,7 @@
 
     <fragment
         android:id="@+id/myAddressFragment"
-        android:name="com.example.shopify.setting.MyAddress.view.myAddressFragment"
+        android:name="com.example.shopify.MyAddress.view.myAddressFragment"
         android:label="fragment_my_address"
         tools:layout="@layout/fragment_my_address" >
         <action

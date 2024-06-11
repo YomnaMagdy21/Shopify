@@ -1,4 +1,4 @@
-package com.example.shopify.setting.MyAddress.view
+package com.example.shopify.MyAddress.view
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -12,24 +12,17 @@ import android.widget.Button
 import android.widget.ImageView
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shopify.R
-import com.example.shopify.model.ShopifyRepository
 import com.example.shopify.model.ShopifyRepositoryImp
 import com.example.shopify.model.addressModel.Address
 import com.example.shopify.model.addressModel.AddressesModel
-import com.example.shopify.network.RetrofitHelper
-import com.example.shopify.network.ShopifyRemoteDataSource
 import com.example.shopify.network.ShopifyRemoteDataSourceImp
-import com.example.shopify.network.ShopifyService
 import com.example.shopify.payment.paymentFragment
-import com.example.shopify.setting.MyAddress.view.MyAddressAdapter
-import com.example.shopify.setting.MyAddress.viewModel.MyAddressFactory
-import com.example.shopify.setting.MyAddress.viewModel.MyAddressViewModel
-import com.example.shopify.setting.newAddress.view.newAddress
+import com.example.shopify.MyAddress.viewModel.MyAddressFactory
+import com.example.shopify.MyAddress.viewModel.MyAddressViewModel
+import com.example.shopify.newAddress.newAddress
 import com.example.shopify.setting.view.settingFragment
 import com.example.shopify.utility.ApiState
 import com.google.firebase.auth.FirebaseAuth
@@ -68,24 +61,17 @@ class myAddressFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(context)
 
 
-        myAddressAdapter = MyAddressAdapter(emptyList()) { address ->
-            saveAddressToPreferences(address)
-            navigateToPaymentFragment(address)
-        }
-
-        /*myAddressAdapter = MyAddressAdapter(emptyList()) { address ->
-            val bundle = Bundle().apply {
-                putSerializable("selected_address", address)
+        myAddressAdapter = MyAddressAdapter(
+            emptyList(),
+            onItemClick = { address ->
+                saveAddressToPreferences(address)
+                navigateToPaymentFragment(address)
+            },
+            onDeleteButtonClick = { address ->
+                address.id?.let { viewModel.deleteAddress(7670572875940, it) }
+                Log.i("delete", "onViewCreated: "+address.id)
             }
-            val paymentFragment = paymentFragment().apply {
-                arguments = bundle
-            }
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.frame_layout, paymentFragment)
-                .addToBackStack(null)
-                .commit()
-        }*/
-
+        )
 
 
         recyclerView.adapter = myAddressAdapter

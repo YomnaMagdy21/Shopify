@@ -1,5 +1,6 @@
-package com.example.shopify.setting.MyAddress.viewModel
+package com.example.shopify.MyAddress.viewModel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -13,6 +14,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
+import kotlin.math.log
 
 class MyAddressViewModel(var repo:ShopifyRepository) :ViewModel(){
 
@@ -25,6 +27,16 @@ class MyAddressViewModel(var repo:ShopifyRepository) :ViewModel(){
                 _allAddressesList.value = ApiState.Failure(error)
             }.collect { addresses ->
                 _allAddressesList.value = ApiState.Success(addresses)
+            }
+        }
+    }
+
+    fun deleteAddress(customerId: Long, addressId: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                repo.removeAddresses(customerId, addressId)
+            } catch (e: Exception) {
+                Log.i("delete", "deleteAddress: cant delete"+e)
             }
         }
     }

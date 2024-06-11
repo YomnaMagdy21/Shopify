@@ -7,6 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.shopify.R
 import com.example.shopify.model.draftModel.DraftOrder
 import com.example.shopify.model.draftModel.DraftOrderResponse
@@ -37,7 +38,8 @@ class ShoppingCardAdapter(private var items: List<Item>,
         holder.titleTextView.text = item.title
         holder.priceTextView.text = item.price
         holder.numberOfItemsTextView.text = item.numberOfItems.toString()
-        holder.imageView.setImageResource(item.imageResId)
+        //holder.imageView.setImageResource(item.imageResId)
+        Glide.with(holder.itemView.context).load(item.imageUrl).into(holder.imageView)
 
         holder.plusTextView.setOnClickListener {
             onAddProduct(item)
@@ -62,5 +64,6 @@ data class Item(
     val title: String,
     val price: String,
     var numberOfItems: Int,
-    val imageResId: Int
+    //val imageResId: Int,
+    val imageUrl: String
 )

@@ -84,5 +84,9 @@ class ShopifyRemoteDataSourceImp :ShopifyRemoteDataSource {
         return flowOf(shopifyService.addCustomerAddresse(customerId, addresse).body())
     }
 
+    override suspend fun removeAddresses(customerId: Long, addressId: Long) {
+        shopifyService.removeCustomerAddresse(customerId,addressId)
+    }
+
 
 }

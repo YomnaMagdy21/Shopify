@@ -38,6 +38,8 @@ interface ShopifyRemoteDataSource {
     suspend fun getAddresses(customerId :Long):Flow<AddressesModel?>
     suspend fun addAddress(customerId:Long, addresse: Address): Flow<AddressesModel?>
 
+    suspend fun removeAddresses(customerId: Long, addressId: Long)
+
 
 
 }

@@ -1,8 +1,10 @@
-package com.example.shopify.setting.MyAddress.view
+package com.example.shopify.MyAddress.view
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.view.menu.MenuView.ItemView
 import androidx.cardview.widget.CardView
@@ -13,7 +15,8 @@ import com.example.shopify.model.addressModel.Address
 
 
 class MyAddressAdapter(private var addresses: List<Address>,
-                       private val onItemClick: (Address) -> Unit) : RecyclerView.Adapter<MyAddressAdapter.ViewHolder>() {
+                       private val onItemClick: (Address) -> Unit,
+                       private val onDeleteButtonClick: (Address) -> Unit) : RecyclerView.Adapter<MyAddressAdapter.ViewHolder>() {
 
     private var selectedAddressPosition: Int = -1
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -22,6 +25,7 @@ class MyAddressAdapter(private var addresses: List<Address>,
         val country: TextView = view.findViewById(R.id.country_value)
         val phone: TextView = view.findViewById(R.id.client_phone_value)
         val cardView: CardView = view.findViewById(R.id.addresses_card)
+        val deleteButton: ImageButton = view.findViewById(R.id.deleteAddress)
 
         init {
             itemView.setOnClickListener {
@@ -36,6 +40,14 @@ class MyAddressAdapter(private var addresses: List<Address>,
                         notifyItemChanged(selectedAddressPosition)
                         onItemClick(address)
                     }
+                }
+            }
+
+            deleteButton.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    val address = addresses[position]
+                    onDeleteButtonClick(address)
                 }
             }
         }
@@ -55,9 +67,9 @@ class MyAddressAdapter(private var addresses: List<Address>,
 
         // Apply shadow to selected item
         if (selectedAddressPosition == position) {
-            holder.cardView.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context, R.color.backgroundColor1))
+            holder.cardView.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context, R.color.black))
         } else {
-            holder.cardView.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context, R.color.backgroundColor1))
+            holder.cardView.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context, R.color.white))
         }
 
     }

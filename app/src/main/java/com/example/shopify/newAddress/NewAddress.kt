@@ -1,4 +1,4 @@
-package com.example.shopify.setting.newAddress.view
+package com.example.shopify.newAddress
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.shopify.R
-import com.example.shopify.setting.MyAddress.view.myAddressFragment
-import com.example.shopify.setting.map.mapFragment
+import com.example.shopify.MyAddress.view.myAddressFragment
+import com.example.shopify.map.mapFragment
 
 
 class newAddress : Fragment() {

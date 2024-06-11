@@ -11,7 +11,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.example.shopify.R
 import com.example.shopify.model.addressModel.Address
-import com.example.shopify.setting.MyAddress.view.myAddressFragment
+import com.example.shopify.MyAddress.view.myAddressFragment
 import com.example.shopify.shoppingCard.view.shoppingCardFragment
 import com.google.gson.Gson
 

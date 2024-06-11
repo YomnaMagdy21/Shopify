@@ -69,5 +69,9 @@ class ShopifyRepositoryImp(private var shopifyRemoteDataSource: ShopifyRemoteDat
         return shopifyRemoteDataSource.addAddress(customerId,addresse)
     }
 
+    override suspend fun removeAddresses(customerId: Long, addressId: Long) {
+        shopifyRemoteDataSource.removeAddresses(customerId,addressId)
+    }
+
 
 }

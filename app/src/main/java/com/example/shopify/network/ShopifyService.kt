@@ -110,5 +110,11 @@ interface ShopifyService {
     @POST("admin/api/2024-04/customers/{customerId}/addresses.json")
     suspend fun addCustomerAddresse(@Path(value = "customerId") id:Long,@Body addresse: Address) : Response<AddressesModel>
 
+    //delete address
+    @Headers("X-Shopify-Access-Token: ${Constants.adminApiAccessToken}")
+    @DELETE("admin/api/2024-04/customers/{customerId}/addresses/{addressId}.json")
+    suspend fun removeCustomerAddresse(@Path(value = "customerId") customerId:Long ,@Path(value = "addressId") addressId:Long )
+
+
 
 }

@@ -55,13 +55,6 @@ class shoppingCardFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-        val items = listOf(
-            Item("Product 1", "10.99 EGP", 1, R.drawable.clothes2222),
-            Item("Product 2", "20.99 EGP", 2, R.drawable.clothes2222),
-            Item("Product 3", "30.99 EGP", 3, R.drawable.clothes2222)
-        )
-
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerViewCardList)
         recyclerView.layoutManager = LinearLayoutManager(context)
         products = mutableListOf()
@@ -81,13 +74,14 @@ class shoppingCardFragment : Fragment() {
                 if (draftOrders != null) {
                     products.addAll(draftOrders)
                     val items = draftOrders.map { draftOrder ->
+                        val imageUrl = draftOrder.note_attributes?.find { it.name == "image" }?.value ?: ""
                         Item(
                             title = draftOrder.line_items?.get(0)?.title ?: "No Name",
                             price = draftOrder.total_price ?: "0.0",
                             numberOfItems = draftOrder.line_items?.sumOf {
                                 it.quantity ?: 0
                             } ?: 0,
-                            imageResId = R.drawable.tshirt
+                            imageUrl = imageUrl
                         )
                     }
                     adapter.updateItems(items)
@@ -125,6 +119,7 @@ class shoppingCardFragment : Fragment() {
 
             textView.text = "Valid"
             textView.setTextColor(Color.GREEN)
+
         } else {
             textView.text = "Invalid"
             textView.setTextColor(Color.RED)
@@ -185,7 +180,7 @@ class shoppingCardFragment : Fragment() {
     }
 
     private fun calculateTotalPrice(items: List<DraftOrder>) {
-        val totalPrice = items.sumOf { it.total_price?.toDouble() ?: 0.0 }
+        var totalPrice = items.sumOf { it.total_price?.toDouble() ?: 0.0 }
         totalPriceTextView.text = "${"%.2f".format(totalPrice)}"
     }
 
