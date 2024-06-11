@@ -17,6 +17,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/addresses_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="9dp"
@@ -45,7 +46,7 @@
 
                     <TextView
                         android:id="@+id/country_title"
-                        android:layout_width="wrap_content"
+                        android:layout_width="51dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:padding="10dp"
@@ -61,6 +62,38 @@
                         android:layout_weight="1"
                         android:padding="10dp"
                         android:text="Egypt"
+                        android:textSize="18sp" />
+                </LinearLayout>
+
+
+                <!-- city -->
+
+                <LinearLayout
+                    android:id="@+id/ll_third_row"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+
+                    <TextView
+                        android:id="@+id/city_title"
+                        android:layout_width="51dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:padding="10dp"
+                        android:text="City:"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+
+                    <TextView
+                        android:id="@+id/city_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:padding="10dp"
+                        android:text="Asyut"
                         android:textSize="18sp" />
                 </LinearLayout>
 
@@ -98,7 +131,7 @@
                 <!-- Phone Number -->
 
                 <LinearLayout
-                    android:id="@+id/ll_third_row"
+                    android:id="@+id/ll_fourth_row"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
@@ -107,7 +140,7 @@
 
                     <TextView
                         android:id="@+id/client_phone_title"
-                        android:layout_width="wrap_content"
+                        android:layout_width="131dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:padding="10dp"
@@ -128,6 +161,7 @@
 
 
             </LinearLayout>
+
 
         </androidx.cardview.widget.CardView>
 

@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.shopify.R
-import com.example.shopify.setting.MyAddresses.view.myAddressFragment
+import com.example.shopify.setting.MyAddress.view.myAddressFragment
 import com.example.shopify.setting.map.mapFragment
 
 

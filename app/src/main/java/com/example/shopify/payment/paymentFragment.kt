@@ -1,5 +1,7 @@
 package com.example.shopify.payment
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,16 +10,19 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.shopify.R
-import com.example.shopify.setting.MyAddresses.view.myAddressFragment
+import com.example.shopify.model.addressModel.Address
+import com.example.shopify.setting.MyAddress.view.myAddressFragment
 import com.example.shopify.shoppingCard.view.shoppingCardFragment
+import com.google.gson.Gson
 
 class paymentFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
+    private lateinit var address: Address
+    lateinit var myCurrentAdreesText : TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
     }
 
     override fun onCreateView(
@@ -30,6 +35,19 @@ class paymentFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+         myCurrentAdreesText = view.findViewById(R.id.textView10)
+
+        arguments?.let {
+            address = it.getSerializable("selected_address") as Address
+        } ?: run {
+            // If there are no arguments, load the default address from SharedPreferences
+            address = loadAddressFromPreferences() ?: Address("", "", "", "", "", "", "")
+        }
+
+        myCurrentAdreesText.text = "${address.address1}, ${address.city}, ${address.country}, ${address.phone}"
+
+
         //navigate to shopping card fragment
         val back = view.findViewById<ImageView>(R.id.backImage)
         back.setOnClickListener {
@@ -40,7 +58,6 @@ class paymentFragment : Fragment() {
                 .commit()
         }
         //navigate to address list fragment
-        val myCurrentAdreesText = view.findViewById<TextView>(R.id.textView10)
         myCurrentAdreesText.setOnClickListener{
             val newFragment = myAddressFragment()
             parentFragmentManager.beginTransaction()
@@ -48,5 +65,11 @@ class paymentFragment : Fragment() {
                 .addToBackStack(null)
                 .commit()
         }
+    }
+
+    private fun loadAddressFromPreferences(): Address? {
+        val sharedPreferences: SharedPreferences = requireContext().getSharedPreferences("default_address", Context.MODE_PRIVATE)
+        val addressJson = sharedPreferences.getString("address", null)
+        return addressJson?.let { Gson().fromJson(it, Address::class.java) }
     }
 }

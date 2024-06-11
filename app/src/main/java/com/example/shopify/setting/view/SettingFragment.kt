@@ -5,13 +5,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.cardview.widget.CardView
 import com.example.shopify.R
 import com.example.shopify.databinding.FragmentSettingBinding
 import com.example.shopify.firebase.Firebase
 import com.example.shopify.login.view.SignInFragment
-import com.example.shopify.setting.MyAddresses.view.myAddressFragment
+import com.example.shopify.setting.MyAddress.view.myAddressFragment
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions

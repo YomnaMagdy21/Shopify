@@ -24,4 +24,21 @@
             android:name="product_id"
             app:argType="long" />
     </fragment>
+
+    <fragment
+        android:id="@+id/paymentFragment"
+        android:name="com.example.shopify.payment.paymentFragment"
+        android:label="fragment_payment"
+        tools:layout="@layout/fragment_payment"/>
+
+    <fragment
+        android:id="@+id/myAddressFragment"
+        android:name="com.example.shopify.setting.MyAddress.view.myAddressFragment"
+        android:label="fragment_my_address"
+        tools:layout="@layout/fragment_my_address" >
+        <action
+            android:id="@+id/action_myAddressFragment_to_paymentFragment"
+            app:destination="@id/paymentFragment">
+        </action>
+    </fragment>
 </navigation>
