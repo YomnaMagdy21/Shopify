@@ -33,6 +33,8 @@ class shoppingCardFragment : Fragment() {
     private lateinit var products: MutableList<DraftOrder>
     private lateinit var totalPriceTextView: TextView
 
+    private var couponApplied = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -120,6 +122,7 @@ class shoppingCardFragment : Fragment() {
     private fun validateCoupon(coupon: String, textView: TextView) {
         val matchingRule = viewModel.validateCoupon(coupon)
         if (matchingRule != null) {
+
             textView.text = "Valid"
             textView.setTextColor(Color.GREEN)
         } else {
