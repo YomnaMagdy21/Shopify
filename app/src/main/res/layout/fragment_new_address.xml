@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F7F7F7"
+    tools:context=".setting.newAddress.view.newAddress">
+
+    <TextView
+        android:id="@+id/textViewCardList"
+        android:layout_width="334dp"
+        android:layout_height="68dp"
+        android:layout_marginTop="52dp"
+        android:layout_marginEnd="36dp"
+        android:text="New Address"
+        android:textSize="48sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="384dp" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardViewBuilding"
+        android:layout_width="355dp"
+        android:layout_height="73dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginEnd="23dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        app:layout_constraintTop_toBottomOf="@+id/textViewCardList">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+            <ImageView
+                android:id="@+id/icon"
+                android:layout_width="40dp"
+                android:layout_height="43dp"
+                android:src="@drawable/building_01_svgrepo_com" />
+
+            <EditText
+                android:id="@+id/editTextBuilding"
+                android:layout_width="271dp"
+                android:layout_height="56dp"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="text"
+                android:textColor="#CFC7C7"
+                android:text="Building" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardViewCity"
+        android:layout_width="355dp"
+        android:layout_height="73dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="22dp"
+        android:layout_marginEnd="23dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        app:layout_constraintTop_toBottomOf="@+id/cardViewBuilding">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+            <ImageView
+                android:id="@+id/icon2"
+                android:layout_width="38dp"
+                android:layout_height="37dp"
+                android:src="@drawable/city_svgrepo_com" />
+
+            <EditText
+                android:id="@+id/editTextCity"
+                android:layout_width="267dp"
+                android:layout_height="57dp"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="text"
+                android:text="City"
+                android:textColor="#CFC7C7" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardViewCountry"
+        android:layout_width="355dp"
+        android:layout_height="73dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="22dp"
+        android:layout_marginEnd="23dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        app:layout_constraintTop_toBottomOf="@+id/cardViewCity">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+            <ImageView
+                android:id="@+id/icon3"
+                android:layout_width="34dp"
+                android:layout_height="37dp"
+                android:src="@drawable/country_flag_flag02_svgrepo_com" />
+
+            <EditText
+                android:id="@+id/editTextCountry"
+                android:layout_width="273dp"
+                android:layout_height="57dp"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="text"
+                android:text="Country"
+                android:textColor="#CFC7C7" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <Button
+        android:id="@+id/confirmButton"
+        android:layout_width="204dp"
+        android:layout_height="49dp"
+        android:layout_marginBottom="74dp"
+        android:backgroundTint="#000000"
+        android:text="Confirm"
+        android:textSize="20sp"
+        app:cornerRadius="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/backImage"
+        android:layout_width="46dp"
+        android:layout_height="29dp"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/chevron_back_sharp_svgrepo_com"
+        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="217dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="20dp"
+        android:text="choose on the map?"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        app:layout_constraintTop_toBottomOf="@+id/cardViewCountry" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

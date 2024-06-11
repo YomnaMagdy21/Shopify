@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="create_your_account">Create Your Account</string>
+    <string name="email">Email</string>
+    <string name="signup">SIGN UP</string>
+    <string name="or">OR</string>
+    <string name="aleardy_have_an_account">Already have an account?</string>
+    <string name="sign_in">Sign In</string>
+    <string name="login">Login</string>
+    <string name="do_not_have_an_account">Don\'t have an account</string>
+    <string name="products">Products</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="description">Description</string>
+    <string name="sale">Sale</string>
+    <string name="first_name">Firstname</string>
+    <string name="second_name">Secondname</string>
+</resources>

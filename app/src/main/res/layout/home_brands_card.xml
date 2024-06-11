@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="155dp"
+    android:layout_height="155dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/brands_card"
+    android:layout_marginVertical="15dp"
+    android:layout_marginHorizontal="10dp"
+    android:elevation="10dp"
+    app:cardCornerRadius="15dp"
+    android:layout_margin="10dp"
+    app:cardMaxElevation="0dp"
+    android:backgroundTint="@color/white"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:id="@+id/ll_brands_card">
+
+    <ImageView
+        android:id="@+id/iv_brand_home"
+        android:layout_width="130dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_gravity="center"
+        android:scaleType="fitXY"
+        android:focusable="true"
+        android:src="@drawable/ic_launcher_foreground"
+        />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:text="Brand1"
+            android:id="@+id/tv_brand_title"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_marginVertical="10dp"
+            android:layout_gravity="center"/>
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
