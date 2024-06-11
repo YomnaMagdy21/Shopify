@@ -8,10 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.viewpager.widget.PagerAdapter
 import com.bumptech.glide.Glide
-import com.example.shopify.R
-import com.example.shopify.databinding.FragmentProductDetailsBinding
 import com.example.shopify.databinding.ViewpagerItemBinding
-import com.example.shopify.model.productDetails.Image
 
 class ImageAdapter(private val context: Context, private val imageUrls: List<String>) : PagerAdapter() {
 
@@ -31,6 +28,13 @@ class ImageAdapter(private val context: Context, private val imageUrls: List<Str
         val inflater = LayoutInflater.from(context)
         binding = ViewpagerItemBinding.inflate(inflater, container, false)
 
+        binding.imageView.setLayoutParams(
+            ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+        )
+        binding.imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         Glide.with(context)
             .load(imageUrls[position])
             .into(binding.imageView)

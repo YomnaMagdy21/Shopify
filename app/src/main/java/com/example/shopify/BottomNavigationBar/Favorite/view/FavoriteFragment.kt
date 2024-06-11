@@ -6,17 +6,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shopify.BottomNavigationBar.Favorite.model.Favorite
+import com.example.shopify.BottomNavigationBar.Favorite.viewmodel.FavoriteViewModel
+import com.example.shopify.BottomNavigationBar.Favorite.viewmodel.FavoriteViewModelFactory
 import com.example.shopify.R
 import com.example.shopify.databinding.FragmentFavoriteBinding
+import com.example.shopify.login.viewmodel.SignInViewModel
+import com.example.shopify.login.viewmodel.SignInViewModelFactory
+import com.example.shopify.model.ShopifyRepositoryImp
+import com.example.shopify.network.ShopifyRemoteDataSourceImp
 import com.example.shopify.productdetails.view.ProductDetailsFragment
 
 class FavoriteFragment : Fragment() ,onFavoriteClickListener{
     private lateinit var binding: FragmentFavoriteBinding
     private lateinit var favoriteAdapter: FavoriteAdapter
+    private lateinit var favoriteViewModel: FavoriteViewModel
+    private lateinit var favoriteViewModelFactory: FavoriteViewModelFactory
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -24,6 +33,14 @@ class FavoriteFragment : Fragment() ,onFavoriteClickListener{
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentFavoriteBinding.inflate(inflater, container, false)
+
+        favoriteViewModelFactory = FavoriteViewModelFactory(
+            ShopifyRepositoryImp.getInstance(
+                ShopifyRemoteDataSourceImp.getInstance()
+            )
+        )
+
+        favoriteViewModel = ViewModelProvider(this, favoriteViewModelFactory).get(FavoriteViewModel::class.java)
 
 
         setUpRecyclerView()

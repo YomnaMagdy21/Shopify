@@ -17,6 +17,7 @@ import com.example.shopify.R
 import com.example.shopify.model.ShopifyRepositoryImp
 import com.example.shopify.model.productDetails.Product
 import com.example.shopify.network.ShopifyRemoteDataSourceImp
+import com.example.shopify.productdetails.view.ProductDetailsFragment
 import com.example.shopify.products.viewModel.ProductsOfBrandViewModel
 import com.example.shopify.products.viewModel.ProductsOfBrandViewModelFactory
 import com.example.shopify.utility.ApiState
@@ -148,7 +149,16 @@ class ProductsFragment : Fragment() ,OnProductClickListener {
         productsOfBrandAdapter.setProductsBrandsList(filteredProducts)
     }
 
-    override fun goToDetails() {
+    override fun goToDetails(id:Long) {
         // Implementation for goToDetails
+        val bundle = Bundle()
+        bundle.putLong("product_id",id)
+        val fragmentDetails = ProductDetailsFragment()
+        fragmentDetails.arguments = bundle
+
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.frame_layout, fragmentDetails)
+            .addToBackStack(null)
+            .commit()
     }
 }

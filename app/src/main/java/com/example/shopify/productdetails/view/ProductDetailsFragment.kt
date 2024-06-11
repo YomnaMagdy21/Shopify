@@ -1,5 +1,6 @@
 package com.example.shopify.productdetails.view
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -7,6 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -38,7 +41,10 @@ import com.example.shopify.productdetails.model.getRandomlyShuffledReviews
 import com.example.shopify.productdetails.model.staticReviews
 import com.example.shopify.productdetails.viewmodel.ProductDetailsViewModel
 import com.example.shopify.productdetails.viewmodel.ProductDetailsViewModelFactory
+import com.example.shopify.products.view.OnProductClickListener
 import com.example.shopify.products.view.ProductAdapter
+import com.example.shopify.products.viewModel.ProductsOfBrandViewModel
+import com.example.shopify.products.viewModel.ProductsOfBrandViewModelFactory
 import com.example.shopify.shoppingCard.view.model.ShoppingCardRepo
 import com.example.shopify.shoppingCard.view.viewModel.PriceRuleViewModelFactory
 import com.example.shopify.shoppingCard.view.viewModel.ShoppingCardViewModel
@@ -50,7 +56,7 @@ import kotlinx.coroutines.launch
 import kotlin.random.Random
 
 
-class ProductDetailsFragment : Fragment() ,OnCategoryClickListener{
+class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClickListener{
 
     private lateinit var binding: FragmentProductDetailsBinding
     lateinit var productDetailsViewModel: ProductDetailsViewModel
@@ -61,9 +67,11 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener{
     lateinit var categoryAdapter: CategoryProductsAdapter
     lateinit var categoryViewModel: CategoryViewModel
     lateinit var categoryViewModelFactory: CategoryViewModelFactory
-
+    lateinit var viewModel: ProductsOfBrandViewModel
+    lateinit var factoryProducts: ProductsOfBrandViewModelFactory
     private lateinit var shoppingCartViewModel: ShoppingCardViewModel
-
+    lateinit var collectProducts: List<Product>
+    private lateinit var productsOfBrandAdapter: ProductAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -97,6 +105,17 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener{
             categoryViewModelFactory
         ).get(CategoryViewModel::class.java)
 
+        factoryProducts = ProductsOfBrandViewModelFactory(
+            ShopifyRepositoryImp.getInstance(
+                ShopifyRemoteDataSourceImp.getInstance()
+            )
+        )
+        viewModel = ViewModelProvider(
+            this,
+            factoryProducts
+        ).get(ProductsOfBrandViewModel::class.java)
+
+        categoryAdapter= CategoryProductsAdapter(requireContext() , this ,  listOf())
 
         return binding.root
     }
@@ -106,22 +125,32 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener{
 
 
         binding.backImage.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.frame_layout, CategoryFragment())
-                .addToBackStack(null)
-                .commit()
+            parentFragmentManager.popBackStack()
         }
 
         setUpRecyclerView()
         setUpSuggestionsRecView()
 
-
+        setUpSuggestionsRecViewFromProduct()
 
         val bundle = arguments
 
+//        val productID = bundle?.getLong("product_id")
+//        if (productID != null) {
+//
+//            productDetailsViewModel.getProductInfo(productID)
+//        }
+//
+//        val productId = bundle?.getLong("product_ID")
+//        Log.i("TAG", "onViewCreated: productID : $productID")
+//        if (productId != null) {
+//           // setUpSuggestionsRecViewFromProduct()
+//            productDetailsViewModel.getProductInfo(productId)
+//        }
         val productID = bundle?.getLong("product_id")
-        if (productID != null) {
-            productDetailsViewModel.getProductInfo(productID)
+        productID?.let {
+            productDetailsViewModel.getProductInfo(it)
+            viewModel.getProductsOfBrands(productID)
         }
         lifecycleScope.launch {
             productDetailsViewModel.productInfo.collectLatest { result ->
@@ -186,6 +215,8 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener{
                         products?.let {
                           var  myProducts = it.products
                             categoryAdapter.updateData(it.products)
+                            productsOfBrandAdapter.setProductsBrandsList(it.products)
+
                         }
                     }
 
@@ -201,11 +232,75 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener{
 
             }
         }
+        collectProducts =  listOf()
+
+        lifecycleScope.launch {
+            viewModel.accessProductsList.collectLatest { result ->
+                when (result) {
+                    is ApiState.Loading -> {
+                        binding.progressBar.visibility = View.VISIBLE
+                        Log.i("TAG", "onViewCreated: loading")
+                    }
+                    is ApiState.Success<*> -> {
+                        binding.progressBar.visibility = View.GONE
+                        val products = result.data as? CollectProductsModel
+                        products?.let {
+                            Log.d(
+                                "ProductsOfBrandFragment",
+                                "Retrieved data: ${it.products.size}"
+                            )
+                            collectProducts = it.products
+                            productsOfBrandAdapter.setProductsBrandsList(it.products)
+                        }
+                    }
+                    is ApiState.Failure -> {
+                        binding.progressBar.visibility = View.GONE
+                        Log.i("TAG", "onViewCreated: failureeeeee")
+                    }
+                    else -> {
+                        binding.progressBar.visibility = View.GONE
+                        Log.i("TAG", "onViewCreated: unexpected state: ${result::class.java.simpleName}")
+                    }
+                }
+            }
+
+
+
+//            viewModel.accessProductsList.collect { result ->
+//                when (result) {
+//                    is ApiState.Success<*> -> {
+//                        binding.progressBar.visibility = View.GONE
+//
+//
+//                        val products = result.data as CollectProductsModel?
+//                        collectProducts = products?.products ?: listOf()
+//                        products?.let {
+//                            Log.d(
+//                                "ProductsOfBrandFragment",
+//                                "Retrieved data: ${collectProducts.size}"
+//                            )
+//
+//                            productsOfBrandAdapter.setProductsBrandsList(it.products)
+//                        }
+//                    }
+//                    is ApiState.Failure -> {
+//                        binding.progressBar.visibility = View.GONE
+//                        Log.i("TAG", "onViewCreated: failureeeeee")
+//
+//                    }
+//                    is ApiState.Loading -> {
+//                        binding.progressBar.visibility = View.VISIBLE
+//
+//                    }
+//                }
+//            }
+        }
+
     }
 
-    fun setUpRecyclerView(){
-        val myReviews=getRandomlyShuffledReviews()
-        reviewsAdapter= ReviewsAdapter(myReviews)
+    fun setUpRecyclerView() {
+        val myReviews = getRandomlyShuffledReviews()
+        reviewsAdapter = ReviewsAdapter(myReviews)
 
         binding.reviewsRecyclerView.apply {
             adapter = reviewsAdapter
@@ -213,27 +308,46 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener{
 
         }
         binding.viewMoreButton.setOnClickListener {
-            isExpanded = !isExpanded
 
-            if (isExpanded) {
-                binding.viewMoreButton.text = "View Less"
-                reviewsAdapter.visibleReviews =
-                    myReviews
-            } else {
-                binding.viewMoreButton.text = "View More"
-                reviewsAdapter.visibleReviews =
-                    myReviews.take(3)
+            val inflater = LayoutInflater.from(context)
+            val popupView = inflater.inflate(R.layout.popup_reviews, null)
+
+
+            val reviewsRecyclerView = popupView.findViewById<RecyclerView>(R.id.reviewsRecyclerView)
+            reviewsRecyclerView.layoutManager = LinearLayoutManager(context)
+            val popupAdapter = ReviewsAdapter(myReviews)
+            reviewsRecyclerView.adapter = popupAdapter
+            popupAdapter.loadAllReviews()
+
+
+            val dialog = AlertDialog.Builder(context)
+                .setView(popupView)
+                .create()
+
+
+            val closeButton = popupView.findViewById<ImageView>(R.id.closeButton)
+            closeButton.setOnClickListener {
+                dialog.dismiss()
             }
-            reviewsAdapter.notifyDataSetChanged()
 
 
+            dialog.show()
 
-        }
+
+    }
     }
     fun setUpSuggestionsRecView(){
         categoryAdapter= CategoryProductsAdapter(requireContext() , this ,  listOf())
         binding.recV.apply {
             adapter = categoryAdapter
+            layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+
+        }
+    }
+    fun setUpSuggestionsRecViewFromProduct(){
+        productsOfBrandAdapter= ProductAdapter(requireContext() ,   listOf(),this)
+        binding.recV.apply {
+            adapter = productsOfBrandAdapter
             layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
 
         }
@@ -310,5 +424,17 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener{
         } else {
             Toast.makeText(requireContext(), "User not logged in", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    override fun goToDetails(id: Long) {
+        val bundle = Bundle()
+        bundle.putLong("product_id",id)
+        val fragmentDetails = ProductDetailsFragment()
+        fragmentDetails.arguments = bundle
+
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.frame_layout, fragmentDetails)
+            .addToBackStack(null)
+            .commit()
     }
 }
