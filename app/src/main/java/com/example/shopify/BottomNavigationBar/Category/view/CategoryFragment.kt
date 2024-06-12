@@ -3,10 +3,13 @@ package com.example.shopify.BottomNavigationBar.Category.view
 
 import com.example.shopify.R
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -22,6 +25,7 @@ import com.example.shopify.BottomNavigationBar.Category.viewModel.CategoryViewMo
 import com.example.shopify.BottomNavigationBar.Category.viewModel.CategoryViewModelFactory
 import com.example.shopify.Models.products.CollectProductsModel
 import com.example.shopify.model.Address
+import com.example.shopify.model.Brands.SmartCollection
 import com.example.shopify.model.Customer
 import com.example.shopify.model.ShopifyRepositoryImp
 import com.example.shopify.model.draftModel.DraftOrder
@@ -65,6 +69,9 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
 
     private var selectedCollectionId: Long? = null
     private var selectedProductType: SubCustomCollections? = null
+    private lateinit var editTextSearch: EditText
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -81,6 +88,8 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
         ivShoes = view.findViewById(R.id.iv_sub_cat_shoes)
         ivAccessories = view.findViewById(R.id.iv_sub_cat_bags)
         ivBlock = view.findViewById(R.id.iv_sub_cat_block)
+        editTextSearch = view.findViewById(R.id.search_edit_text)
+
 
         recyclerView = view.findViewById(R.id.rv_products_in_category)
 
@@ -137,6 +146,7 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
 
         // Default selection: get all products "without any filtration"
         fetchProducts()
+        setupSearch()
 
 
 
@@ -304,4 +314,31 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
 //        transaction.commit()
     }
 
+    fun setupSearch(){
+        editTextSearch.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                filterProducts(s.toString())
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+        })
+    }
+    private fun filterProducts(query: String) {
+        lifecycleScope.launch {
+            categoryViewModel.accessAllProductList.collect { result ->
+                if (result is ApiState.Success<*>) {
+                    val products = result.data as CollectProductsModel?
+                    products?.let {
+                        val filteredProducts = it.products.filter { product ->
+                            product.title?.contains(query, ignoreCase = true) ?: true
+                        }
+                        adapter.updateData(filteredProducts)
+                    }
+                }
+            }
+        }
+
+    }
 }

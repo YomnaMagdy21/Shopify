@@ -1,11 +1,14 @@
 package com.example.shopify.products.view
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.lifecycle.ViewModelProvider
@@ -37,6 +40,8 @@ class ProductsFragment : Fragment() ,OnProductClickListener {
     lateinit var viewModel: ProductsOfBrandViewModel
     lateinit var factory: ProductsOfBrandViewModelFactory
     lateinit var collectProducts: List<Product>
+    private lateinit var editTextSearch: EditText
+
 
 
 
@@ -60,6 +65,10 @@ class ProductsFragment : Fragment() ,OnProductClickListener {
         progressBar = view.findViewById(R.id.progressBar)
         filterImg = view.findViewById(R.id.filter)
         filterSlider = view.findViewById(R.id.filterSlider)
+        editTextSearch = view.findViewById(R.id.search_edit_text)
+
+
+        setupSearch()
 
         return view
     }
@@ -160,5 +169,23 @@ class ProductsFragment : Fragment() ,OnProductClickListener {
             .replace(R.id.frame_layout, fragmentDetails)
             .addToBackStack(null)
             .commit()
+    }
+    private fun setupSearch() {
+        editTextSearch.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                filterBrands(s.toString())
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+        })
+    }
+
+    private fun filterBrands(query: String) {
+        val filteredList = collectProducts.filter {
+            it.title?.contains(query, ignoreCase = true) ?: true
+        }
+        productsOfBrandAdapter.setProductsBrandsList(filteredList)
     }
 }
