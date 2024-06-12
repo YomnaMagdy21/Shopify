@@ -1,5 +1,6 @@
 package com.example.shopify.setting.view
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -7,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.cardview.widget.CardView
+import com.example.shopify.MainActivity
 import com.example.shopify.R
 import com.example.shopify.databinding.FragmentSettingBinding
 import com.example.shopify.firebase.Firebase
@@ -56,9 +58,11 @@ class settingFragment : Fragment() {
         }
         binding.logOutButton.setOnClickListener {
             Firebase(requireContext()).logout()
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.home_fragment, SignInFragment())
-                .commit()
+            val intent = Intent(requireContext(), MainActivity::class.java)
+            startActivity(intent)
+//            parentFragmentManager.beginTransaction()
+//                .replace(R.id.home_fragment, SignInFragment())
+//                .commit()
             signOut()
         }
 

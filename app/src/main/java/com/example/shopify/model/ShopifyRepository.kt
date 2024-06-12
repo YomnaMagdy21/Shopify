@@ -1,5 +1,6 @@
 package com.example.shopify.model
 
+import android.content.Context
 import com.example.shopify.Models.products.CollectProductsModel
 import com.example.shopify.model.Brands.BrandModel
 import com.example.shopify.model.productDetails.ProductModel
@@ -27,4 +28,5 @@ interface ShopifyRepository {
     suspend fun getProducts(collectionId: Long?, productType: String?) : Flow<CollectProductsModel?>
 
 
-}
+
+    }

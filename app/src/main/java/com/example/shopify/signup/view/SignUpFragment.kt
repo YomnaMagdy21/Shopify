@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -132,7 +133,10 @@ class SignUpFragment : Fragment() {
             }
             binding.password.setSelection(binding.password.text.length)
         }
-
+//        binding.password.doOnTextChanged { text, _, _, _ ->
+//            val password = text.toString()
+//           // checkPasswordStrength(password)
+//        }
 
         binding.signup.setOnClickListener {
             email = binding.email.text.toString()
@@ -166,6 +170,15 @@ class SignUpFragment : Fragment() {
             if (password.isEmpty()) {
                 binding.password.error = "Password cannot be empty"
                 binding.password.requestFocus()
+                return@setOnClickListener
+            }
+            if (password.length < 8) {
+                binding.password.error = "Password cannot be less than 6 characters"
+                binding.password.requestFocus()
+                return@setOnClickListener
+            }
+            if (!isPasswordStrong(password)) {
+                binding.password.error = "Password is not strong enough"
                 return@setOnClickListener
             }
             if (password_confirmation.isEmpty()) {
@@ -245,6 +258,29 @@ class SignUpFragment : Fragment() {
     private fun isValidEmail(email: String): Boolean {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
+
+    private fun isPasswordStrong(password: String): Boolean {
+        return getPasswordStrength(password) >= PasswordStrength.STRONG
+    }
+
+    private fun getPasswordStrength(password: String): PasswordStrength {
+        val lengthCriteria = password.length >= 8
+        val uppercaseCriteria = password.any { it.isUpperCase() }
+        val lowercaseCriteria = password.any { it.isLowerCase() }
+        val digitCriteria = password.any { it.isDigit() }
+        val specialCharCriteria = password.any { !it.isLetterOrDigit() }
+
+        return when {
+            lengthCriteria && uppercaseCriteria && lowercaseCriteria && digitCriteria && specialCharCriteria -> PasswordStrength.VERY_STRONG
+            lengthCriteria && (uppercaseCriteria || lowercaseCriteria) && digitCriteria && specialCharCriteria -> PasswordStrength.STRONG
+            lengthCriteria && (uppercaseCriteria || lowercaseCriteria) && digitCriteria -> PasswordStrength.MEDIUM
+            else -> PasswordStrength.WEAK
+        }
+    }
+    enum class PasswordStrength {
+        WEAK, MEDIUM, STRONG, VERY_STRONG
+    }
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

@@ -86,16 +86,18 @@ interface ShopifyService {
     ): Response<CollectProductsModel>
 
     @Headers("X-Shopify-Access-Token: ${Constants.adminApiAccessToken}")
-    @GET("customers/search.json")
-    suspend fun getCustomerWithEmail(@Query("email") email:String): Response<createCustomersResponse>
+    @GET("admin/api/2024-04/customers/search.json")
+    suspend fun getCustomerWithEmail(@Query("email") email: String): Response<createCustomersResponse>
 
     @Headers("X-Shopify-Access-Token: ${Constants.adminApiAccessToken}")
-    @GET("customers/{customerId}.json")
+    @GET("admin/api/2024-04/customers/{customerId}.json")
     suspend fun getCustomerWithID(@Path("customerId") customerId: Long): Response<createCustomerRequest>
 
 
     @Headers("X-Shopify-Access-Token: ${Constants.adminApiAccessToken}")
     @GET("/admin/api/2024-04/products/{product_id}.json")
     suspend fun getProductInfo(@Path("product_id") product_id: Long) : Response<ProductModel>
+
+
 
 }
