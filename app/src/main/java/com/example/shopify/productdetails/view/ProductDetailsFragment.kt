@@ -43,6 +43,7 @@ import com.example.shopify.shoppingCard.view.model.ShoppingCardRepo
 import com.example.shopify.shoppingCard.view.viewModel.PriceRuleViewModelFactory
 import com.example.shopify.shoppingCard.view.viewModel.ShoppingCardViewModel
 import com.example.shopify.utility.ApiState
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.collectLatest
@@ -269,8 +270,14 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener{
 
         if (currentUser != null) {
             val variantId = product.product?.variants?.get(0)?.id
-            if (variantId != null && !categoryViewModel.addedProductIds.contains(variantId)) {
+            if (variantId != null) {
+                if (categoryViewModel.addedProductIds.contains(variantId)) {
+                    Snackbar.make(requireView(), "Product already in cart", Snackbar.LENGTH_SHORT).show()
+                    return
+                }
+
                 Log.d("AddToCart", "Product not already in cart. Proceeding to add.")
+
                 var order = DraftOrder()
                 order.email = userEmail
                 var draft_orders = DraftOrderResponse()
@@ -285,7 +292,6 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener{
                 order.note_attributes = listOf(note_attribute)
                 draft_orders = DraftOrderResponse(order)
 
-
                 Log.d("DraftOrder", "Creating Draft Order: $draft_orders")
 
                 shoppingCartViewModel.createDraftOrder(draft_orders)
@@ -293,22 +299,17 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener{
                 lifecycleScope.launch {
                     shoppingCartViewModel.draftOrderResponse.collect { draftOrderResponse ->
                         if (draftOrderResponse != null) {
-                            //add the id
+                            // Add the id
                             variantId.let { categoryViewModel.addedProductIds.add(it) }
-                            Toast.makeText(requireContext(), "Added to cart", Toast.LENGTH_LONG)
-                                .show()
+                            Snackbar.make(requireView(), "Added to Cart", Snackbar.LENGTH_SHORT).show()
                         } else {
-                            Toast.makeText(
-                                requireContext(),
-                                "Failed to add to cart",
-                                Toast.LENGTH_LONG
-                            ).show()
+                            Log.e("AddToCart", "Failed to create draft order")
                         }
                     }
                 }
             }
         } else {
-            Toast.makeText(requireContext(), "User not logged in", Toast.LENGTH_SHORT).show()
+            Snackbar.make(requireView(), "User Not Logged In", Snackbar.LENGTH_SHORT).show()
         }
     }
 }

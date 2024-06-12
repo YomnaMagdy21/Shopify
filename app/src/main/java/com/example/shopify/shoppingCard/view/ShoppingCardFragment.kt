@@ -18,9 +18,11 @@ import com.example.shopify.R
 import com.example.shopify.model.draftModel.DraftOrder
 import com.example.shopify.model.draftModel.DraftOrderResponse
 import com.example.shopify.payment.paymentFragment
+import com.example.shopify.shoppingCard.view.model.PriceRule
 import com.example.shopify.shoppingCard.view.model.ShoppingCardRepo
 import com.example.shopify.shoppingCard.view.viewModel.PriceRuleViewModelFactory
 import com.example.shopify.shoppingCard.view.viewModel.ShoppingCardViewModel
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -33,6 +35,7 @@ class shoppingCardFragment : Fragment() {
     private lateinit var products: MutableList<DraftOrder>
     private lateinit var totalPriceTextView: TextView
 
+    private var discountAmount: Double = 0.0
     private var couponApplied = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -113,13 +116,17 @@ class shoppingCardFragment : Fragment() {
         }
 
     }
+
     private fun validateCoupon(coupon: String, textView: TextView) {
         val matchingRule = viewModel.validateCoupon(coupon)
-        if (matchingRule != null) {
-
+        if (matchingRule != null && !couponApplied) {
+            applyDiscount(calculateTotalWithoutDiscount(products), matchingRule)
+            couponApplied = true
             textView.text = "Valid"
             textView.setTextColor(Color.GREEN)
-
+            calculateTotalPrice(products)
+        } else if (couponApplied) {
+            Snackbar.make(requireView(), "Coupon already applied", Snackbar.LENGTH_SHORT).show()
         } else {
             textView.text = "Invalid"
             textView.setTextColor(Color.RED)
@@ -179,9 +186,23 @@ class shoppingCardFragment : Fragment() {
         }
     }
 
+    private fun applyDiscount(totalPrice: Double, priceRule: PriceRule) {
+        val discountPercentage = priceRule.value.toDouble() / 100
+        discountAmount = totalPrice * discountPercentage
+        Log.i("discount", "applyDiscount: "+discountAmount)
+    }
+
+    private fun calculateTotalWithoutDiscount(items: List<DraftOrder>): Double {
+        return items.sumOf { it.total_price?.toDouble() ?: 0.0 }
+    }
+
     private fun calculateTotalPrice(items: List<DraftOrder>) {
-        var totalPrice = items.sumOf { it.total_price?.toDouble() ?: 0.0 }
+        var totalPrice = calculateTotalWithoutDiscount(items)
+        if (couponApplied) {
+            totalPrice += discountAmount
+        }
         totalPriceTextView.text = "${"%.2f".format(totalPrice)}"
     }
+
 
 }
