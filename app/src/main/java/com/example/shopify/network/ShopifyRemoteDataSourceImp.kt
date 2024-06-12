@@ -4,6 +4,7 @@ import com.example.shopify.Models.products.CollectProductsModel
 import com.example.shopify.model.Customer
 
 import com.example.shopify.model.Brands.BrandModel
+import com.example.shopify.model.addressModel.AddNewAddress
 import com.example.shopify.model.addressModel.Address
 import com.example.shopify.model.addressModel.AddressesModel
 
@@ -80,7 +81,7 @@ class ShopifyRemoteDataSourceImp :ShopifyRemoteDataSource {
         return flowOf(shopifyService.getCustomerAddresses(customerId).body())
     }
 
-    override suspend fun addAddress(customerId: Long, addresse: Address): Flow<AddressesModel?> {
+    override suspend fun addAddress(customerId: Long, addresse: AddNewAddress): Flow<AddressesModel?> {
         return flowOf(shopifyService.addCustomerAddresse(customerId, addresse).body())
     }
 

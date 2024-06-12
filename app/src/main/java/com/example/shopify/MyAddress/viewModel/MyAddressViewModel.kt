@@ -5,16 +5,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.shopify.model.ShopifyRepository
-import com.example.shopify.model.ShopifyRepositoryImp
-import com.example.shopify.shoppingCard.view.model.ShoppingCardRepo
-import com.example.shopify.shoppingCard.view.viewModel.ShoppingCardViewModel
 import com.example.shopify.utility.ApiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
-import kotlin.math.log
 
 class MyAddressViewModel(var repo:ShopifyRepository) :ViewModel(){
 

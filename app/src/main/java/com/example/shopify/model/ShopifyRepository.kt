@@ -2,6 +2,7 @@ package com.example.shopify.model
 
 import com.example.shopify.Models.products.CollectProductsModel
 import com.example.shopify.model.Brands.BrandModel
+import com.example.shopify.model.addressModel.AddNewAddress
 import com.example.shopify.model.addressModel.Address
 import com.example.shopify.model.addressModel.AddressesModel
 import com.example.shopify.model.productDetails.ProductModel
@@ -29,7 +30,7 @@ interface ShopifyRepository {
 
     suspend fun getAddresses(customerId: Long): Flow<AddressesModel?>
 
-    suspend fun addAddress(customerId:Long, addresse: Address): Flow<AddressesModel?>
+    suspend fun addAddress(customerId:Long, addresse: AddNewAddress): Flow<AddressesModel?>
 
     suspend fun removeAddresses(customerId :Long , addressId :Long)
 

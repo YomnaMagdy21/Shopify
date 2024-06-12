@@ -7,14 +7,14 @@ import com.example.shopify.model.addressModel.Address
 import com.example.shopify.model.addressModel.AddressesModel
 
 import com.example.shopify.model.createCustomerRequest
-import com.example.shopify.model.draftModel.DraftOrder
 import com.example.shopify.model.draftModel.DraftOrderResponse
 import com.example.shopify.model.draftModel.Draft_orders_list
 import com.example.shopify.model.createCustomersResponse
 import com.example.shopify.model.productDetails.ProductModel
 
 
-import com.example.shopify.shoppingCard.view.model.PriceRulesResponse
+import com.example.shopify.ShoppingCart.model.PriceRulesResponse
+import com.example.shopify.model.addressModel.AddNewAddress
 import com.example.shopify.utility.Constants
 import retrofit2.Response
 import retrofit2.http.Body
@@ -108,7 +108,7 @@ interface ShopifyService {
     //add address
     @Headers("X-Shopify-Access-Token: ${Constants.adminApiAccessToken}")
     @POST("admin/api/2024-04/customers/{customerId}/addresses.json")
-    suspend fun addCustomerAddresse(@Path(value = "customerId") id:Long,@Body addresse: Address) : Response<AddressesModel>
+    suspend fun addCustomerAddresse(@Path(value = "customerId") id:Long,@Body addresse: AddNewAddress) : Response<AddressesModel>
 
     //delete address
     @Headers("X-Shopify-Access-Token: ${Constants.adminApiAccessToken}")

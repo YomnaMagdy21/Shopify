@@ -22,7 +22,7 @@ import com.example.shopify.network.ShopifyRemoteDataSourceImp
 import com.example.shopify.payment.paymentFragment
 import com.example.shopify.MyAddress.viewModel.MyAddressFactory
 import com.example.shopify.MyAddress.viewModel.MyAddressViewModel
-import com.example.shopify.newAddress.newAddress
+import com.example.shopify.newAddress.view.newAddress
 import com.example.shopify.setting.view.settingFragment
 import com.example.shopify.utility.ApiState
 import com.google.firebase.auth.FirebaseAuth

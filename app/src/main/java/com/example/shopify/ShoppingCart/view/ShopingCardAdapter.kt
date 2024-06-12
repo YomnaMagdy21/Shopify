@@ -1,4 +1,4 @@
-package com.example.shopify.shoppingCard.view
+package com.example.shopify.ShoppingCart.view
 
 import android.view.LayoutInflater
 import android.view.View
@@ -9,9 +9,6 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.shopify.R
-import com.example.shopify.model.draftModel.DraftOrder
-import com.example.shopify.model.draftModel.DraftOrderResponse
-import com.example.shopify.model.draftModel.LineItem
 
 class ShoppingCardAdapter(private var items: List<Item>,
                           private val onAddProduct: (Item) -> Unit,

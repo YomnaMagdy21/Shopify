@@ -1,4 +1,4 @@
-package com.example.shopify.shoppingCard.view
+package com.example.shopify.ShoppingCart.view
 
 import android.graphics.Color
 import android.os.Bundle
@@ -18,10 +18,10 @@ import com.example.shopify.R
 import com.example.shopify.model.draftModel.DraftOrder
 import com.example.shopify.model.draftModel.DraftOrderResponse
 import com.example.shopify.payment.paymentFragment
-import com.example.shopify.shoppingCard.view.model.PriceRule
-import com.example.shopify.shoppingCard.view.model.ShoppingCardRepo
-import com.example.shopify.shoppingCard.view.viewModel.PriceRuleViewModelFactory
-import com.example.shopify.shoppingCard.view.viewModel.ShoppingCardViewModel
+import com.example.shopify.ShoppingCart.model.PriceRule
+import com.example.shopify.ShoppingCart.model.ShoppingCardRepo
+import com.example.shopify.ShoppingCart.viewModel.PriceRuleViewModelFactory
+import com.example.shopify.ShoppingCart.viewModel.ShoppingCardViewModel
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.collectLatest
