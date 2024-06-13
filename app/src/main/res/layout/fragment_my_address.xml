@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F7F7F7"
-    tools:context=".setting.MyAddresses.view.myAddressFragment">
+    tools:context=".MyAddress.view.myAddressFragment">
+
 
     <TextView
         android:id="@+id/textViewCardList"
@@ -30,7 +31,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/RVAddresses"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="476dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="4dp"

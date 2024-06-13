@@ -13,8 +13,6 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -28,20 +26,14 @@ import com.example.shopify.model.Address
 import com.example.shopify.model.Brands.SmartCollection
 import com.example.shopify.model.Customer
 import com.example.shopify.model.ShopifyRepositoryImp
-import com.example.shopify.model.draftModel.DraftOrder
-import com.example.shopify.model.draftModel.DraftOrderResponse
-import com.example.shopify.model.draftModel.LineItem
-import com.example.shopify.model.draftModel.NoteAttribute
 import com.example.shopify.model.category.CustomCollection
 import com.example.shopify.model.category.SubCustomCollections
-import com.example.shopify.model.productDetails.Product
 import com.example.shopify.network.ShopifyRemoteDataSourceImp
 import com.example.shopify.productdetails.view.ProductDetailsFragment
-import com.example.shopify.shoppingCard.view.model.ShoppingCardRepo
-import com.example.shopify.shoppingCard.view.viewModel.PriceRuleViewModelFactory
-import com.example.shopify.shoppingCard.view.viewModel.ShoppingCardViewModel
+import com.example.shopify.ShoppingCart.model.ShoppingCardRepo
+import com.example.shopify.ShoppingCart.viewModel.PriceRuleViewModelFactory
+import com.example.shopify.ShoppingCart.viewModel.ShoppingCardViewModel
 import com.example.shopify.utility.ApiState
-import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 
 class CategoryFragment : Fragment() , OnCategoryClickListener {

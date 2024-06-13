@@ -1,10 +1,10 @@
-package com.example.shopify.shoppingCard.view.model
+package com.example.shopify.ShoppingCart.model
 
 import android.util.Log
+import com.example.shopify.ShoppingCart.model.PriceRule
 import com.example.shopify.model.draftModel.DraftOrder
 import com.example.shopify.model.draftModel.DraftOrderResponse
 import com.example.shopify.network.RetrofitHelper
-import kotlin.math.log
 
 class ShoppingCardRepo {
     suspend fun getPriceRules(): List<PriceRule> {

@@ -13,7 +13,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shopify.BottomNavigationBar.Category.view.CategoryFragment
@@ -24,23 +23,21 @@ import com.example.shopify.BottomNavigationBar.Category.viewModel.CategoryViewMo
 import com.example.shopify.Models.products.CollectProductsModel
 import com.example.shopify.R
 import com.example.shopify.databinding.CustomTabBinding
-import com.example.shopify.databinding.FragmentFavoriteBinding
 import com.example.shopify.databinding.FragmentProductDetailsBinding
 import com.example.shopify.databinding.ReviewItemBinding
-import com.example.shopify.login.viewmodel.SignInViewModel
-import com.example.shopify.login.viewmodel.SignInViewModelFactory
 import com.example.shopify.model.ShopifyRepositoryImp
 import com.example.shopify.model.draftModel.DraftOrder
 import com.example.shopify.model.draftModel.DraftOrderResponse
 import com.example.shopify.model.draftModel.LineItem
 import com.example.shopify.model.draftModel.NoteAttribute
-import com.example.shopify.model.productDetails.Product
 import com.example.shopify.model.productDetails.ProductModel
 import com.example.shopify.network.ShopifyRemoteDataSourceImp
 import com.example.shopify.productdetails.model.getRandomlyShuffledReviews
-import com.example.shopify.productdetails.model.staticReviews
 import com.example.shopify.productdetails.viewmodel.ProductDetailsViewModel
 import com.example.shopify.productdetails.viewmodel.ProductDetailsViewModelFactory
+import com.example.shopify.ShoppingCart.model.ShoppingCardRepo
+import com.example.shopify.ShoppingCart.viewModel.PriceRuleViewModelFactory
+import com.example.shopify.ShoppingCart.viewModel.ShoppingCardViewModel
 import com.example.shopify.products.view.OnProductClickListener
 import com.example.shopify.products.view.ProductAdapter
 import com.example.shopify.products.viewModel.ProductsOfBrandViewModel
@@ -49,7 +46,7 @@ import com.example.shopify.shoppingCard.view.model.ShoppingCardRepo
 import com.example.shopify.shoppingCard.view.viewModel.PriceRuleViewModelFactory
 import com.example.shopify.shoppingCard.view.viewModel.ShoppingCardViewModel
 import com.example.shopify.utility.ApiState
-import com.google.android.material.tabs.TabLayout
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -383,8 +380,14 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
 
         if (currentUser != null) {
             val variantId = product.product?.variants?.get(0)?.id
-            if (variantId != null && !categoryViewModel.addedProductIds.contains(variantId)) {
+            if (variantId != null) {
+                if (categoryViewModel.addedProductIds.contains(variantId)) {
+                    Snackbar.make(requireView(), "Product already in cart", Snackbar.LENGTH_SHORT).show()
+                    return
+                }
+
                 Log.d("AddToCart", "Product not already in cart. Proceeding to add.")
+
                 var order = DraftOrder()
                 order.email = userEmail
                 var draft_orders = DraftOrderResponse()
@@ -399,7 +402,6 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
                 order.note_attributes = listOf(note_attribute)
                 draft_orders = DraftOrderResponse(order)
 
-
                 Log.d("DraftOrder", "Creating Draft Order: $draft_orders")
 
                 shoppingCartViewModel.createDraftOrder(draft_orders)
@@ -407,22 +409,17 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
                 lifecycleScope.launch {
                     shoppingCartViewModel.draftOrderResponse.collect { draftOrderResponse ->
                         if (draftOrderResponse != null) {
-                            //add the id
+                            // Add the id
                             variantId.let { categoryViewModel.addedProductIds.add(it) }
-                            Toast.makeText(requireContext(), "Added to cart", Toast.LENGTH_LONG)
-                                .show()
+                            Snackbar.make(requireView(), "Added to Cart", Snackbar.LENGTH_SHORT).show()
                         } else {
-                            Toast.makeText(
-                                requireContext(),
-                                "Failed to add to cart",
-                                Toast.LENGTH_LONG
-                            ).show()
+                            Log.e("AddToCart", "Failed to create draft order")
                         }
                     }
                 }
             }
         } else {
-            Toast.makeText(requireContext(), "User not logged in", Toast.LENGTH_SHORT).show()
+            Snackbar.make(requireView(), "User Not Logged In", Snackbar.LENGTH_SHORT).show()
         }
     }
 

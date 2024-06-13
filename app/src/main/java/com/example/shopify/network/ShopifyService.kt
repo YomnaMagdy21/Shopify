@@ -3,16 +3,18 @@ package com.example.shopify.network
 import com.example.shopify.Models.products.CollectProductsModel
 
 import com.example.shopify.model.Brands.BrandModel
+import com.example.shopify.model.addressModel.Address
+import com.example.shopify.model.addressModel.AddressesModel
 
 import com.example.shopify.model.createCustomerRequest
-import com.example.shopify.model.draftModel.DraftOrder
 import com.example.shopify.model.draftModel.DraftOrderResponse
 import com.example.shopify.model.draftModel.Draft_orders_list
 import com.example.shopify.model.createCustomersResponse
 import com.example.shopify.model.productDetails.ProductModel
 
 
-import com.example.shopify.shoppingCard.view.model.PriceRulesResponse
+import com.example.shopify.ShoppingCart.model.PriceRulesResponse
+import com.example.shopify.model.addressModel.AddNewAddress
 import com.example.shopify.utility.Constants
 import retrofit2.Response
 import retrofit2.http.Body
@@ -97,6 +99,21 @@ interface ShopifyService {
     @Headers("X-Shopify-Access-Token: ${Constants.adminApiAccessToken}")
     @GET("/admin/api/2024-04/products/{product_id}.json")
     suspend fun getProductInfo(@Path("product_id") product_id: Long) : Response<ProductModel>
+
+    //get address
+    @Headers("X-Shopify-Access-Token: ${Constants.adminApiAccessToken}")
+    @GET("admin/api/2024-04/customers/{customerId}/addresses.json")
+    suspend fun getCustomerAddresses(@Path(value = "customerId") id:Long) : Response<AddressesModel>
+
+    //add address
+    @Headers("X-Shopify-Access-Token: ${Constants.adminApiAccessToken}")
+    @POST("admin/api/2024-04/customers/{customerId}/addresses.json")
+    suspend fun addCustomerAddresse(@Path(value = "customerId") id:Long,@Body addresse: AddNewAddress) : Response<AddressesModel>
+
+    //delete address
+    @Headers("X-Shopify-Access-Token: ${Constants.adminApiAccessToken}")
+    @DELETE("admin/api/2024-04/customers/{customerId}/addresses/{addressId}.json")
+    suspend fun removeCustomerAddresse(@Path(value = "customerId") customerId:Long ,@Path(value = "addressId") addressId:Long )
 
 
 

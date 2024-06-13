@@ -4,6 +4,9 @@ import com.example.shopify.Models.products.CollectProductsModel
 import com.example.shopify.model.Customer
 
 import com.example.shopify.model.Brands.BrandModel
+import com.example.shopify.model.addressModel.AddNewAddress
+import com.example.shopify.model.addressModel.Address
+import com.example.shopify.model.addressModel.AddressesModel
 import com.example.shopify.model.createCustomerRequest
 import com.example.shopify.model.createCustomersResponse
 import com.example.shopify.model.productDetails.ProductModel
@@ -32,6 +35,11 @@ interface ShopifyRemoteDataSource {
 
     // get category products according to the main and sub categories
     suspend fun getProducts(collectionId: Long?, productType: String?) : Flow<CollectProductsModel?>
+
+    suspend fun getAddresses(customerId :Long):Flow<AddressesModel?>
+    suspend fun addAddress(customerId:Long, addresse: AddNewAddress): Flow<AddressesModel?>
+
+    suspend fun removeAddresses(customerId: Long, addressId: Long)
 
 
 

@@ -1,4 +1,4 @@
-package com.example.shopify.shoppingCard.view.model
+package com.example.shopify.ShoppingCart.model
 
 data class PriceRulesResponse(val price_rules: List<PriceRule>)
 

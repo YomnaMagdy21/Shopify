@@ -6,6 +6,9 @@ import android.widget.Toast
 import com.example.shopify.BottomNavigationBar.BottomNavActivity
 import com.example.shopify.Models.products.CollectProductsModel
 import com.example.shopify.model.Brands.BrandModel
+import com.example.shopify.model.addressModel.AddNewAddress
+import com.example.shopify.model.addressModel.Address
+import com.example.shopify.model.addressModel.AddressesModel
 import com.example.shopify.model.productDetails.ProductModel
 import com.example.shopify.network.ShopifyRemoteDataSource
 import com.google.android.gms.tasks.OnCompleteListener
@@ -66,6 +69,19 @@ class ShopifyRepositoryImp(private var shopifyRemoteDataSource: ShopifyRemoteDat
         ): Flow<CollectProductsModel?> {
             return shopifyRemoteDataSource.getProducts(collectionId, productType)
         }
+
+    //address
+    override suspend fun getAddresses(customerId: Long): Flow<AddressesModel?> {
+        return shopifyRemoteDataSource.getAddresses(customerId)
+    }
+
+    override suspend fun addAddress(customerId: Long, addresse: AddNewAddress): Flow<AddressesModel?> {
+        return shopifyRemoteDataSource.addAddress(customerId,addresse)
+    }
+
+    override suspend fun removeAddresses(customerId: Long, addressId: Long) {
+        shopifyRemoteDataSource.removeAddresses(customerId,addressId)
+    }
 
 
 }
