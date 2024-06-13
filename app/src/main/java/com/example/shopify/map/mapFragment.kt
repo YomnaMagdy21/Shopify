@@ -52,7 +52,7 @@ class mapFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val mapFragment = childFragmentManager.findFragmentById(R.id.mapView) as SupportMapFragment?
+        val mapFragment = childFragmentManager.findFragmentById(R.id.My_Map) as SupportMapFragment?
         mapFragment?.getMapAsync(callback)
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
@@ -132,7 +132,7 @@ class mapFragment : Fragment() {
         val newFragment = newAddress()
         newFragment.arguments = bundle
         parentFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, newFragment)
+            .replace(R.id.frame_layout, newFragment)
             .addToBackStack(null)
             .commit()
 

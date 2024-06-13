@@ -29,11 +29,11 @@
             android:name=".BottomNavigationBar.BottomNavActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustPan"/>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCE9F8W3jodhahZhcGZ5jLMvChRD3s4Jbg"></meta-data>
+
     </application>
-
-    <meta-data
-        android:name="com.google.android.geo.API_KEY"
-        android:value="AIzaSyCE9F8W3jodhahZhcGZ5jLMvChRD3s4Jbg"></meta-data>
-
 
 </manifest>
