@@ -25,6 +25,7 @@ import com.example.shopify.MyAddress.viewModel.MyAddressViewModel
 import com.example.shopify.newAddress.view.newAddress
 import com.example.shopify.setting.view.settingFragment
 import com.example.shopify.utility.ApiState
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.collectLatest
@@ -60,6 +61,12 @@ class myAddressFragment : Fragment() {
         recyclerView = view.findViewById(R.id.RVAddresses)
         recyclerView.layoutManager = LinearLayoutManager(context)
 
+        //get user id and pass it
+        val sharedPreferences = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val userId = sharedPreferences.getString("userID", null)
+        Log.i("userid", "onViewCreated: "+userId)
+
+
 
         myAddressAdapter = MyAddressAdapter(
             emptyList(),
@@ -68,7 +75,12 @@ class myAddressFragment : Fragment() {
                 navigateToPaymentFragment(address)
             },
             onDeleteButtonClick = { address ->
-                address.id?.let { viewModel.deleteAddress(7670572875940, it) }
+                address.id?.let {
+                    if (userId != null) {
+                        viewModel.deleteAddress(userId.toLong(), it)
+                        Snackbar.make(view, "Address deleted successfully", Snackbar.LENGTH_SHORT).show()
+                    }
+                }
                 Log.i("delete", "onViewCreated: "+address.id)
             }
         )
@@ -94,11 +106,9 @@ class myAddressFragment : Fragment() {
                 .commit()
         }
 
-
-        val currentUser = FirebaseAuth.getInstance().currentUser
-        //Log.i("address", "onViewCreated: $customerId")
-
-        viewModel.getAllAddresses(7670572875940)
+        if (userId != null) {
+            viewModel.getAllAddresses(userId.toLong())
+        }
 
     lifecycleScope.launch {
         viewModel.accessAllAddressesList.collectLatest { apiState ->

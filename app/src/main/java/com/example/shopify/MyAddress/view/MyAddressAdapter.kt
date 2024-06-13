@@ -1,5 +1,6 @@
 package com.example.shopify.MyAddress.view
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,10 +21,10 @@ class MyAddressAdapter(private var addresses: List<Address>,
 
     private var selectedAddressPosition: Int = -1
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val addressLine1: TextView = view.findViewById(R.id.client_address_value)
-        val city: TextView = view.findViewById(R.id.city_value)
-        val country: TextView = view.findViewById(R.id.country_value)
-        val phone: TextView = view.findViewById(R.id.client_phone_value)
+        val addressLine1: TextView = view.findViewById(R.id.add_client_address_value)
+        val city: TextView = view.findViewById(R.id.add_city_value)
+        val country: TextView = view.findViewById(R.id.add_country_value)
+        val phone: TextView = view.findViewById(R.id.add_client_phone_value)
         val cardView: CardView = view.findViewById(R.id.addresses_card)
         val deleteButton: ImageButton = view.findViewById(R.id.deleteAddress)
 
@@ -60,10 +61,13 @@ class MyAddressAdapter(private var addresses: List<Address>,
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val address = addresses[position]
+
         holder.addressLine1.text = address.address1
-        holder.city.text = address.city
-        holder.country.text = address.country
-        holder.phone.text = address.phone
+        holder.city.text = address.address2
+        holder.country.text = address.city
+        holder.phone.text = address.company
+
+        Log.i("phone", "onBindViewHolder: "+holder.country.text+","+holder.phone.text)
 
         // Apply shadow to selected item
         if (selectedAddressPosition == position) {

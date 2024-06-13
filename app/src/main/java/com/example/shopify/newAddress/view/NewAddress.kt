@@ -1,5 +1,6 @@
 package com.example.shopify.newAddress.view
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -65,6 +66,9 @@ class newAddress : Fragment() {
         building = view.findViewById(R.id.editTextBuilding)
         addButton = view.findViewById(R.id.confirmButton)
 
+        val sharedPreferences = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val userId = sharedPreferences.getString("userID", null)
+
         //add new address
         addButton.setOnClickListener{
             val address1 = building.text.toString()
@@ -72,10 +76,13 @@ class newAddress : Fragment() {
             val country = country.text.toString()
             val phone = phone.text.toString()
 
-            val customerId = 7670572875940
-            val address = Address(address1, phone, city, country, customer_id = customerId)
-
-            viewModel.addAddresses(customerId, AddNewAddress(address))
+            if (validateInputs(address1, city, country, phone)) {
+                val address = Address(address1, city, country,phone, customer_id = userId?.toLong())
+                Log.i("phone", "onViewCreated: "+address)
+                if (userId != null) {
+                    viewModel.addAddresses(userId.toLong(), AddNewAddress(address))
+                }
+            }
         }
 
         observeViewModel()
@@ -119,5 +126,28 @@ class newAddress : Fragment() {
                 }
             }
         }
+    }
+
+    private fun validateInputs(address1: String, city: String, country: String, phone: String): Boolean {
+        var isValid = true
+
+        if (address1.isEmpty() || address1.length < 5) {
+            isValid = false
+            building.error = "Address must be at least 5 characters"
+        }
+        if (city.isEmpty() || city.length < 2) {
+            isValid = false
+            this.city.error = "City must be at least 2 characters"
+        }
+        if (country.isEmpty() || country.length < 2) {
+            isValid = false
+            this.country.error = "Country must be at least 2 characters"
+        }
+        if (phone.isEmpty() || phone.length < 10) {
+            isValid = false
+            this.phone.error = "Phone number must be at least 7 characters"
+        }
+
+        return isValid
     }
 }

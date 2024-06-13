@@ -31,6 +31,7 @@ class MyAddressViewModel(var repo:ShopifyRepository) :ViewModel(){
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 repo.removeAddresses(customerId, addressId)
+                getAllAddresses(customerId)
             } catch (e: Exception) {
                 Log.i("delete", "deleteAddress: cant delete"+e)
             }
