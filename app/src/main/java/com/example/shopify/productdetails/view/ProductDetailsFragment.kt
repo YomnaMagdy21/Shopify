@@ -38,13 +38,11 @@ import com.example.shopify.productdetails.viewmodel.ProductDetailsViewModelFacto
 import com.example.shopify.ShoppingCart.model.ShoppingCardRepo
 import com.example.shopify.ShoppingCart.viewModel.PriceRuleViewModelFactory
 import com.example.shopify.ShoppingCart.viewModel.ShoppingCardViewModel
+import com.example.shopify.model.productDetails.Product
 import com.example.shopify.products.view.OnProductClickListener
 import com.example.shopify.products.view.ProductAdapter
 import com.example.shopify.products.viewModel.ProductsOfBrandViewModel
 import com.example.shopify.products.viewModel.ProductsOfBrandViewModelFactory
-import com.example.shopify.shoppingCard.view.model.ShoppingCardRepo
-import com.example.shopify.shoppingCard.view.viewModel.PriceRuleViewModelFactory
-import com.example.shopify.shoppingCard.view.viewModel.ShoppingCardViewModel
 import com.example.shopify.utility.ApiState
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
