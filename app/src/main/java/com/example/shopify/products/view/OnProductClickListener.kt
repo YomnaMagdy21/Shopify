@@ -1,5 +1,5 @@
 package com.example.shopify.products.view
 
 interface OnProductClickListener {
-    fun goToDetails()
+    fun goToDetails(id:Long)
 }

@@ -3,7 +3,6 @@ package com.example.shopify.productdetails.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.shopify.model.ShopifyRepository
-import com.example.shopify.model.createCustomerRequest
 import com.example.shopify.utility.ApiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

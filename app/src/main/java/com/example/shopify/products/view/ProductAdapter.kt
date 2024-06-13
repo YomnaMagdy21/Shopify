@@ -50,10 +50,11 @@ class ProductAdapter(var context: Context, var productsOfBrand: List<Product>, v
             }
 
             Glide.with(context).load(it.image?.src).into(holder.productImg)
+        }
+        var product  = productsOfBrand.get(position)
 
-            holder.card.setOnClickListener {
-                listener.goToDetails()
-            }
+        holder.card.setOnClickListener {
+            listener.goToDetails(product.id?: 8663275405476)
         }
     }
 

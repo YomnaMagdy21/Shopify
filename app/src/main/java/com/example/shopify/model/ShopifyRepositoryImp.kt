@@ -1,5 +1,9 @@
 package com.example.shopify.model
 
+import android.content.Context
+import android.content.Intent
+import android.widget.Toast
+import com.example.shopify.BottomNavigationBar.BottomNavActivity
 import com.example.shopify.Models.products.CollectProductsModel
 import com.example.shopify.model.Brands.BrandModel
 import com.example.shopify.model.addressModel.AddNewAddress
@@ -7,10 +11,15 @@ import com.example.shopify.model.addressModel.Address
 import com.example.shopify.model.addressModel.AddressesModel
 import com.example.shopify.model.productDetails.ProductModel
 import com.example.shopify.network.ShopifyRemoteDataSource
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.auth.AuthResult
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
 import kotlinx.coroutines.flow.Flow
 
 class ShopifyRepositoryImp(private var shopifyRemoteDataSource: ShopifyRemoteDataSource) : ShopifyRepository{
-
+    var firebaseAuth = FirebaseAuth.getInstance()
+    lateinit var mDatabase: DatabaseReference
     companion object{
         private var instance:ShopifyRepositoryImp?=null
         fun getInstance(

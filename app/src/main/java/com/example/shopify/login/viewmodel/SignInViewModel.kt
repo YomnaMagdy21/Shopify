@@ -1,9 +1,9 @@
 package com.example.shopify.login.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.shopify.model.ShopifyRepository
-import com.example.shopify.model.createCustomerRequest
 import com.example.shopify.utility.ApiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,6 +17,7 @@ class SignInViewModel (private val _repo: ShopifyRepository): ViewModel() {
     val login: StateFlow<ApiState> = _login
 
 
+
     fun getCustomerByEmail(email:String){
         viewModelScope.launch(Dispatchers.IO){
             _repo.getCustomerByEmail(email)
@@ -28,4 +29,5 @@ class SignInViewModel (private val _repo: ShopifyRepository): ViewModel() {
                 }
         }
     }
+
 }
