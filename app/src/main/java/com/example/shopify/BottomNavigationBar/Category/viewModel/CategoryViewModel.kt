@@ -14,6 +14,10 @@ import kotlinx.coroutines.launch
 class CategoryViewModel (var repository: ShopifyRepository) : ViewModel() {
     private var _allProductList = MutableStateFlow<ApiState>(ApiState.Loading)
     var  accessAllProductList : StateFlow<ApiState> = _allProductList
+
+    // Store the IDs of products added to the cart
+    val addedProductIds = mutableListOf<Long>()
+
     val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
         throwable.printStackTrace()
     }

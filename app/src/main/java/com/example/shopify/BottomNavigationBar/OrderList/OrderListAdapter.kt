@@ -9,7 +9,6 @@ import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shopify.BottomNavigationBar.orderItem.OrderItemFragment
 import com.example.shopify.R
-import com.example.shopify.shoppingCard.view.shoppingCardFragment
 
 class OrderListAdapter(
     private val context: Context,
