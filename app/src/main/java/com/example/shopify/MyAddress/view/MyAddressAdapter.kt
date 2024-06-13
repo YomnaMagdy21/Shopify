@@ -21,12 +21,12 @@ class MyAddressAdapter(private var addresses: List<Address>,
 
     private var selectedAddressPosition: Int = -1
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val addressLine1: TextView = view.findViewById(R.id.add_client_address_value)
-        val city: TextView = view.findViewById(R.id.add_city_value)
-        val country: TextView = view.findViewById(R.id.add_country_value)
-        val phone: TextView = view.findViewById(R.id.add_client_phone_value)
-        val cardView: CardView = view.findViewById(R.id.addresses_card)
-        val deleteButton: ImageButton = view.findViewById(R.id.deleteAddress)
+        val addressLine1: TextView = view.findViewById(R.id.Building_value)
+        val city: TextView = view.findViewById(R.id.tv_cityy_value)
+        val country: TextView = view.findViewById(R.id.tv_countryy_value)
+        val phone: TextView = view.findViewById(R.id.tv_Phonee_value)
+        val cardView: CardView = view.findViewById(R.id.card_Address_list)
+        val deleteButton: ImageButton = view.findViewById(R.id.deleteeAddress)
 
         init {
             itemView.setOnClickListener {
@@ -55,7 +55,7 @@ class MyAddressAdapter(private var addresses: List<Address>,
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.addresses_card, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.address_card_update, parent, false)
         return ViewHolder(view)
     }
 

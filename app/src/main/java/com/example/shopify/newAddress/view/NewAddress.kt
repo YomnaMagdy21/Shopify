@@ -26,6 +26,7 @@ import com.example.shopify.network.ShopifyRemoteDataSourceImp
 import com.example.shopify.newAddress.viewModel.NewAddressFactory
 import com.example.shopify.newAddress.viewModel.NewAddressViewModel
 import com.example.shopify.utility.ApiState
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import kotlin.math.log
 
@@ -90,6 +91,9 @@ class newAddress : Fragment() {
                     viewModel.addAddresses(userId.toLong(), AddNewAddress(address))
                 }
             }
+
+            Snackbar.make(requireView(), "Address added successfully", Snackbar.LENGTH_SHORT).show()
+            navigateBack()
         }
 
         observeViewModel()
@@ -125,7 +129,8 @@ class newAddress : Fragment() {
                     }
                     is ApiState.Success<*> -> {
                         // Address added successfully, navigate back
-                        Log.i("neww", "observeViewModel: ")
+                        Snackbar.make(requireView(), "Address added successfully", Snackbar.LENGTH_SHORT).show()
+                        navigateBack()
                     }
                     is ApiState.Failure -> {
                         // Show error message
@@ -150,11 +155,20 @@ class newAddress : Fragment() {
             isValid = false
             this.country.error = "Country must be at least 2 characters"
         }
-        if (phone.isEmpty() || phone.length < 10) {
+        if (phone.isEmpty() || phone.length < 7) {
             isValid = false
             this.phone.error = "Phone number must be at least 7 characters"
         }
 
         return isValid
+    }
+
+    private fun navigateBack(){
+        val newFragment = myAddressFragment()
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.frame_layout, newFragment)
+            .addToBackStack(null)
+            .commit()
+
     }
 }

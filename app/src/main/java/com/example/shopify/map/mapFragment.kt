@@ -3,6 +3,7 @@ package com.example.shopify.map
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -20,6 +21,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.snackbar.Snackbar
 import java.util.Locale
 
 
@@ -61,7 +63,7 @@ class mapFragment : Fragment() {
             selectedLatLng?.let { latLng ->
                 getAddressFromLatLng(latLng)
             } ?: run {
-                Toast.makeText(requireContext(), "Please select a location on the map", Toast.LENGTH_SHORT).show()
+                Snackbar.make(requireView(), "Please select a location on the map", Snackbar.LENGTH_SHORT).show()
             }
         }
 
@@ -120,11 +122,13 @@ class mapFragment : Fragment() {
             val bundle = Bundle().apply {
                 putString("address1", address.getAddressLine(0))
                 putString("city", address.locality)
+                Log.i("city", "getAddressFromLatLng: "+address.locality)
                 putString("country", address.countryName)
             }
+            Snackbar.make(requireView(), "Address added successfully", Snackbar.LENGTH_SHORT).show()
             navigateToNewAddress(bundle)
         } else {
-            Toast.makeText(requireContext(), "Unable to get address", Toast.LENGTH_SHORT).show()
+            Snackbar.make(requireView(), "unable to get address", Snackbar.LENGTH_SHORT).show()
         }
     }
 
