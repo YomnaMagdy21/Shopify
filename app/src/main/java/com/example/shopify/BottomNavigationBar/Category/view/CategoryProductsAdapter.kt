@@ -50,6 +50,5 @@ class CategoryProductsAdapter(private val context: Context,
         val productName: TextView = itemView.findViewById(R.id.tv_product_name_category_card)
         val productPrice: TextView = itemView.findViewById(R.id.tv_product_price_category_card)
         val card: CardView = itemView.findViewById(R.id.products_card_category)
-        val addToCartButton: Button = itemView.findViewById(R.id.button2)
     }
 }

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F7F7F7"
-    tools:context=".setting.newAddress.view.newAddress">
+    tools:context=".newAddress.view.newAddress">
 
     <TextView
         android:id="@+id/textViewCardList"
@@ -32,7 +32,7 @@
         android:layout_width="355dp"
         android:layout_height="73dp"
         android:layout_marginStart="3dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="30dp"
         android:layout_marginEnd="23dp"
         app:cardCornerRadius="12dp"
         app:cardElevation="10dp"
@@ -61,8 +61,8 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:inputType="text"
-                android:textColor="#CFC7C7"
-                android:text="Building" />
+                android:text="Building"
+                android:textColor="#CFC7C7" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -135,12 +135,53 @@
             <EditText
                 android:id="@+id/editTextCountry"
                 android:layout_width="273dp"
-                android:layout_height="57dp"
+                android:layout_height="match_parent"
                 android:layout_marginStart="16dp"
                 android:layout_weight="1"
                 android:ems="10"
                 android:inputType="text"
                 android:text="Country"
+                android:textColor="#CFC7C7" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardViewPhone"
+        android:layout_width="355dp"
+        android:layout_height="73dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="22dp"
+        android:layout_marginEnd="23dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        app:layout_constraintTop_toBottomOf="@+id/cardViewCountry">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+            <ImageView
+                android:id="@+id/icon4"
+                android:layout_width="34dp"
+                android:layout_height="37dp"
+                android:src="@drawable/country_flag_flag02_svgrepo_com" />
+
+            <EditText
+                android:id="@+id/editTextPhone"
+                android:layout_width="273dp"
+                android:layout_height="57dp"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="text"
+                android:text="Phone"
                 android:textColor="#CFC7C7" />
 
         </LinearLayout>
@@ -173,11 +214,11 @@
         android:layout_width="217dp"
         android:layout_height="35dp"
         android:layout_marginStart="4dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="22dp"
         android:text="choose on the map?"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
-        app:layout_constraintTop_toBottomOf="@+id/cardViewCountry" />
+        app:layout_constraintTop_toBottomOf="@+id/cardViewPhone" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -12,7 +12,7 @@ import com.example.shopify.BottomNavigationBar.Me.MeFragment
 import com.example.shopify.R
 
 import com.example.shopify.databinding.ActivityBottomNavBinding
-import com.example.shopify.shoppingCard.view.shoppingCardFragment
+import com.example.shopify.ShoppingCart.view.shoppingCardFragment
 
 
 class BottomNavActivity : AppCompatActivity() {

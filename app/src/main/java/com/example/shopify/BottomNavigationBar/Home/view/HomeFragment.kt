@@ -7,7 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.os.Handler
 import android.os.Looper
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
+import android.widget.EditText
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -18,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.shopify.BottomNavigationBar.Home.viewModel.HomeViewModel
 import com.example.shopify.BottomNavigationBar.Home.viewModel.HomeViewModelFactory
+import com.example.shopify.databinding.FragmentHomeBinding
 import com.example.shopify.model.ShopifyRepositoryImp
 import com.example.shopify.model.Brands.BrandModel
 import com.example.shopify.model.Brands.SmartCollection
@@ -42,6 +46,7 @@ class HomeFragment : Fragment() , OnBrandClickListener {
     lateinit var homeViewModelFactory: HomeViewModelFactory
     lateinit var smartCollections: List<SmartCollection>
     private lateinit var progressBar: ProgressBar
+    private lateinit var etSearch: EditText
 
 
    private val images = listOf(
@@ -60,6 +65,8 @@ class HomeFragment : Fragment() , OnBrandClickListener {
         viewPager = view.findViewById(R.id.viewPager)
         brandsRecyclerView = view.findViewById(R.id.rv_brands_in_home)
         progressBar = view.findViewById(R.id.progressBar)
+        etSearch = view.findViewById(R.id.search_edit_text)
+
 
         smartCollections = listOf()
         homeViewModelFactory = HomeViewModelFactory(
@@ -79,6 +86,7 @@ class HomeFragment : Fragment() , OnBrandClickListener {
         setupRecyclerView()
         setBrandData()
         homeViewModel.getBrands()
+        setupSearch()
     }
 
 
@@ -161,5 +169,23 @@ class HomeFragment : Fragment() , OnBrandClickListener {
         transaction.replace(R.id.frame_layout, fragment)
         transaction.addToBackStack(null)
         transaction.commit()
+    }
+    private fun setupSearch() {
+        etSearch.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                filterBrands(s.toString())
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+        })
+    }
+
+    private fun filterBrands(query: String) {
+        val filteredList = smartCollections.filter {
+            it.title.contains(query, ignoreCase = true)
+        }
+        brandsAdapter.setBrandsList(filteredList)
     }
 }

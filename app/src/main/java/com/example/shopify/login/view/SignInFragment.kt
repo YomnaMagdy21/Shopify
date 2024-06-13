@@ -1,5 +1,6 @@
 package com.example.shopify.login.view
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.InputType
@@ -22,6 +23,7 @@ import com.example.shopify.login.viewmodel.SignInViewModelFactory
 import com.example.shopify.model.Customer
 import com.example.shopify.model.ShopifyRepositoryImp
 import com.example.shopify.model.createCustomerRequest
+import com.example.shopify.model.createCustomersResponse
 import com.example.shopify.network.ShopifyRemoteDataSourceImp
 import com.example.shopify.signup.view.SignUpFragment
 import com.example.shopify.signup.viewmodel.SignUpViewModel
@@ -102,7 +104,11 @@ class SignInFragment : Fragment() {
                 binding.emailEditText.requestFocus()
                 return@setOnClickListener
             }
-
+            if (!isValidEmail(email)) {
+                binding.emailEditText.error = "Invalid Email "
+                binding.emailEditText.requestFocus()
+                return@setOnClickListener
+            }
             if (password.isEmpty()) {
                 binding.password.error = "Password cannot be empty"
                 binding.password.requestFocus()
@@ -111,33 +117,65 @@ class SignInFragment : Fragment() {
 
 
             binding.progressBar.visibility = View.VISIBLE
-            Firebase(requireContext()).loginClient(requireContext(), email, password) {isSuccess ->
+            Firebase(requireContext()).loginClient(requireContext(), email, password) { isSuccess ->
                 binding.progressBar.visibility = View.GONE
                 if (!isSuccess) {
                     binding.password.error = "Incorrect password"
                     binding.password.requestFocus()
                 }
             }
+            signInViewModel.getCustomerByEmail(email)
+
 
             lifecycleScope.launch {
-                signInViewModel.login.collectLatest {result->
-                    when(result){
-                        is ApiState.Loading ->{
-                            binding.progressBar.visibility= View.VISIBLE
-                        }
-                        is ApiState.Success<*> ->{
+                signInViewModel.login.collectLatest { result ->
+                    when (result) {
+                        is ApiState.Loading -> {
+                            binding.progressBar.visibility = View.VISIBLE
+                            Log.i(TAG, "Loading state")
 
+                        }
+
+                        is ApiState.Success<*> -> {
+                            binding.progressBar.visibility = View.GONE
+                            val person = result.data as? createCustomersResponse
                             signInViewModel.getCustomerByEmail(email)
-                        }
-                        else ->{
 
+                            if (person != null) {
+
+                                Log.i(TAG, "Customer ID in login: ${person.customers?.get(0)?.id}")
+                                var userID = person.customers?.get(0)?.id
+                                if (userID != null) {
+
+                                    val sharedPreferences = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+                                    val editor = sharedPreferences.edit()
+                                    editor.putString("userID", userID.toString())
+                                    editor.apply()
+
+                                    Log.i(TAG, "Saved userID to SharedPreferences: $userID")
+                                } else {
+                                    Log.i(TAG, "UserID is null")
+                                }
+
+                            } else {
+                                Log.i(TAG, "Received null person")
+                            }
+                        }
+                        is ApiState.Failure -> {
+                            binding.progressBar.visibility = View.GONE
+                            Log.e(TAG, "API call failed: ${result.msg}")
+                            // Handle the failure state here
+                        }
+
+                        else -> {
+
+                            binding.progressBar.visibility = View.GONE
+                            Log.i(TAG, "Unexpected state: ${result.javaClass.simpleName}")
                         }
                     }
-
                 }
             }
-        //            val intent= Intent(requireContext(), BottomNavActivity::class.java)
-//            startActivity(intent)
+
         }
         binding.signup.setOnClickListener {
             val transaction = (context as AppCompatActivity).supportFragmentManager.beginTransaction()
@@ -164,6 +202,10 @@ class SignInFragment : Fragment() {
             binding.progressBar.visibility = View.VISIBLE
         }
     }
+    private fun isValidEmail(email: String): Boolean {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == RC_SIGN_IN) {
@@ -240,7 +282,7 @@ class SignInFragment : Fragment() {
                 signUpViewModel.registerCustomerInAPI(client)
 
                 lifecycleScope.launch {
-                    signUpViewModel.register.collectLatest { result ->
+                    signInViewModel.login.collectLatest { result ->
                         when (result) {
                             is ApiState.Loading ->{
                                 binding.progressBar.visibility = View.VISIBLE

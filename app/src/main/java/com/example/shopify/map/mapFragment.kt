@@ -1,4 +1,4 @@
-package com.example.shopify.setting.map
+package com.example.shopify.map
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

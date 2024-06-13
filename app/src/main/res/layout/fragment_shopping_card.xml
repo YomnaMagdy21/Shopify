@@ -5,7 +5,7 @@ xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
 android:background="#F7F7F7"
-tools:context=".shoppingCard.view.shoppingCardFragment">
+tools:context=".ShoppingCart.view.shoppingCardFragment">
 
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
@@ -13,12 +13,12 @@ tools:context=".shoppingCard.view.shoppingCardFragment">
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="328dp"
-        android:layout_height="67dp"
+        android:layout_width="332dp"
+        android:layout_height="56dp"
         android:layout_marginStart="2dp"
-        android:layout_marginTop="104dp"
+        android:layout_marginTop="76dp"
         android:layout_marginEnd="137dp"
-        android:text="Card List"
+        android:text="Cart List"
         android:textSize="48sp"
         android:textStyle="normal"
         app:layout_constraintEnd_toEndOf="parent"
@@ -28,10 +28,10 @@ tools:context=".shoppingCard.view.shoppingCardFragment">
 
     <TextView
         android:id="@+id/textViewCardList"
-        android:layout_width="328dp"
-        android:layout_height="67dp"
+        android:layout_width="330dp"
+        android:layout_height="62dp"
         android:layout_marginStart="2dp"
-        android:layout_marginTop="56dp"
+        android:layout_marginTop="28dp"
         android:layout_marginEnd="137dp"
         android:text="My"
         android:textSize="48sp"
@@ -48,29 +48,20 @@ tools:context=".shoppingCard.view.shoppingCardFragment">
         android:orientation="vertical"
         app:layout_constraintGuide_begin="26dp" />
 
-    <ImageView
-        android:id="@+id/backImage"
-        android:layout_width="46dp"
-        android:layout_height="29dp"
-        android:layout_marginTop="10dp"
-        android:src="@drawable/chevron_back_sharp_svgrepo_com"
-        app:layout_constraintStart_toStartOf="@+id/guideline4"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewCardList"
         android:layout_width="match_parent"
-        android:layout_height="217dp"
-        android:layout_marginTop="28dp"
+        android:layout_height="320dp"
+        android:layout_marginTop="24dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.17"
+        app:layout_constraintHorizontal_bias="0.961"
         app:layout_constraintStart_toStartOf="@+id/guideline4"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
-        android:layout_width="409dp"
-        android:layout_height="186dp"
+        android:layout_width="match_parent"
+        android:layout_height="147dp"
         android:background="#FFFEFE"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -95,12 +86,11 @@ tools:context=".shoppingCard.view.shoppingCardFragment">
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="4dp"
             android:text="Total Price"
             android:textColor="#A28E8E"
-            android:textSize="34sp"
+            android:textSize="30dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.491"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -108,7 +98,7 @@ tools:context=".shoppingCard.view.shoppingCardFragment">
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="9dp"
             android:text="2349.9 "
             android:textSize="24sp"
             android:textStyle="bold"
@@ -123,20 +113,22 @@ tools:context=".shoppingCard.view.shoppingCardFragment">
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="10dp"
-        android:layout_marginBottom="10dp"
         android:layout_marginTop="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.842"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerViewCardList">
+        app:layout_constraintTop_toBottomOf="@+id/recyclerViewCardList"
+        app:layout_constraintVertical_bias="1.0">
 
         <EditText
             android:id="@+id/editTextText"
-            android:layout_width="237dp"
-            android:layout_height="44dp"
+            android:layout_width="254dp"
+            android:layout_height="41dp"
             android:layout_marginVertical="10dp"
             android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
             android:background="@drawable/edittext_border"
             android:ems="10"
             android:hint="Coupon"
@@ -154,9 +146,9 @@ tools:context=".shoppingCard.view.shoppingCardFragment">
             android:id="@+id/textView5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginVertical="10dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="50dp"
-            android:layout_marginVertical="10dp"
             android:text="Discount"
             android:textSize="24sp"
             app:layout_constraintBottom_toTopOf="@+id/const_coupon"
@@ -188,24 +180,27 @@ tools:context=".shoppingCard.view.shoppingCardFragment">
             android:text="Valid"
             android:textColor="#FB0404"
             android:textSize="24sp"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="@+id/editTextText"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/editTextText"
             app:layout_constraintTop_toTopOf="@+id/editTextText"
             app:layout_constraintVertical_bias="0.545" />
 
         <Button
             android:id="@+id/applyButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="#000000"
-            android:text="Apply"
-            app:cornerRadius="12dp"
-            android:paddingHorizontal="5dp"
+            android:layout_width="115dp"
+            android:layout_height="51dp"
             android:layout_margin="2dp"
+            android:backgroundTint="#000000"
+            android:paddingHorizontal="5dp"
+            android:text="Apply"
+            app:cornerRadius="5dp"
             app:layout_constraintBottom_toBottomOf="@+id/editTextText"
             app:layout_constraintEnd_toEndOf="@+id/editTextText"
-            app:layout_constraintTop_toTopOf="@+id/editTextText" />
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/editTextText"
+            app:layout_constraintTop_toTopOf="@+id/editTextText"
+            app:layout_constraintVertical_bias="0.629" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

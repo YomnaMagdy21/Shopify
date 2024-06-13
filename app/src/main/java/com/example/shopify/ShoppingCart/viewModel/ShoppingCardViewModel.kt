@@ -1,4 +1,4 @@
-package com.example.shopify.shoppingCard.view.viewModel
+package com.example.shopify.ShoppingCart.viewModel
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -6,9 +6,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.shopify.model.draftModel.DraftOrder
 import com.example.shopify.model.draftModel.DraftOrderResponse
-import com.example.shopify.shoppingCard.view.model.PriceRule
-import com.example.shopify.shoppingCard.view.model.ShoppingCardRepo
-import com.google.android.gms.common.api.Response
+import com.example.shopify.ShoppingCart.model.PriceRule
+import com.example.shopify.ShoppingCart.model.ShoppingCardRepo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch

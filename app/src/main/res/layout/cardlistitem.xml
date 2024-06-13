@@ -12,86 +12,87 @@
     app:cardElevation="12dp">
 
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="118dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/textViewNumberOfItems"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="10dp"
+            android:background="#0C0C0C"
+            android:text="1"
+            android:textAlignment="center"
+            android:textColor="#FDFBFB"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/cardListImage"
+            app:layout_constraintTop_toBottomOf="@+id/textViewPlus" />
 
-            <TextView
-                android:id="@+id/textViewNumberOfItems"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_marginTop="3dp"
-                android:layout_marginEnd="10dp"
-                android:background="#0C0C0C"
-                android:text="1"
-                android:textAlignment="center"
-                android:textColor="#FDFBFB"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toEndOf="@+id/cardListImage"
-                app:layout_constraintTop_toBottomOf="@+id/textViewPlus" />
+        <TextView
+            android:id="@+id/textViewPlus"
+            android:layout_width="17dp"
+            android:layout_height="28dp"
+            android:layout_marginTop="5dp"
+            android:text="+"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/textViewNumberOfItems"
+            app:layout_constraintStart_toStartOf="@+id/textViewNumberOfItems"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/textViewPlus"
-                android:layout_width="17dp"
-                android:layout_height="28dp"
-                android:layout_marginTop="5dp"
-                android:text="+"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="@+id/textViewNumberOfItems"
-                app:layout_constraintStart_toStartOf="@+id/textViewNumberOfItems"
-                app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/textViewReduce"
+            android:layout_width="27dp"
+            android:layout_height="37dp"
+            android:layout_marginBottom="16dp"
+            android:text="-"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/textViewNumberOfItems"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/textViewNumberOfItems" />
 
-            <TextView
-                android:id="@+id/textViewReduce"
-                android:layout_width="19dp"
-                android:layout_height="22dp"
-                android:layout_marginBottom="4dp"
-                android:text="-"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/textViewNumberOfItems"
-                app:layout_constraintHorizontal_bias="0.625"
-                app:layout_constraintStart_toStartOf="@+id/textViewNumberOfItems" />
+        <ImageView
+            android:id="@+id/cardListImage"
+            android:layout_width="109dp"
+            android:layout_height="115dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.363"
+            tools:srcCompat="@tools:sample/avatars" />
 
-            <ImageView
-                android:id="@+id/cardListImage"
-                android:layout_width="75dp"
-                android:layout_height="63dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="14dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:srcCompat="@tools:sample/avatars" />
+        <TextView
+            android:id="@+id/titleOfProduct"
+            android:layout_width="198dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="9dp"
+            android:text="title"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/cardListImage"
+            app:layout_constraintStart_toEndOf="@+id/cardListImage"
+            app:layout_constraintTop_toTopOf="@+id/cardListImage"
+            app:layout_constraintVertical_bias="0.194" />
 
-            <TextView
-                android:id="@+id/titleOfProduct"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_marginStart="4dp"
-                android:layout_marginBottom="7dp"
-                android:text="title"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toTopOf="@+id/price"
-                app:layout_constraintStart_toEndOf="@+id/cardListImage" />
-
-            <TextView
-                android:id="@+id/price"
-                android:layout_width="142dp"
-                android:layout_height="27dp"
-                android:layout_marginStart="4dp"
-                android:layout_marginBottom="16dp"
-                android:text="13.87 EGP"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/cardListImage" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="9dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="24dp"
+            android:text="13.87 EGP"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/cardListImage"
+            app:layout_constraintTop_toBottomOf="@+id/titleOfProduct" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

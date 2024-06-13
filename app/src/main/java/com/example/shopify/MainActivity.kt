@@ -6,7 +6,6 @@ import android.os.Bundle
 import com.example.shopify.BottomNavigationBar.BottomNavActivity
 import com.example.shopify.firebase.Firebase
 import com.example.shopify.login.view.SignInFragment
-import com.example.shopify.shoppingCard.view.shoppingCardFragment
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
