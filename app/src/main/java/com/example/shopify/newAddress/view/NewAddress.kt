@@ -66,6 +66,13 @@ class newAddress : Fragment() {
         building = view.findViewById(R.id.editTextBuilding)
         addButton = view.findViewById(R.id.confirmButton)
 
+        // Retrieve and display address from map
+        arguments?.let { bundle ->
+            building.setText(bundle.getString("address1"))
+            city.setText(bundle.getString("city"))
+            country.setText(bundle.getString("country"))
+        }
+
         val sharedPreferences = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val userId = sharedPreferences.getString("userID", null)
 
