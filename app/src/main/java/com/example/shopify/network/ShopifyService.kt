@@ -116,5 +116,11 @@ interface ShopifyService {
     suspend fun removeCustomerAddresse(@Path(value = "customerId") customerId:Long ,@Path(value = "addressId") addressId:Long )
 
 
+    //change defult address for the customer
+    @Headers("X-Shopify-Access-Token: ${Constants.adminApiAccessToken}")
+    @PUT("admin/api/2024-04/customers/{customerId}/addresses/{addressId}/default.json")
+    suspend fun makeAddressDefault(@Path(value="customerId") customerId:Long, @Path(value="addressId") addressId:Long) :Response<AddressesModel>
+
+
 
 }

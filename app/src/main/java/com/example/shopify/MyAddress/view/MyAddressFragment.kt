@@ -72,6 +72,13 @@ class myAddressFragment : Fragment() {
             emptyList(),
             onItemClick = { address ->
                 saveAddressToPreferences(address)
+                address.id?.let {
+                    if (userId != null) {
+                        viewModel.makeDefaultAddress(userId.toLong(), it)
+                        Snackbar.make(view, "Default address updated successfully", Snackbar.LENGTH_SHORT).show()
+                    }
+                }
+                Log.i("default", "onViewCreated: " + address.id)
                 navigateToPaymentFragment(address)
             },
             onDeleteButtonClick = { address ->

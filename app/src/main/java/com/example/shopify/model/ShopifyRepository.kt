@@ -35,6 +35,8 @@ interface ShopifyRepository {
 
     suspend fun removeAddresses(customerId :Long , addressId :Long)
 
+    suspend fun makeAddressDefault(customerId: Long, addressId: Long): Flow<AddressesModel?>
+
 
 
     }

@@ -29,7 +29,7 @@ class MyAddressAdapter(private var addresses: List<Address>,
         val deleteButton: ImageButton = view.findViewById(R.id.deleteeAddress)
 
         init {
-            itemView.setOnClickListener {
+            itemView.setOnLongClickListener {
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
                     val address = addresses[position]
@@ -42,6 +42,7 @@ class MyAddressAdapter(private var addresses: List<Address>,
                         onItemClick(address)
                     }
                 }
+                true
             }
 
             deleteButton.setOnClickListener {

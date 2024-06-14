@@ -38,6 +38,17 @@ class MyAddressViewModel(var repo:ShopifyRepository) :ViewModel(){
         }
     }
 
+    fun makeDefaultAddress(customerId: Long, addressId: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                repo.makeAddressDefault(customerId, addressId)
+                getAllAddresses(customerId)
+            } catch (e: Exception) {
+                Log.e("default", "makeDefaultAddress: can't make default" + e)
+            }
+        }
+    }
+
 }
 
 class MyAddressFactory(private val repository: ShopifyRepository) : ViewModelProvider.Factory {
