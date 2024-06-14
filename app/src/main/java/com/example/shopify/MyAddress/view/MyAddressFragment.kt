@@ -25,6 +25,7 @@ import com.example.shopify.MyAddress.viewModel.MyAddressViewModel
 import com.example.shopify.newAddress.view.newAddress
 import com.example.shopify.setting.view.settingFragment
 import com.example.shopify.utility.ApiState
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.collectLatest
@@ -60,16 +61,49 @@ class myAddressFragment : Fragment() {
         recyclerView = view.findViewById(R.id.RVAddresses)
         recyclerView.layoutManager = LinearLayoutManager(context)
 
+        //get user id and pass it
+        val sharedPreferences = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val userId = sharedPreferences.getString("userID", null)
+        Log.i("userid", "onViewCreated: "+userId)
+
+
 
         myAddressAdapter = MyAddressAdapter(
             emptyList(),
             onItemClick = { address ->
                 saveAddressToPreferences(address)
+                address.id?.let {
+                    if (userId != null) {
+                        viewModel.makeDefaultAddress(userId.toLong(), it)
+                        Snackbar.make(view, "Default address updated successfully", Snackbar.LENGTH_SHORT).show()
+                    }
+                }
+                Log.i("default", "onViewCreated: " + address.id)
                 navigateToPaymentFragment(address)
             },
             onDeleteButtonClick = { address ->
-                address.id?.let { viewModel.deleteAddress(7670572875940, it) }
+                address.id?.let {
+                    if (userId != null) {
+                        viewModel.deleteAddress(userId.toLong(), it)
+                        Snackbar.make(view, "Address deleted successfully", Snackbar.LENGTH_SHORT).show()
+                    }
+                }
                 Log.i("delete", "onViewCreated: "+address.id)
+            },onEditButtonClick = { address ->
+                val bundle = Bundle().apply {
+                    putSerializable("address", address)
+                    putString("address1", address.address1)
+                    putString("city", address.address2)
+                    putString("country", address.city)
+                    putString("phone", address.company)
+                }
+                val editAddressFragment = newAddress().apply {
+                    arguments = bundle
+                }
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.frame_layout, editAddressFragment)
+                    .addToBackStack(null)
+                    .commit()
             }
         )
 
@@ -94,11 +128,9 @@ class myAddressFragment : Fragment() {
                 .commit()
         }
 
-
-        val currentUser = FirebaseAuth.getInstance().currentUser
-        //Log.i("address", "onViewCreated: $customerId")
-
-        viewModel.getAllAddresses(7670572875940)
+        if (userId != null) {
+            viewModel.getAllAddresses(userId.toLong())
+        }
 
     lifecycleScope.launch {
         viewModel.accessAllAddressesList.collectLatest { apiState ->
@@ -107,7 +139,8 @@ class myAddressFragment : Fragment() {
                     var products = apiState.data as AddressesModel?
                     products?.let {
                         if (it.addresses != null) {
-                            myAddressAdapter.updateAddresses(it.addresses)
+                            val defaultAddressId = getDefaultAddressIdFromSharedPreferences()
+                            myAddressAdapter.updateAddresses(it.addresses,defaultAddressId)
                         }else{
                             Log.i("address", "onViewCreated: hiiiiiiii")
                         }
@@ -118,6 +151,8 @@ class myAddressFragment : Fragment() {
                 }
                 is ApiState.Loading -> {
                 }
+
+                else -> {}
             }
         }
     }
@@ -130,6 +165,16 @@ class myAddressFragment : Fragment() {
             apply()
         }
     }
+
+    private fun getDefaultAddressIdFromSharedPreferences(): Long? {
+        val sharedPreferences = requireContext().getSharedPreferences("default_address", Context.MODE_PRIVATE)
+        val defaultAddressJson = sharedPreferences.getString("address", null)
+        return defaultAddressJson?.let {
+            val defaultAddress = Gson().fromJson(it, Address::class.java)
+            defaultAddress.id
+        }
+    }
+
 
     private fun navigateToPaymentFragment(address: Address) {
         val bundle = Bundle().apply {

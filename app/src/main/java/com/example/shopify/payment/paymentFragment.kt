@@ -45,7 +45,7 @@ class paymentFragment : Fragment() {
             address = loadAddressFromPreferences() ?: Address("", "", "", "", "", "", "")
         }
 
-        myCurrentAdreesText.text = "${address.address1}, ${address.city}, ${address.country}, ${address.phone}"
+        myCurrentAdreesText.text = "${address.address1}, ${address.address2}, ${address.city}, ${address.company}"
 
 
         //navigate to shopping card fragment
