@@ -1,5 +1,6 @@
 package com.example.shopify.network
 
+import com.example.shopify.Models.orderList.RetriveOrderModel
 import com.example.shopify.Models.products.CollectProductsModel
 import com.example.shopify.model.Customer
 
@@ -103,4 +104,7 @@ class ShopifyRemoteDataSourceImp :ShopifyRemoteDataSource {
         return  flowOf(shopifyService.createOrder(order).body())
     }
 
+    override suspend fun getOrderList(): Flow<RetriveOrderModel?> {
+        return  flowOf(shopifyService.getAllOrders().body())
+    }
 }

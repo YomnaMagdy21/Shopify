@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/backgroundColor1"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".BottomNavigationBar.OrderList.OrderListFragment">
+    tools:context=".BottomNavigationBar.OrderList.view.OrderListFragment">
 
     <TextView
         android:id="@+id/tv_order_list"

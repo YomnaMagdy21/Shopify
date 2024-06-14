@@ -1,6 +1,7 @@
 package com.example.shopify.model
 
 import android.content.Context
+import com.example.shopify.Models.orderList.RetriveOrderModel
 import com.example.shopify.Models.products.CollectProductsModel
 import com.example.shopify.model.Brands.BrandModel
 import com.example.shopify.model.PostOrders.PostOrderModel
@@ -46,4 +47,6 @@ interface ShopifyRepository {
 
     suspend fun createOrder(order : PostOrderModel): Flow<RetriveOrder?>
 
-    }
+    suspend fun getOrderList(): Flow<RetriveOrderModel?>
+
+}

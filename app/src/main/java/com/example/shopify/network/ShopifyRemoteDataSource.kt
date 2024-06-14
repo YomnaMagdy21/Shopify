@@ -51,4 +51,7 @@ interface ShopifyRemoteDataSource {
     // post order
     suspend fun createOrder(order: PostOrderModel): Flow<RetriveOrder?>
 
+    // get all orders
+    suspend fun getOrderList(): Flow<RetriveOrderModel?>
+
 }

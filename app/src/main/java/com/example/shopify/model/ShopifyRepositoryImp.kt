@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.widget.Toast
 import com.example.shopify.BottomNavigationBar.BottomNavActivity
+import com.example.shopify.Models.orderList.RetriveOrderModel
 import com.example.shopify.Models.products.CollectProductsModel
 import com.example.shopify.model.Brands.BrandModel
 import com.example.shopify.model.PostOrders.PostOrderModel
@@ -98,4 +99,7 @@ class ShopifyRepositoryImp(private var shopifyRemoteDataSource: ShopifyRemoteDat
         return  shopifyRemoteDataSource.createOrder(order)
     }
 
+    override suspend fun getOrderList(): Flow<RetriveOrderModel?> {
+        return  shopifyRemoteDataSource.getOrderList()
+    }
 }

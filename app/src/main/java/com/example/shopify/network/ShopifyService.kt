@@ -1,5 +1,6 @@
 package com.example.shopify.network
 
+import com.example.shopify.Models.orderList.RetriveOrderModel
 import com.example.shopify.Models.products.CollectProductsModel
 
 import com.example.shopify.model.Brands.BrandModel
@@ -136,4 +137,9 @@ interface ShopifyService {
     @POST("admin/api/2024-04/orders.json")
     suspend fun createOrder(@Body order: PostOrderModel) : Response<RetriveOrder>
 
+
+    // get all orders
+    @Headers("X-Shopify-Access-Token: ${Constants.adminApiAccessToken}")
+    @GET("admin/api/2024-04/orders.json")
+    suspend fun getAllOrders() : Response<RetriveOrderModel>
 }
