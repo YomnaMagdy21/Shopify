@@ -12,6 +12,7 @@ import com.example.shopify.model.createCustomersResponse
 import com.example.shopify.model.productDetails.ProductModel
 import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
+import retrofit2.http.Body
 
 interface ShopifyRemoteDataSource {
  
@@ -41,6 +42,8 @@ interface ShopifyRemoteDataSource {
 
     suspend fun removeAddresses(customerId: Long, addressId: Long)
     suspend fun makeAddressDefault(customerId: Long, addressId: Long): Flow<AddressesModel?>
+
+    suspend fun editAddress(customerId: Long, addressId: Long,addresse: AddNewAddress): Flow<AddressesModel?>
 
 
 

@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import retrofit2.Response
+import retrofit2.http.Body
 
 class ShopifyRemoteDataSourceImp :ShopifyRemoteDataSource {
     val shopifyService:ShopifyService by lazy {
@@ -91,6 +92,10 @@ class ShopifyRemoteDataSourceImp :ShopifyRemoteDataSource {
 
     override suspend fun makeAddressDefault(customerId: Long, addressId: Long): Flow<AddressesModel?> {
         return flowOf(shopifyService.makeAddressDefault(customerId,addressId).body())
+    }
+
+    override suspend fun editAddress(customerId: Long, addressId: Long,addresse: AddNewAddress): Flow<AddressesModel?> {
+        return flowOf(shopifyService.editAddress(customerId,addressId,addresse).body())
     }
 
 

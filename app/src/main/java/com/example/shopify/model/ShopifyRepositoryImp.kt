@@ -16,6 +16,7 @@ import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import kotlinx.coroutines.flow.Flow
+import retrofit2.http.Body
 
 class ShopifyRepositoryImp(private var shopifyRemoteDataSource: ShopifyRemoteDataSource) : ShopifyRepository{
     var firebaseAuth = FirebaseAuth.getInstance()
@@ -85,6 +86,10 @@ class ShopifyRepositoryImp(private var shopifyRemoteDataSource: ShopifyRemoteDat
 
     override suspend fun makeAddressDefault(customerId: Long, addressId: Long): Flow<AddressesModel?> {
         return shopifyRemoteDataSource.makeAddressDefault(customerId,addressId)
+    }
+
+    override suspend fun editAddress(customerId: Long, addressId: Long,addresse: AddNewAddress): Flow<AddressesModel?> {
+        return shopifyRemoteDataSource.editAddress(customerId,addressId,addresse)
     }
 
 

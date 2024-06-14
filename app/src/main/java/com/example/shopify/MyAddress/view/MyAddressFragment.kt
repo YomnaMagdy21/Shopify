@@ -89,6 +89,21 @@ class myAddressFragment : Fragment() {
                     }
                 }
                 Log.i("delete", "onViewCreated: "+address.id)
+            },onEditButtonClick = { address ->
+                val bundle = Bundle().apply {
+                    putSerializable("address", address)
+                    putString("address1", address.address1)
+                    putString("city", address.address2)
+                    putString("country", address.city)
+                    putString("phone", address.company)
+                }
+                val editAddressFragment = newAddress().apply {
+                    arguments = bundle
+                }
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.frame_layout, editAddressFragment)
+                    .addToBackStack(null)
+                    .commit()
             }
         )
 
@@ -136,6 +151,8 @@ class myAddressFragment : Fragment() {
                 }
                 is ApiState.Loading -> {
                 }
+
+                else -> {}
             }
         }
     }

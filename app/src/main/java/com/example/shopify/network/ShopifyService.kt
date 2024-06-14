@@ -121,6 +121,11 @@ interface ShopifyService {
     @PUT("admin/api/2024-04/customers/{customerId}/addresses/{addressId}/default.json")
     suspend fun makeAddressDefault(@Path(value="customerId") customerId:Long, @Path(value="addressId") addressId:Long) :Response<AddressesModel>
 
+    //edit address
+    @Headers("X-Shopify-Access-Token: ${Constants.adminApiAccessToken}")
+    @PUT("admin/api/2024-04/customers/{customerId}/addresses/{addressId}.json")
+    suspend fun editAddress(@Path(value="customerId") customerId:Long, @Path(value="addressId") addressId:Long,@Body addresse: AddNewAddress) :Response<AddressesModel>
+
 
 
 }

@@ -37,6 +37,7 @@ class NewAddressViewModel(val repo:ShopifyRepository):ViewModel() {
             }
         }
     }
+
 }
 class NewAddressFactory(private val repository: ShopifyRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

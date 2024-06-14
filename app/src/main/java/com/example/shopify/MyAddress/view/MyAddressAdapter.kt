@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.view.menu.MenuView.ItemView
 import androidx.cardview.widget.CardView
@@ -17,7 +18,8 @@ import com.example.shopify.model.addressModel.Address
 
 class MyAddressAdapter(private var addresses: List<Address>,
                        private val onItemClick: (Address) -> Unit,
-                       private val onDeleteButtonClick: (Address) -> Unit) : RecyclerView.Adapter<MyAddressAdapter.ViewHolder>() {
+                       private val onDeleteButtonClick: (Address) -> Unit,
+                       private val onEditButtonClick: (Address) -> Unit) : RecyclerView.Adapter<MyAddressAdapter.ViewHolder>() {
 
     private var selectedAddressPosition: Int = -1
     private var defaultAddressId: Long? = null
@@ -28,6 +30,7 @@ class MyAddressAdapter(private var addresses: List<Address>,
         val phone: TextView = view.findViewById(R.id.tv_Phonee_value)
         val cardView: CardView = view.findViewById(R.id.card_Address_list)
         val deleteButton: ImageButton = view.findViewById(R.id.deleteeAddress)
+        val editButton: ImageView = view.findViewById(R.id.imageViewEdit)
 
         init {
             itemView.setOnLongClickListener {
@@ -53,6 +56,14 @@ class MyAddressAdapter(private var addresses: List<Address>,
                 if (position != RecyclerView.NO_POSITION) {
                     val address = addresses[position]
                     onDeleteButtonClick(address)
+                }
+            }
+
+            editButton.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    val address = addresses[position]
+                    onEditButtonClick(address)
                 }
             }
         }

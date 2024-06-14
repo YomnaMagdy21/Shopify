@@ -34,11 +34,15 @@ import kotlin.math.log
 class newAddress : Fragment() {
 
     private lateinit var viewModel : NewAddressViewModel
+    private lateinit var viewModelMyAddress : MyAddressViewModel
     lateinit var addButton : Button
     lateinit var phone : EditText
     lateinit var city :EditText
     lateinit var country : EditText
     lateinit var building : EditText
+
+    private var addressToEdit: Address? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,12 +64,24 @@ class newAddress : Fragment() {
         val repository = ShopifyRepositoryImp.getInstance(remoteDataSource)
         val factory = NewAddressFactory(repository)
         viewModel = ViewModelProvider(this, factory).get(NewAddressViewModel::class.java)
+        //
+        val factory2 = MyAddressFactory(repository)
+        viewModelMyAddress = ViewModelProvider(this, factory2).get(MyAddressViewModel::class.java)
 
         city = view.findViewById(R.id.editTextCity)
         phone = view.findViewById(R.id.editTextPhone)
         country = view.findViewById(R.id.editTextCountry)
         building = view.findViewById(R.id.editTextBuilding)
         addButton = view.findViewById(R.id.confirmButton)
+
+        arguments?.let { bundle ->
+            addressToEdit = bundle.getSerializable("address") as? Address
+            addressToEdit?.let { address ->
+                populateFields(address)
+            } ?: run {
+                Snackbar.make(requireView(), "nothing to edit", Snackbar.LENGTH_SHORT).show()
+            }
+        }
 
         // Retrieve and display address from map
         arguments?.let { bundle ->
@@ -84,14 +100,29 @@ class newAddress : Fragment() {
             val country = country.text.toString()
             val phone = phone.text.toString()
 
-            if (validateInputs(address1, city, country, phone)) {
+            /*if (validateInputs(address1, city, country, phone)) {
                 val address = Address(address1, city, country,phone, customer_id = userId?.toLong())
                 Log.i("phone", "onViewCreated: "+address)
                 if (userId != null) {
                     viewModel.addAddresses(userId.toLong(), AddNewAddress(address))
                 }
-            }
+            }*/
+            if (validateInputs(address1, city, country, phone)) {
+                val address =
+                    Address(address1, city, country, phone, customer_id = userId?.toLong())
 
+                if (userId != null) {
+                    if (addressToEdit != null) {
+                        addressToEdit?.id?.let { it1 ->
+                            viewModelMyAddress.editAddress(userId.toLong(), it1, AddNewAddress(address))
+                        }
+                    } else {
+                        if (userId != null) {
+                            viewModel.addAddresses(userId.toLong(), AddNewAddress(address))
+                        }
+                    }
+                }
+            }
             Snackbar.make(requireView(), "Address added successfully", Snackbar.LENGTH_SHORT).show()
             navigateBack()
         }
@@ -170,5 +201,12 @@ class newAddress : Fragment() {
             .addToBackStack(null)
             .commit()
 
+    }
+
+    private fun populateFields(address: Address) {
+        building.setText(address.address1)
+        city.setText(address.address2)
+        country.setText(address.city)
+        phone.setText(address.company)
     }
 }

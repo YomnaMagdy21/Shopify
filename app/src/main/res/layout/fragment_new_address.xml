@@ -171,7 +171,7 @@
                 android:id="@+id/icon4"
                 android:layout_width="34dp"
                 android:layout_height="37dp"
-                android:src="@drawable/country_flag_flag02_svgrepo_com" />
+                android:src="@drawable/phone_svgrepo_com" />
 
             <EditText
                 android:id="@+id/editTextPhone"
