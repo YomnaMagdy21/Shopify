@@ -124,7 +124,8 @@ class myAddressFragment : Fragment() {
                     var products = apiState.data as AddressesModel?
                     products?.let {
                         if (it.addresses != null) {
-                            myAddressAdapter.updateAddresses(it.addresses)
+                            val defaultAddressId = getDefaultAddressIdFromSharedPreferences()
+                            myAddressAdapter.updateAddresses(it.addresses,defaultAddressId)
                         }else{
                             Log.i("address", "onViewCreated: hiiiiiiii")
                         }
@@ -147,6 +148,16 @@ class myAddressFragment : Fragment() {
             apply()
         }
     }
+
+    private fun getDefaultAddressIdFromSharedPreferences(): Long? {
+        val sharedPreferences = requireContext().getSharedPreferences("default_address", Context.MODE_PRIVATE)
+        val defaultAddressJson = sharedPreferences.getString("address", null)
+        return defaultAddressJson?.let {
+            val defaultAddress = Gson().fromJson(it, Address::class.java)
+            defaultAddress.id
+        }
+    }
+
 
     private fun navigateToPaymentFragment(address: Address) {
         val bundle = Bundle().apply {

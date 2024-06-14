@@ -20,6 +20,7 @@ class MyAddressAdapter(private var addresses: List<Address>,
                        private val onDeleteButtonClick: (Address) -> Unit) : RecyclerView.Adapter<MyAddressAdapter.ViewHolder>() {
 
     private var selectedAddressPosition: Int = -1
+    private var defaultAddressId: Long? = null
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val addressLine1: TextView = view.findViewById(R.id.Building_value)
         val city: TextView = view.findViewById(R.id.tv_cityy_value)
@@ -34,11 +35,13 @@ class MyAddressAdapter(private var addresses: List<Address>,
                 if (position != RecyclerView.NO_POSITION) {
                     val address = addresses[position]
                     if (selectedAddressPosition != position) {
-                        // Unselect previously selected item
-                        notifyItemChanged(selectedAddressPosition)
-                        // Select the clicked item
-                        selectedAddressPosition = position
-                        notifyItemChanged(selectedAddressPosition)
+                        // Move selected item to top
+                        addresses = addresses.toMutableList().apply {
+                            removeAt(position)
+                            add(0, address)
+                        }
+                        selectedAddressPosition = 0
+                        notifyDataSetChanged()
                         onItemClick(address)
                     }
                 }
@@ -62,19 +65,17 @@ class MyAddressAdapter(private var addresses: List<Address>,
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val address = addresses[position]
-
         holder.addressLine1.text = address.address1
         holder.city.text = address.address2
         holder.country.text = address.city
         holder.phone.text = address.company
 
-        Log.i("phone", "onBindViewHolder: "+holder.country.text+","+holder.phone.text)
-
-        // Apply shadow to selected item
-        if (selectedAddressPosition == position) {
-            holder.cardView.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context, R.color.black))
+        if (address.id == defaultAddressId) {
+            holder.cardView.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context, R.color.backgroundColor1))
+            holder.cardView.setBackgroundResource(R.drawable.edittext_border)
         } else {
             holder.cardView.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context, R.color.white))
+            //holder.cardView.background = null
         }
 
     }
@@ -83,8 +84,18 @@ class MyAddressAdapter(private var addresses: List<Address>,
         return addresses.size
     }
 
-    fun updateAddresses(newAddresses: List<Address>) {
-        addresses = newAddresses
+    fun updateAddresses(newAddresses: List<Address>,defaultId: Long?) {
+        defaultAddressId = defaultId
+        val mutableAddresses = newAddresses.toMutableList()
+        defaultId?.let { defaultId ->
+            val defaultAddressIndex = mutableAddresses.indexOfFirst { it.id == defaultId }
+            if (defaultAddressIndex != -1) {
+                mutableAddresses.removeAt(defaultAddressIndex)
+                mutableAddresses.add(0, newAddresses[defaultAddressIndex])
+            }
+        }
+
+        addresses = mutableAddresses
         notifyDataSetChanged()
     }
 }
