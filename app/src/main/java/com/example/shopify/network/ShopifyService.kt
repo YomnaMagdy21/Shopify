@@ -14,6 +14,8 @@ import com.example.shopify.model.productDetails.ProductModel
 
 
 import com.example.shopify.ShoppingCart.model.PriceRulesResponse
+import com.example.shopify.model.PostOrders.PostOrderModel
+import com.example.shopify.model.RetriveOrder.RetriveOrder
 import com.example.shopify.model.addressModel.AddNewAddress
 import com.example.shopify.utility.Constants
 import retrofit2.Response
@@ -127,5 +129,11 @@ interface ShopifyService {
     suspend fun editAddress(@Path(value="customerId") customerId:Long, @Path(value="addressId") addressId:Long,@Body addresse: AddNewAddress) :Response<AddressesModel>
 
 
+
+
+    // post order
+    @Headers("X-Shopify-Access-Token: ${Constants.adminApiAccessToken}")
+    @POST("admin/api/2024-04/orders.json")
+    suspend fun createOrder(@Body order: PostOrderModel) : Response<RetriveOrder>
 
 }

@@ -98,7 +98,14 @@ class shoppingCardFragment : Fragment() {
        //navigationg to checkout fragment
         val checkOut = view.findViewById<Button>(R.id.checkOutButton)
         checkOut.setOnClickListener {
+            val bundle = Bundle().apply {
+                putSerializable("products", ArrayList(products))
+                putDouble("total_price", calculateTotalWithoutDiscount(products))
+                putString("email", userEmail)
+
+            }
             val newFragment = paymentFragment()
+            newFragment.arguments = bundle
             parentFragmentManager.beginTransaction()
                 .replace(R.id.frame_layout, newFragment)
                 .addToBackStack(null)

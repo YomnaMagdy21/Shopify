@@ -4,6 +4,8 @@ import com.example.shopify.Models.products.CollectProductsModel
 import com.example.shopify.model.Customer
 
 import com.example.shopify.model.Brands.BrandModel
+import com.example.shopify.model.PostOrders.PostOrderModel
+import com.example.shopify.model.RetriveOrder.RetriveOrder
 import com.example.shopify.model.addressModel.AddNewAddress
 import com.example.shopify.model.addressModel.Address
 import com.example.shopify.model.addressModel.AddressesModel
@@ -97,6 +99,8 @@ class ShopifyRemoteDataSourceImp :ShopifyRemoteDataSource {
     override suspend fun editAddress(customerId: Long, addressId: Long,addresse: AddNewAddress): Flow<AddressesModel?> {
         return flowOf(shopifyService.editAddress(customerId,addressId,addresse).body())
     }
-
+    override suspend fun createOrder(order: PostOrderModel): Flow<RetriveOrder?> {
+        return  flowOf(shopifyService.createOrder(order).body())
+    }
 
 }
