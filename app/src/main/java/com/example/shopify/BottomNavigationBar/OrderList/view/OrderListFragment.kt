@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shopify.BottomNavigationBar.OrderList.viewModel.OrderListViewModel
 import com.example.shopify.BottomNavigationBar.OrderList.viewModel.OrderListViewModelFactory
-import com.example.shopify.BottomNavigationBar.orderItem.OrderItemFragment
+import com.example.shopify.BottomNavigationBar.orderItem.view.OrderItemFragment
 import com.example.shopify.Models.orderList.RetriveOrderModel
 import com.example.shopify.model.PostOrders.Order
 import com.example.shopify.model.ShopifyRepositoryImp

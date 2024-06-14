@@ -5,9 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.cardview.widget.CardView
-import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.shopify.BottomNavigationBar.orderItem.OrderItemFragment
 import com.example.shopify.R
 import com.example.shopify.model.PostOrders.Order
 
