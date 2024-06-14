@@ -86,7 +86,8 @@ class MyAddressAdapter(private var addresses: List<Address>,
             holder.cardView.setBackgroundResource(R.drawable.edittext_border)
         } else {
             holder.cardView.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context, R.color.white))
-            //holder.cardView.background = null
+           // holder.cardView.setBackgroundResource(0)
+            holder.cardView.setBackgroundResource(R.drawable.default_border)
         }
 
     }
