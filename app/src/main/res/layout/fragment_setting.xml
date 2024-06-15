@@ -61,8 +61,8 @@
                 android:layout_width="199dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:text="Adress"
-                android:textColor="#CFC7C7"
+                android:text="Address"
+                android:textColor="#090909"
                 android:textSize="20sp" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -99,7 +99,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:text="Curruncy"
-                android:textColor="#CFC7C7"
+                android:textColor="#0C0C0C"
                 android:textSize="20sp" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -136,7 +136,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:text="About Us"
-                android:textColor="#CFC7C7"
+                android:textColor="#0E0E0E"
                 android:textSize="20sp" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>

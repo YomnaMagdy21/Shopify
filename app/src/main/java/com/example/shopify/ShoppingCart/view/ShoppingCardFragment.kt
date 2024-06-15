@@ -34,6 +34,7 @@ class shoppingCardFragment : Fragment() {
     private lateinit var adapter: ShoppingCardAdapter
     private lateinit var products: MutableList<DraftOrder>
     private lateinit var totalPriceTextView: TextView
+    private lateinit var discountText: TextView
 
     private var discountAmount: Double = 0.0
     private var couponApplied = false
@@ -64,6 +65,7 @@ class shoppingCardFragment : Fragment() {
         adapter = ShoppingCardAdapter(emptyList(),::onAddProduct, ::onRemoveProduct)
         recyclerView.adapter = adapter
         totalPriceTextView = view.findViewById(R.id.textView3)
+        discountText = view.findViewById(R.id.textView7)
 
         //cards
         val currentUser = FirebaseAuth.getInstance().currentUser
@@ -189,6 +191,7 @@ class shoppingCardFragment : Fragment() {
     private fun applyDiscount(totalPrice: Double, priceRule: PriceRule) {
         val discountPercentage = priceRule.value.toDouble() / 100
         discountAmount = totalPrice * discountPercentage
+        discountText.text =  "${"%.2f".format(discountAmount)}"
         Log.i("discount", "applyDiscount: "+discountAmount)
     }
 

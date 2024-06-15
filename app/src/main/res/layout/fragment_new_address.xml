@@ -60,9 +60,8 @@
                 android:layout_marginStart="16dp"
                 android:layout_weight="1"
                 android:ems="10"
-                android:inputType="text"
-                android:text="Building"
-                android:textColor="#CFC7C7" />
+                android:hint="@string/Building"
+                android:textColor="#0B0A0A" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -99,9 +98,9 @@
                 android:layout_marginStart="16dp"
                 android:layout_weight="1"
                 android:ems="10"
+                android:hint="City"
                 android:inputType="text"
-                android:text="City"
-                android:textColor="#CFC7C7" />
+                android:textColor="#090909" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -139,9 +138,9 @@
                 android:layout_marginStart="16dp"
                 android:layout_weight="1"
                 android:ems="10"
+                android:hint="@string/Country"
                 android:inputType="text"
-                android:text="Country"
-                android:textColor="#CFC7C7" />
+                android:textColor="#0E0E0E" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -171,7 +170,7 @@
                 android:id="@+id/icon4"
                 android:layout_width="34dp"
                 android:layout_height="37dp"
-                android:src="@drawable/country_flag_flag02_svgrepo_com" />
+                android:src="@drawable/phone_svgrepo_com" />
 
             <EditText
                 android:id="@+id/editTextPhone"
@@ -180,9 +179,9 @@
                 android:layout_marginStart="16dp"
                 android:layout_weight="1"
                 android:ems="10"
+                android:hint="@string/phone_number"
                 android:inputType="text"
-                android:text="Phone"
-                android:textColor="#CFC7C7" />
+                android:textColor="#0E0E0E" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
