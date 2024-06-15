@@ -59,33 +59,15 @@ class OrderItemFragment : Fragment() {
         totalPrice.text = orderItemViewModel.totalPrice
 
 
-        val noteAttributesMap = convertNoteAttributes(order.note_attributes)
-        val imageUrl = order.note_attributes?.find { it.name == "image" }?.value ?: ""
+        val imageUrls = order.note_attributes?.filter { it.name == "image" }?.map { it.value ?: "" } ?: emptyList()
 
-        orderItemAdapter = OrderItemAdapter(requireContext(), orderItemViewModel.lineItems , imageUrl)
+        orderItemAdapter = OrderItemAdapter(requireContext(), orderItemViewModel.lineItems , imageUrls)
+        print("imagggggggge : $imageUrls")
         recyclerView.adapter = orderItemAdapter
 
 
 
         return view
     }
-
-    // convert note_attributes to a map
-    private fun convertNoteAttributes(noteAttributes: List<Any>?): Map<String, String> {
-        val map = mutableMapOf<String, String>()
-        if (noteAttributes != null) {
-            for (attribute in noteAttributes) {
-                if (attribute is Map<*, *>) {
-                    val id = attribute["id"]?.toString()
-                    val imageUrl = attribute["src"]?.toString()
-                    if (id != null && imageUrl != null) {
-                        map[id] = imageUrl
-                    }
-                }
-            }
-        }
-        return map
-    }
-
 
 }

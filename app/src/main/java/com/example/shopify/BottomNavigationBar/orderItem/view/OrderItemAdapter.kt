@@ -12,7 +12,7 @@ import com.bumptech.glide.Glide
 import com.example.shopify.R
 import com.example.shopify.model.PostOrders.LineItem
 
-class OrderItemAdapter (private val context: Context, private var lineItems: List<LineItem>, private val imageUrl : String
+class OrderItemAdapter (private val context: Context, private var lineItems: List<LineItem>, private val imageUrls: List<String>
 ) : RecyclerView.Adapter<OrderItemAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -29,6 +29,7 @@ class OrderItemAdapter (private val context: Context, private var lineItems: Lis
         val lineItem = lineItems[position]
         holder.nameProduct.text = lineItem.name
         holder.priceProduct.text = lineItem.price + " EGP"
+        val imageUrl = imageUrls.getOrNull(position) ?: ""
         Glide.with(context).load(imageUrl).into(holder.imageProduct)
     }
 

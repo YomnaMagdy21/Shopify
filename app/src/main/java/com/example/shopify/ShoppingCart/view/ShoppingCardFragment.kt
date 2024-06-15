@@ -70,6 +70,7 @@ class shoppingCardFragment : Fragment() {
         //cards
         val currentUser = FirebaseAuth.getInstance().currentUser
         val userEmail = currentUser?.email.toString()
+        val userName = currentUser?.displayName
         viewModel.getDraftOrders(userEmail)
 
         //update card list
@@ -98,12 +99,18 @@ class shoppingCardFragment : Fragment() {
        //navigationg to checkout fragment
         val checkOut = view.findViewById<Button>(R.id.checkOutButton)
         checkOut.setOnClickListener {
+            val totalPrice = totalPriceTextView.text.toString().toDouble()
             val bundle = Bundle().apply {
                 putSerializable("products", ArrayList(products))
-                putDouble("total_price", calculateTotalWithoutDiscount(products))
+                putDouble("total_price", totalPrice)
                 putString("email", userEmail)
+                putString("name", userName)
 
             }
+            println("user name : $userName")
+            println("user email : $userEmail")
+
+
             val newFragment = paymentFragment()
             newFragment.arguments = bundle
             parentFragmentManager.beginTransaction()
