@@ -1,6 +1,7 @@
 package com.example.shopify.products.view
 
 import android.content.Context
+import android.provider.ContactsContract.CommonDataKinds.Im
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -50,6 +51,10 @@ class ProductAdapter(var context: Context, var productsOfBrand: List<Product>, v
             }
 
             Glide.with(context).load(it.image?.src).into(holder.productImg)
+            holder.fav.setOnClickListener{
+                listener.onFavBtnClick(current)
+                holder.fav.setImageResource(R.drawable.favorite)
+            }
         }
         var product  = productsOfBrand.get(position)
 
@@ -65,6 +70,8 @@ class ProductAdapter(var context: Context, var productsOfBrand: List<Product>, v
         val productPrice : TextView = itemView.findViewById(R.id.tv_product_price_of_brand)
 
         val card: CardView = itemView.findViewById(R.id.products_of_brand_card)
+
+        val fav : ImageView = itemView.findViewById(R.id.iv_add_to_fav)
     }
 
 

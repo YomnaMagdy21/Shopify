@@ -1,5 +1,6 @@
 package com.example.shopify.network
 
+import com.example.shopify.BottomNavigationBar.Favorite.model.FavDraftOrderResponse
 import com.example.shopify.Models.products.CollectProductsModel
 
 import com.example.shopify.model.Brands.BrandModel
@@ -16,6 +17,7 @@ import com.example.shopify.model.productDetails.ProductModel
 import com.example.shopify.ShoppingCart.model.PriceRulesResponse
 import com.example.shopify.model.addressModel.AddNewAddress
 import com.example.shopify.utility.Constants
+import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -114,6 +116,18 @@ interface ShopifyService {
     @Headers("X-Shopify-Access-Token: ${Constants.adminApiAccessToken}")
     @DELETE("admin/api/2024-04/customers/{customerId}/addresses/{addressId}.json")
     suspend fun removeCustomerAddresse(@Path(value = "customerId") customerId:Long ,@Path(value = "addressId") addressId:Long )
+
+    @Headers("X-Shopify-Access-Token: ${Constants.adminApiAccessToken}")
+    @GET("admin/api/2024-04/draft_orders/{draft_order_id}.json")
+    suspend fun getFavDraftOrders(@Path(value = "draft_order_id")draftOrderId:Long): Response<FavDraftOrderResponse>
+
+    @Headers("X-Shopify-Access-Token: ${Constants.adminApiAccessToken}")
+    @POST("admin/api/2024-04/draft_orders.json")
+   suspend fun createFavDraftOrders(@Body order: FavDraftOrderResponse): Response<FavDraftOrderResponse>
+
+    @Headers("X-Shopify-Access-Token: ${Constants.adminApiAccessToken}")
+    @PUT("admin/api/2024-04/draft_orders/{draft_order_id}.json")
+    suspend fun updateFavDraftOrder(@Path(value = "draft_order_id") draftId:Long, @Body order: FavDraftOrderResponse): Response<FavDraftOrderResponse>
 
 
 

@@ -8,11 +8,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.shopify.BottomNavigationBar.Favorite.model.FavDraftOrder
 import com.example.shopify.BottomNavigationBar.Favorite.model.Favorite
+import com.example.shopify.BottomNavigationBar.Favorite.model.ItemLine
 import com.example.shopify.databinding.FavItemBinding
+import com.example.shopify.model.draftModel.DraftOrder
+import com.example.shopify.model.draftModel.Draft_orders_list
 
 class FavoriteAdapter(var context: Context, var listener: onFavoriteClickListener):
-    ListAdapter<Favorite, FavoriteAdapter.DayViewHolder>(DayDiffUtil()) {
+    ListAdapter<ItemLine, FavoriteAdapter.DayViewHolder>(DayDiffUtil()) {
 
 
     lateinit var binding: FavItemBinding
@@ -28,22 +32,26 @@ class FavoriteAdapter(var context: Context, var listener: onFavoriteClickListene
     override fun onBindViewHolder(holder: DayViewHolder, position: Int) {
         val current = getItem(position)
 
-        holder.binding.productName.text = current.name
-        holder.binding.productImg.setImageResource(current.img)
+        holder.binding.productName.text = current.title
+      //  holder.binding.productImg.setImageResource(current.draft_orders.get(0).)
         holder.binding.cardView.setOnClickListener {
             listener.onFavClick()
         }
 
+
     }
+
 }
 
-class DayDiffUtil : DiffUtil.ItemCallback<Favorite>() {
-    override fun areItemsTheSame(oldItem: Favorite, newItem: Favorite): Boolean {
-        return oldItem.name == newItem.name
+class DayDiffUtil : DiffUtil.ItemCallback<ItemLine>() {
+    override fun areItemsTheSame(oldItem: ItemLine, newItem: ItemLine): Boolean {
+        return oldItem == newItem
     }
 
-    override fun areContentsTheSame(oldItem: Favorite, newItem: Favorite): Boolean {
+    override fun areContentsTheSame(oldItem: ItemLine, newItem: ItemLine): Boolean {
         return newItem == oldItem
     }
 
 }
+
+data class FavItem(var title:String)

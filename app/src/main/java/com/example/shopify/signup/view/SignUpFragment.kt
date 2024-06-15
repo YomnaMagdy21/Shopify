@@ -1,5 +1,6 @@
 package com.example.shopify.signup.view
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.InputType
@@ -15,6 +16,15 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.shopify.BottomNavigationBar.BottomNavActivity
+import com.example.shopify.BottomNavigationBar.Favorite.model.FavDraftOrder
+import com.example.shopify.BottomNavigationBar.Favorite.model.FavDraftOrderResponse
+import com.example.shopify.BottomNavigationBar.Favorite.model.ItemLine
+
+//import com.example.shopify.BottomNavigationBar.Favorite.model.FavDraftOrderResponse
+//import com.example.shopify.BottomNavigationBar.Favorite.model.LineItem
+
+
+
 import com.example.shopify.R
 import com.example.shopify.databinding.FragmentSignUpBinding
 import com.example.shopify.firebase.Firebase
@@ -24,6 +34,12 @@ import com.example.shopify.login.viewmodel.SignInViewModelFactory
 import com.example.shopify.model.Customer
 import com.example.shopify.model.ShopifyRepositoryImp
 import com.example.shopify.model.createCustomerRequest
+import com.example.shopify.model.draftModel.DraftOrder
+import com.example.shopify.model.draftModel.DraftOrderResponse
+
+
+
+import com.example.shopify.model.productDetails.Product
 import com.example.shopify.network.ShopifyRemoteDataSourceImp
 import com.example.shopify.signup.viewmodel.SignUpViewModel
 import com.example.shopify.signup.viewmodel.SignUpViewModelFactory
@@ -33,6 +49,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -138,6 +155,9 @@ class SignUpFragment : Fragment() {
 //           // checkPasswordStrength(password)
 //        }
 
+
+
+
         binding.signup.setOnClickListener {
             email = binding.email.text.toString()
             password = binding.password.text.toString()
@@ -191,6 +211,7 @@ class SignUpFragment : Fragment() {
                 binding.confirm.requestFocus()
                 return@setOnClickListener
             }
+
             binding.progressBar.visibility = View.VISIBLE
             Firebase(requireContext()).createCustomerAccount(email, password) { user, error ->
                 if (user != null) {
@@ -208,6 +229,35 @@ class SignUpFragment : Fragment() {
                             val client = createCustomerRequest(customer)
                             Firebase(requireContext()).writeNewUser(customer)
                             signUpViewModel.registerCustomerInAPI(client)
+//                            var order = FavDraftOrder(id = 1, note = "fav", line_items = listOf(LineItem()), note_attributes = listOf(
+//                                NoteAttribute()
+//                            ), email = email, customer = customer)
+////                            order.email = email
+////                            // var draft_orders = DraftOrderResponse()
+////                            order.note = "fav"
+////                            var lineItems = LineItem()
+////                            lineItems.quantity = 1
+////
+////
+////
+////                            order.line_items = listOf(lineItems)
+////                            var note_attribute = NoteAttribute()
+////                            note_attribute.name = "image"
+////
+////                            order.note_attributes = listOf(note_attribute)
+//                            val draftOrderResponse = FavDraftOrderResponse(order)
+//
+
+                            val lineItems = listOf(
+                                ItemLine(quantity = 1, variant_id = 45826729279652)
+                            )
+                            val draftOrder = FavDraftOrder(
+
+                                line_items = lineItems,
+                            )
+
+                            var order = FavDraftOrderResponse(draftOrder)
+
 
                             lifecycleScope.launch {
                                 signUpViewModel.register.collectLatest { result ->
@@ -217,8 +267,12 @@ class SignUpFragment : Fragment() {
                                         }
                                         is ApiState.Success<*> -> {
                                             val person = result.data as? createCustomerRequest
+
                                             Log.i(TAG, "Customer ID: ${person?.customer?.id}")
+
                                             var id = person?.customer?.id
+
+                                            signUpViewModel.createFavDraftOrders(order)
 
                                             parentFragmentManager.beginTransaction().replace(R.id.fragment_container,SignInFragment()).commit()
                                         //    startActivity(Intent(context, BottomNavActivity::class.java))
@@ -231,6 +285,7 @@ class SignUpFragment : Fragment() {
                                     binding.progressBar.visibility = View.GONE
                                 }
                             }
+
                         } else {
                             Log.e(TAG, "Failed to send verification email.", emailTask.exception)
                             Toast.makeText(context, "Failed to send verification email.", Toast.LENGTH_LONG).show()
@@ -245,12 +300,76 @@ class SignUpFragment : Fragment() {
 
                 }
             }
+//            val draftOrder = FavDraftOrderResponse(
+//                draft_order = FavDraftOrder(
+//                    line_items = listOf(
+//                        LineItem(quantity = 1, variant_id = 123456789)
+//                    )
+//                )
+//            )
+
+
+
+//            Log.i(TAG, "Draft Order before sending: $draftOrder")
+//            signUpViewModel.createFavDraftOrders(draftOrder)
+
+            lifecycleScope.launch {
+                signUpViewModel.wishList.collectLatest {result ->
+                    when(result){
+                        is ApiState.Loading ->{
+
+                        }
+                        is ApiState.Success<*> ->{
+                            val wishList = result.data as? FavDraftOrderResponse
+                            val sharedPreferences = requireContext().getSharedPreferences("draftPref", Context.MODE_PRIVATE)
+                            val editor = sharedPreferences.edit()
+                            editor.putString("draft_order_id", wishList?.draft_order?.id.toString())
+                            editor.apply()
+                            Log.i(TAG, "onViewCreated: draft order in  = ${wishList?.draft_order?.id}")
+                            if(wishList!=null) {
+
+                                Log.i(
+                                    TAG,
+                                    "onViewCreated: draft order in sign up = ${wishList?.draft_order?.id}"
+                                )
+                            }
+                        }
+                        else->{
+
+                        }
+                    }
+                }
+            }
+
         }
+
 
         binding.google.setOnClickListener {
             val signInIntent = mGoogleSignInClient.signInIntent
             startActivityForResult(signInIntent, RC_SIGN_IN)
         }
+      //  createWishListDraftOrder()
+        
+//        lifecycleScope.launch {
+//            signUpViewModel.wishList.collectLatest {result ->
+//                when(result){
+//                    is ApiState.Loading ->{
+//
+//                    }
+//                    is ApiState.Success<*> ->{
+//                        val wishList = result.data as? DraftOrderResponse
+//                        val sharedPreferences = requireContext().getSharedPreferences("draftPref", Context.MODE_PRIVATE)
+//                        val editor = sharedPreferences.edit()
+//                        editor.putString("draft_order_id", wishList?.draft_order?.id.toString())
+//                        editor.apply()
+//                        Log.i(TAG, "onViewCreated: draft order in sign up = ${wishList?.draft_order?.id}")
+//                    }
+//                    else->{
+//
+//                    }
+//                }
+//            }
+//        }
 
 
 
@@ -382,6 +501,57 @@ class SignUpFragment : Fragment() {
             }
         }
     }
+    private fun createWishListDraftOrder() {
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        val userEmail = currentUser?.email
+
+        Log.d("AddToFav", "Attempting to add product to fav: ")
 
 
+          //  val variantId = product?.variants?.get(0)?.id
+
+//                var order = DraftOrder()
+//                order.email = userEmail
+//                var draft_orders = DraftOrderResponse()
+//                order.note = "fav"
+//                var lineItems = LineItem()
+//                lineItems.quantity = 1
+//
+//                order.line_items = listOf(lineItems)
+//                var note_attribute = NoteAttribute()
+//                note_attribute.name = "image"
+//
+//                order.note_attributes = listOf(note_attribute)
+//                draft_orders = DraftOrderResponse(order)
+//
+//                Log.d("DraftOrder", "Creating Draft Order: $draft_orders")
+//
+//                signUpViewModel.createFavDraftOrders(draft_orders)
+                lifecycleScope.launch {
+                    signUpViewModel.wishList.collectLatest {result ->
+                        when(result){
+                            is ApiState.Loading ->{
+
+                                Log.i("TAG", "addProductToFav:loadingggg ")
+                            }
+                            is ApiState.Success<*> ->{
+                                val wishList = result.data as? DraftOrderResponse
+                                val sharedPreferences = requireContext().getSharedPreferences("draftPref", Context.MODE_PRIVATE)
+                                val editor = sharedPreferences.edit()
+                                editor.putString("draft_order_id", wishList?.draft_order?.id.toString())
+                                editor.apply()
+                                Log.i("TAG", "onViewCreated: draft order in fav = ${wishList?.draft_order?.id}")
+                            }
+                            else->{
+
+                            }
+                        }
+                    }
+                }
+
+
+
+    }
 }
+
+

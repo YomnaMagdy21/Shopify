@@ -290,6 +290,7 @@ class SignInFragment : Fragment() {
                             is ApiState.Success<*> -> {
                                 val person = result.data as? createCustomerRequest
                                 Log.i(TAG, "Customer ID: ${person?.customer?.id}")
+
                                 startActivity(Intent(context, BottomNavActivity::class.java))
                                 Toast.makeText(context, "User logged in with Google successfully.", Toast.LENGTH_LONG).show()
                             }

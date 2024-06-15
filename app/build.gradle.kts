@@ -90,6 +90,8 @@ dependencies {
 
     implementation ("androidx.navigation:navigation-fragment-ktx:2.7.7")
     implementation ("androidx.navigation:navigation-ui-ktx:2.7.7")
+    implementation ("com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
 
 
 
