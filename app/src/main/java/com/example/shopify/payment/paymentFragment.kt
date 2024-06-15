@@ -3,7 +3,6 @@ package com.example.shopify.payment
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -99,10 +98,6 @@ class paymentFragment : Fragment() {
     }
 
     private fun createOrder() {
-        if (draftOrders.isEmpty()) {
-            Log.e("PaymentFragment", "Draft orders list is empty")
-            return
-        }
         val customer = draftOrders[0].customer ?: return
         val lineItems = draftOrders.flatMap { it.line_items ?: emptyList() }
 
@@ -144,7 +139,7 @@ class paymentFragment : Fragment() {
         println("Total Price: ${order.total_price}")
         println("first name: ${order.customer?.first_name}")
         println("last name: ${order.customer?.last_name}")
-        println("address : ${order.shipping_address}")
+
         println("Line Items:")
         order.line_items?.forEachIndexed { index, item ->
             println("Item ${index + 1}: ${item.name}, Quantity: ${item.quantity}, Variant ID: ${item.variant_id} , userEmail : $userEmail ")
