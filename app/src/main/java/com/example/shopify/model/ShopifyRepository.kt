@@ -44,6 +44,9 @@ interface ShopifyRepository {
 
     fun updateFavDraftOrder(id:Long,draftOrderResponse :FavDraftOrderResponse):Flow<FavDraftOrderResponse?>
 
-  //  fun createFavDraftOrder(draftOrder: FavDraftOrderResponse): FavDraftOrderResponse?
+    fun deleteFavDraftOrder(id:Long):Flow<FavDraftOrderResponse?>
+
+
+    //  fun createFavDraftOrder(draftOrder: FavDraftOrderResponse): FavDraftOrderResponse?
 
     }

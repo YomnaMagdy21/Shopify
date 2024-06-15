@@ -49,6 +49,9 @@ interface ShopifyRemoteDataSource {
 
 
       fun updateFavDraftOrder(id:Long,draftOrderResponse: FavDraftOrderResponse): Flow<FavDraftOrderResponse?>
+    fun deleteFavDraftOrder(
+        id: Long
+    ): Flow<FavDraftOrderResponse?>
 
 
 }

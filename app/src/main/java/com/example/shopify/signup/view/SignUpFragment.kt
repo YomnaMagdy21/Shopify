@@ -249,7 +249,7 @@ class SignUpFragment : Fragment() {
 //
 
                             val lineItems = listOf(
-                                ItemLine(quantity = 1, variant_id = 45826729279652)
+                                ItemLine(quantity = 1, variant_id = 45826729279652, sku="")
                             )
                             val draftOrder = FavDraftOrder(
 

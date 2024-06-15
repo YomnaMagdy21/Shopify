@@ -19,6 +19,7 @@ import com.example.shopify.BottomNavigationBar.Favorite.model.FavDraftOrder
 import com.example.shopify.BottomNavigationBar.Favorite.model.FavDraftOrderResponse
 import com.example.shopify.BottomNavigationBar.Favorite.model.Favorite
 import com.example.shopify.BottomNavigationBar.Favorite.model.ItemLine
+import com.example.shopify.BottomNavigationBar.Favorite.model.Items
 import com.example.shopify.BottomNavigationBar.Favorite.viewmodel.FavoriteViewModel
 import com.example.shopify.BottomNavigationBar.Favorite.viewmodel.FavoriteViewModelFactory
 import com.example.shopify.R
@@ -120,9 +121,9 @@ class FavoriteFragment : Fragment() ,onFavoriteClickListener{
                         Log.i("FavoriteFragment", "DraftOrderResponse: ${data?.draft_order?.id}")
                         if (data != null) {
 
+                            var items = data.draft_order?.line_items
 
-
-                            favProducts.addAll(data.draft_order.line_items)
+                            items?.let { favProducts.addAll(it) }
                             Log.i("FavoriteFragment", "Number of items: ${favProducts.size}") // Log number of items
                            // favoriteAdapter.submitList(favProducts)
                         }
@@ -161,6 +162,57 @@ class FavoriteFragment : Fragment() ,onFavoriteClickListener{
         transaction.commit()
     }
 
+    override fun removeFavorite(id: Long) {
 
+
+        val sharedPreferences = requireContext().getSharedPreferences("draftPref", Context.MODE_PRIVATE)
+        val draftOrderId = sharedPreferences.getString("draft_order_id", null)?.toLong()
+
+        if (draftOrderId != null) {
+            fetchDraftOrder(draftOrderId) { draftOrder ->
+                val updatedLineItems = draftOrder?.line_items?.toMutableList() ?: mutableListOf()
+                Log.i("TAG", "Initial updatedLineItems: $updatedLineItems")
+
+                // Find the item to remove by matching the id (or other unique identifier)
+                val itemToRemove = updatedLineItems.find { it.id == id }
+
+                if (itemToRemove != null) {
+                    updatedLineItems.remove(itemToRemove)
+                    Log.i("TAG", "Updated updatedLineItems after removal: $updatedLineItems")
+
+                    val favDraftOrder = FavDraftOrder(
+                        id = draftOrderId,
+                        line_items = updatedLineItems
+                    )
+                    val favDraftOrderResponse = FavDraftOrderResponse(favDraftOrder)
+
+                    favoriteViewModel.updateFavorite(draftOrderId, favDraftOrderResponse)
+                } else {
+                    Log.i("TAG", "Item not found in updatedLineItems")
+                }
+            }
+        } else {
+            Log.e("DraftOrder", "Draft Order ID not found")
+        }
+        favoriteViewModel.deleteFavorite(id)
+    }
+
+    private fun fetchDraftOrder(draftOrderId: Long, callback: (FavDraftOrder?) -> Unit) {
+        // Assuming you have a method in your ViewModel to get the current DraftOrder
+        favoriteViewModel.getFavorites(draftOrderId)
+        lifecycleScope.launch {
+            favoriteViewModel.fav.collectLatest { result ->
+                when (result) {
+                    is ApiState.Success<*> -> {
+                        val data = result.data as? FavDraftOrderResponse
+                        callback(data?.draft_order)
+                    }
+                    else -> {
+                        callback(null)
+                    }
+                }
+            }
+        }
+    }
 
 }

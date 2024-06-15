@@ -6,7 +6,7 @@ import com.example.shopify.model.Customer
 
 import java.io.Serializable
 data class FavDraftOrderResponse(
-    val draft_order: FavDraftOrder
+    var draft_order: FavDraftOrder?=null
 )
 data class FavDraftOrder(
     val id: Long=1, // Optional: ID of the draft order, can be null for new draft orders
@@ -39,9 +39,19 @@ data class ItemLine(
     val id: Long? = null,
     val title: String? = "title",
     val price: String? = "10",
-    val sku: String? = null,
+    var sku: String = "",
+  //  var properties:List<String?>?=null
 )
 
+data class Items(
+    var variant_id: Long?,
+    var quantity: Int?,
+    val id: Long? = null,
+    val title: String? = "title",
+    val price: String? = "10",
+    var sku: String = "",
+    //  var properties:List<String?>?=null
+)
 
 
 //data class FavDraftOrderResponse(

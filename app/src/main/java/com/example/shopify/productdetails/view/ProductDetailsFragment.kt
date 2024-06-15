@@ -55,6 +55,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlin.math.log
 import kotlin.random.Random
 
 
@@ -77,6 +78,7 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
     lateinit var favoriteViewModel: FavoriteViewModel
     lateinit var favoriteViewModelFactory: FavoriteViewModelFactory
 
+    lateinit var draftOrder: FavDraftOrderResponse
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -135,6 +137,8 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
 
         productsOfBrandAdapter= ProductAdapter(requireContext() ,   listOf(),this)
 
+        draftOrder = FavDraftOrderResponse()
+
         return binding.root
     }
 
@@ -191,6 +195,7 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
                     }
 
                     is ApiState.Success<*> -> {
+//                        draftOrder.draft_order= (result.data as? FavDraftOrder)!!
                         binding.progressBar.visibility = View.GONE
                         var data = result.data as? ProductModel
 
@@ -211,22 +216,58 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
                             if (draftOrderId != null) {
                                 fetchDraftOrder(draftOrderId) { draftOrder ->
 
-                                    val newLineItem = ItemLine(
-                                        title = data?.product?.title,
-                                        variant_id = data?.product?.variants?.get(0)?.id,
-                                        quantity = 1
+                                    val productTitle = data?.product?.title
+                                    val productVariantId = data?.product?.variants?.get(0)?.id
+                                    val productImageSrc = data?.product?.image?.src
+
+                                    if (productTitle != null && productVariantId != null && productImageSrc != null) {
+                                        // Ensure properties are correctly assigned
+                                        val properties = listOf(productImageSrc)
+
+                                        val newLineItem = ItemLine(
+                                            title = productTitle,
+                                            variant_id = productVariantId,
+                                            quantity = 1,
+                                            sku = productImageSrc
+                                           // properties = properties
+                                        )
+
+
+                                    val updatedLineItems =
+                                        draftOrder?.line_items?.toMutableList() ?: mutableListOf()
+                                    Log.i(
+                                        "TAG",
+                                        "onViewCreated: updatedLineItems111 ${updatedLineItems}"
+                                    )
+                                    val itemExists =
+                                        updatedLineItems.any { it.variant_id == newLineItem.variant_id }
+
+                                    if (!itemExists) {
+                                        updatedLineItems.add(newLineItem)
+                                        Log.i(
+                                            "TAG",
+                                            "onViewCreated: updatedLineItems222 ${updatedLineItems}"
+                                        )
+
+                                    }
+                                    Log.i(
+                                        "TAG",
+                                        "onViewCreated: updatedLineItems3333 ${updatedLineItems}"
                                     )
 
 
-                                    val updatedLineItems = draftOrder?.line_items?.toMutableList() ?: mutableListOf()
-                                    updatedLineItems.add(newLineItem)
-
-
-                                    val favDraftOrder = FavDraftOrder(line_items = updatedLineItems)
+                                    val favDraftOrder = FavDraftOrder(
+                                        id = draftOrderId,
+                                        line_items = updatedLineItems
+                                    )
                                     val favDraftOrderResponse = FavDraftOrderResponse(favDraftOrder)
 
 
-                                    favoriteViewModel.updateFavorite(draftOrderId, favDraftOrderResponse)
+                                    favoriteViewModel.updateFavorite(
+                                        draftOrderId,
+                                        favDraftOrderResponse
+                                    )
+                                }
                                 }
                             } else {
                                 Log.e("DraftOrder", "Draft Order ID not found")

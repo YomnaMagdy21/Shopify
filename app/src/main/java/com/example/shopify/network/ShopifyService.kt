@@ -129,6 +129,11 @@ interface ShopifyService {
     @PUT("admin/api/2024-04/draft_orders/{draft_order_id}.json")
     suspend fun updateFavDraftOrder(@Path(value = "draft_order_id") draftId:Long, @Body order: FavDraftOrderResponse): Response<FavDraftOrderResponse>
 
+    @Headers("X-Shopify-Access-Token: ${Constants.adminApiAccessToken}")
+    @DELETE("admin/api/2024-04/draft_orders/{draft_order_id}.json")
+    suspend fun deleteFavDraftOrder(@Path(value = "draft_order_id") draftId:Long): Response<FavDraftOrderResponse>
+
+
 
 
 }

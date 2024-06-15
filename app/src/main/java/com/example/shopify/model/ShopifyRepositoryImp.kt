@@ -103,6 +103,12 @@ class ShopifyRepositoryImp(private var shopifyRemoteDataSource: ShopifyRemoteDat
     ): Flow<FavDraftOrderResponse?> {
         return shopifyRemoteDataSource.updateFavDraftOrder(id,draftOrderResponse)
     }
+
+    override fun deleteFavDraftOrder(
+        id: Long
+    ): Flow<FavDraftOrderResponse?> {
+        return shopifyRemoteDataSource.deleteFavDraftOrder(id)
+    }
 //    override fun createFavDraftOrder(draftOrder: FavDraftOrderResponse): FavDraftOrderResponse? {
 //        return try {
 //            val response = RetrofitHelper.apiService.createFavDraftOrders(draftOrder)

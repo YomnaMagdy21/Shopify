@@ -116,6 +116,14 @@ class ShopifyRemoteDataSourceImp :ShopifyRemoteDataSource {
         }
     }
 
+    override fun deleteFavDraftOrder(
+        id: Long
+    ): Flow<FavDraftOrderResponse?> {
+        return flow {
+            emit(shopifyService.deleteFavDraftOrder(id).body())
+        }
+    }
+
 
 //    override fun createFavDraftOrder(draftOrderResponse: FavDraftOrderResponse): Flow<FavDraftOrderResponse?> {
 //        return flow {
