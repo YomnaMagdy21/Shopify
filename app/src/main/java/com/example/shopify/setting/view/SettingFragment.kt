@@ -1,11 +1,13 @@
 package com.example.shopify.setting.view
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.cardview.widget.CardView
 import com.example.shopify.MainActivity
 import com.example.shopify.R
@@ -65,8 +67,47 @@ class settingFragment : Fragment() {
             signOut()
         }
 
+        binding.cardView2Currnucy.setOnClickListener{
+            showCurrencyDialog()
+        }
+
+        binding.cardView3About.setOnClickListener{
+            showAboutUsDialog()
+        }
+
     }
 
+    private fun showCurrencyDialog() {
+        val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_currency, null)
+        val dialogBuilder = AlertDialog.Builder(requireContext())
+            .setView(dialogView)
+            .create()
+
+        val option1Button = dialogView.findViewById<Button>(R.id.option1Button)
+        val option2Button = dialogView.findViewById<Button>(R.id.option2Button)
+
+        option1Button.setOnClickListener {
+            // Handle option 1 (USD) selection
+            // e.g., save the selected currency or perform any action
+            dialogBuilder.dismiss()
+        }
+
+        option2Button.setOnClickListener {
+            // Handle option 2 (EUR) selection
+            // e.g., save the selected currency or perform any action
+            dialogBuilder.dismiss()
+        }
+        dialogBuilder.show()
+    }
+
+    private fun showAboutUsDialog() {
+        val dialogView = LayoutInflater.from(context).inflate(R.layout.about_us_diaglog, null)
+        val dialogBuilder = AlertDialog.Builder(requireContext())
+            .setView(dialogView)
+            .create()
+
+        dialogBuilder.show()
+    }
     fun signOut() {
         val account = GoogleSignIn.getLastSignedInAccount(requireContext())
         if (account != null) {
