@@ -37,12 +37,14 @@ class paymentFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
          myCurrentAdreesText = view.findViewById(R.id.textView10)
+        val sharedPreferences = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val userId = sharedPreferences.getString("userID", null)
 
         arguments?.let {
             address = it.getSerializable("selected_address") as Address
         } ?: run {
             // If there are no arguments, load the default address from SharedPreferences
-            address = loadAddressFromPreferences() ?: Address("", "", "", "", "", "", "")
+            address = userId?.let { loadAddressFromPreferences(it) } ?: Address("", "", "", "", "", "", "")
         }
 
         myCurrentAdreesText.text = "${address.address1}, ${address.address2}, ${address.city}, ${address.company}"
@@ -67,9 +69,10 @@ class paymentFragment : Fragment() {
         }
     }
 
-    private fun loadAddressFromPreferences(): Address? {
-        val sharedPreferences: SharedPreferences = requireContext().getSharedPreferences("default_address", Context.MODE_PRIVATE)
+    private fun loadAddressFromPreferences(userId: String): Address? {
+        val sharedPreferences: SharedPreferences = requireContext().getSharedPreferences("default_address_$userId", Context.MODE_PRIVATE)
         val addressJson = sharedPreferences.getString("address", null)
         return addressJson?.let { Gson().fromJson(it, Address::class.java) }
     }
+
 }

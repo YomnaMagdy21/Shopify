@@ -62,34 +62,42 @@ class myAddressFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(context)
 
         //get user id and pass it
-        val sharedPreferences = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val sharedPreferences =
+            requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val userId = sharedPreferences.getString("userID", null)
-        Log.i("userid", "onViewCreated: "+userId)
+        Log.i("userid", "onViewCreated: " + userId)
 
 
 
         myAddressAdapter = MyAddressAdapter(
             emptyList(),
             onItemClick = { address ->
-                saveAddressToPreferences(address)
+                if (userId != null) {
+                    saveAddressToPreferences(userId,address)
+                }
                 address.id?.let {
                     if (userId != null) {
                         viewModel.makeDefaultAddress(userId.toLong(), it)
-                        Snackbar.make(view, "Default address updated successfully", Snackbar.LENGTH_SHORT).show()
+                        Snackbar.make(
+                            view,
+                            "Default address updated successfully",
+                            Snackbar.LENGTH_SHORT
+                        ).show()
                     }
                 }
                 Log.i("default", "onViewCreated: " + address.id)
-                navigateToPaymentFragment(address)
+                //navigateToPaymentFragment(address)
             },
             onDeleteButtonClick = { address ->
                 address.id?.let {
                     if (userId != null) {
                         viewModel.deleteAddress(userId.toLong(), it)
-                        Snackbar.make(view, "Address deleted successfully", Snackbar.LENGTH_SHORT).show()
+                        Snackbar.make(view, "Address deleted successfully", Snackbar.LENGTH_SHORT)
+                            .show()
                     }
                 }
-                Log.i("delete", "onViewCreated: "+address.id)
-            },onEditButtonClick = { address ->
+                Log.i("delete", "onViewCreated: " + address.id)
+            }, onEditButtonClick = { address ->
                 val bundle = Bundle().apply {
                     putSerializable("address", address)
                     putString("address1", address.address1)
@@ -132,48 +140,54 @@ class myAddressFragment : Fragment() {
             viewModel.getAllAddresses(userId.toLong())
         }
 
-    lifecycleScope.launch {
-        viewModel.accessAllAddressesList.collectLatest { apiState ->
-            when (apiState) {
-                is ApiState.Success<*> -> {
-                    var products = apiState.data as AddressesModel?
-                    products?.let {
-                        if (it.addresses != null) {
-                            val defaultAddressId = getDefaultAddressIdFromSharedPreferences()
-                            myAddressAdapter.updateAddresses(it.addresses,defaultAddressId)
-                        }else{
-                            Log.i("address", "onViewCreated: hiiiiiiii")
+        lifecycleScope.launch {
+            viewModel.accessAllAddressesList.collectLatest { apiState ->
+                when (apiState) {
+                    is ApiState.Success<*> -> {
+                        var products = apiState.data as AddressesModel?
+                        products?.let {
+                            if (it.addresses != null) {
+                                val defaultAddressId = userId?.let { it1 -> getDefaultAddressIdFromSharedPreferences(it1) }
+                                myAddressAdapter.updateAddresses(it.addresses, defaultAddressId)
+                            } else {
+                                Log.i("address", "onViewCreated: hiiiiiiii")
+                            }
                         }
                     }
-                }
-                is ApiState.Failure -> {
-                    Log.e("myAddressFragment", "Failed to fetch addresses: ${apiState.msg}")
-                }
-                is ApiState.Loading -> {
-                }
 
-                else -> {}
+                    is ApiState.Failure -> {
+                        Log.e("myAddressFragment", "Failed to fetch addresses: ${apiState.msg}")
+                    }
+
+                    is ApiState.Loading -> {
+                    }
+
+                    else -> {}
+                }
             }
         }
+
     }
 
-}
-    private fun saveAddressToPreferences(address: Address) {
-        val sharedPreferences: SharedPreferences = requireContext().getSharedPreferences("default_address", Context.MODE_PRIVATE)
+    private fun saveAddressToPreferences(userId: String, address: Address) {
+        val sharedPreferences: SharedPreferences =
+            requireContext().getSharedPreferences("default_address_$userId", Context.MODE_PRIVATE)
         with(sharedPreferences.edit()) {
             putString("address", Gson().toJson(address))
             apply()
         }
     }
 
-    private fun getDefaultAddressIdFromSharedPreferences(): Long? {
-        val sharedPreferences = requireContext().getSharedPreferences("default_address", Context.MODE_PRIVATE)
+    private fun getDefaultAddressIdFromSharedPreferences(userId: String): Long? {
+        val sharedPreferences =
+            requireContext().getSharedPreferences("default_address_$userId", Context.MODE_PRIVATE)
         val defaultAddressJson = sharedPreferences.getString("address", null)
         return defaultAddressJson?.let {
             val defaultAddress = Gson().fromJson(it, Address::class.java)
             defaultAddress.id
         }
     }
+
 
 
     private fun navigateToPaymentFragment(address: Address) {
