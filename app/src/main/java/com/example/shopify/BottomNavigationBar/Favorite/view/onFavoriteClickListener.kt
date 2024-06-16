@@ -4,4 +4,6 @@ interface onFavoriteClickListener {
 
     fun onFavClick()
     fun removeFavorite(id:Long)
+
+    fun goToProductDetails(id:Long)
 }

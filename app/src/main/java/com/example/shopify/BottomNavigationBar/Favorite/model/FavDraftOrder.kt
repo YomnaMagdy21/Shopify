@@ -40,6 +40,7 @@ data class ItemLine(
     val title: String? = "title",
     val price: String? = "10",
     var sku: String = "",
+    var product_id: Long?=null
   //  var properties:List<String?>?=null
 )
 

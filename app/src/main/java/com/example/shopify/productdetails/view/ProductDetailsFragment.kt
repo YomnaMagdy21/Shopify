@@ -51,6 +51,7 @@ import com.example.shopify.products.view.ProductAdapter
 import com.example.shopify.products.viewModel.ProductsOfBrandViewModel
 import com.example.shopify.products.viewModel.ProductsOfBrandViewModelFactory
 import com.example.shopify.utility.ApiState
+import com.example.shopify.utility.SharedPreference
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.collectLatest
@@ -150,8 +151,11 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
             parentFragmentManager.popBackStack()
         }
 
+
         setUpRecyclerView()
         setUpSuggestionsRecView()
+
+
 
         //setUpSuggestionsRecViewFromProduct()
 
@@ -172,7 +176,7 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
         val productID = bundle?.getLong("product_id")
         productID?.let {
             productDetailsViewModel.getProductInfo(it)
-            viewModel.getProductsOfBrands(productID)
+           // viewModel.getProductsOfBrands(productID)
         }
         val sharedPreferences = requireContext().getSharedPreferences("draftPref", Context.MODE_PRIVATE)
         val draftOrderId = sharedPreferences.getString("draft_order_id", null)
@@ -208,70 +212,104 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
                                 addProductToCart(data)
                             }
                         }
-                        binding.fav.setOnClickListener {
+                        val fav = data?.product?.variants?.get(0)?.id?.let {
+                            SharedPreference.getFav(requireContext(),
+                                it
+                            )
+                        }
+                        if (fav==true) {
                             binding.fav.setImageResource(R.drawable.favorite)
-                            val sharedPreferences = requireContext().getSharedPreferences("draftPref", Context.MODE_PRIVATE)
-                            val draftOrderId = sharedPreferences.getString("draft_order_id", null)?.toLong()
-
-                            if (draftOrderId != null) {
-                                fetchDraftOrder(draftOrderId) { draftOrder ->
-
-                                    val productTitle = data?.product?.title
-                                    val productVariantId = data?.product?.variants?.get(0)?.id
-                                    val productImageSrc = data?.product?.image?.src
-
-                                    if (productTitle != null && productVariantId != null && productImageSrc != null) {
-                                        // Ensure properties are correctly assigned
-                                        val properties = listOf(productImageSrc)
-
-                                        val newLineItem = ItemLine(
-                                            title = productTitle,
-                                            variant_id = productVariantId,
-                                            quantity = 1,
-                                            sku = productImageSrc
-                                           // properties = properties
-                                        )
-
-
-                                    val updatedLineItems =
-                                        draftOrder?.line_items?.toMutableList() ?: mutableListOf()
-                                    Log.i(
-                                        "TAG",
-                                        "onViewCreated: updatedLineItems111 ${updatedLineItems}"
-                                    )
-                                    val itemExists =
-                                        updatedLineItems.any { it.variant_id == newLineItem.variant_id }
-
-                                    if (!itemExists) {
-                                        updatedLineItems.add(newLineItem)
-                                        Log.i(
-                                            "TAG",
-                                            "onViewCreated: updatedLineItems222 ${updatedLineItems}"
-                                        )
-
-                                    }
-                                    Log.i(
-                                        "TAG",
-                                        "onViewCreated: updatedLineItems3333 ${updatedLineItems}"
-                                    )
-
-
-                                    val favDraftOrder = FavDraftOrder(
-                                        id = draftOrderId,
-                                        line_items = updatedLineItems
-                                    )
-                                    val favDraftOrderResponse = FavDraftOrderResponse(favDraftOrder)
-
-
-                                    favoriteViewModel.updateFavorite(
-                                        draftOrderId,
-                                        favDraftOrderResponse
-                                    )
+                        } else {
+                            binding.fav.setImageResource(R.drawable.heart_unfilled)
+                        }
+                        binding.fav.setOnClickListener {
+                         //   binding.fav.setImageResource(R.drawable.favorite)
+                            val isFav =
+                                data?.product?.variants?.get(0)?.id?.let { it1 -> SharedPreference.getFav(requireContext(), it1) }
+                            if (isFav == true) {
+                                data?.product?.variants?.get(0)?.id?.let { it1 ->
+                                    SharedPreference.saveFav(requireContext(),
+                                        it1,false)
                                 }
-                                }
+                                data?.product?.variants?.get(0)?.id?.let { it1 -> deleteFav(it1) }
+                                // SharedPreference.saveFav(context, current.variants?.get(0)?.id!!,false)
+                                // sharedPreferences.edit().putBoolean(current.id.toString(), false).apply()
+                                binding.fav.setImageResource(R.drawable.heart_unfilled)
+                              //  current.variants?.get(0)?.id?.let { it1 -> listener.onClickToRemove(it1) }
+                                //  current.id?.let { it1 -> FavoriteFragment().deleteFav(it1) }
                             } else {
-                                Log.e("DraftOrder", "Draft Order ID not found")
+                                data?.product?.variants?.get(0)?.id?.let { it1 ->
+                                    SharedPreference.saveFav(requireContext(),
+                                        it1,true)
+                                }
+
+                                //  sharedPreferences.edit().putBoolean(current.id.toString(), true).apply()
+                                binding.fav.setImageResource(R.drawable.favorite)
+                               // listener.onFavBtnClick(current)
+                                val sharedPreferences = requireContext().getSharedPreferences("draftPref", Context.MODE_PRIVATE)
+                                val draftOrderId = sharedPreferences.getString("draft_order_id", null)?.toLong()
+
+                                if (draftOrderId != null) {
+                                    fetchDraftOrder(draftOrderId) { draftOrder ->
+
+                                        val productTitle = data?.product?.title
+                                        val productVariantId = data?.product?.variants?.get(0)?.id
+                                        val productImageSrc = data?.product?.image?.src
+
+                                        if (productTitle != null && productVariantId != null && productImageSrc != null) {
+                                            // Ensure properties are correctly assigned
+                                            val properties = listOf(productImageSrc)
+
+                                            val newLineItem = ItemLine(
+                                                title = productTitle,
+                                                variant_id = productVariantId,
+                                                quantity = 1,
+                                                sku = productImageSrc
+                                                // properties = properties
+                                            )
+
+
+                                            val updatedLineItems =
+                                                draftOrder?.line_items?.toMutableList() ?: mutableListOf()
+                                            Log.i(
+                                                "TAG",
+                                                "onViewCreated: updatedLineItems111 ${updatedLineItems}"
+                                            )
+                                            val itemExists =
+                                                updatedLineItems.any { it.variant_id == newLineItem.variant_id }
+
+                                            if (!itemExists) {
+                                                updatedLineItems.add(newLineItem)
+                                                Log.i(
+                                                    "TAG",
+                                                    "onViewCreated: updatedLineItems222 ${updatedLineItems}"
+                                                )
+
+                                            }
+                                            Log.i(
+                                                "TAG",
+                                                "onViewCreated: updatedLineItems3333 ${updatedLineItems}"
+                                            )
+
+
+                                            val favDraftOrder = FavDraftOrder(
+                                                id = draftOrderId,
+                                                line_items = updatedLineItems
+                                            )
+                                            val favDraftOrderResponse = FavDraftOrderResponse(favDraftOrder)
+
+
+                                            favoriteViewModel.updateFavorite(
+                                                draftOrderId,
+                                                favDraftOrderResponse
+                                            )
+                                        }
+                                    }
+                                } else {
+                                    Log.e("DraftOrder", "Draft Order ID not found")
+                                }
                             }
+
                         }
 
 
@@ -568,6 +606,10 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
 
     override fun onFavBtnClick(favorite: Product) {
     }
+
+    override fun onClickToRemove(id: Long) {
+
+    }
     private fun fetchDraftOrder(draftOrderId: Long, callback: (FavDraftOrder?) -> Unit) {
         // Assuming you have a method in your ViewModel to get the current DraftOrder
         favoriteViewModel.getFavorites(draftOrderId)
@@ -584,6 +626,39 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
                 }
             }
         }
+    }
+    fun deleteFav(id: Long){
+        val sharedPreferences = requireContext().getSharedPreferences("draftPref", Context.MODE_PRIVATE)
+        val draftOrderId = sharedPreferences.getString("draft_order_id", null)?.toLong()
+
+        if (draftOrderId != null) {
+            fetchDraftOrder(draftOrderId) { draftOrder ->
+                val updatedLineItems = draftOrder?.line_items?.toMutableList() ?: mutableListOf()
+                Log.i("TAG", "Initial updatedLineItems: $updatedLineItems")
+
+                // Find the item to remove by matching the id (or other unique identifier)
+                val itemToRemove = updatedLineItems.find { it.variant_id == id }
+
+                if (itemToRemove != null) {
+                    updatedLineItems.remove(itemToRemove)
+                    Log.i("TAG", "Updated updatedLineItems after removal: $updatedLineItems")
+
+                    val favDraftOrder = FavDraftOrder(
+                        id = draftOrderId,
+                        line_items = updatedLineItems
+                    )
+                    val favDraftOrderResponse = FavDraftOrderResponse(favDraftOrder)
+
+                    favoriteViewModel.updateFavorite(draftOrderId, favDraftOrderResponse)
+                } else {
+                    Log.i("TAG", "Item not found in updatedLineItems")
+                }
+            }
+        } else {
+            Log.e("DraftOrder", "Draft Order ID not found")
+        }
+
+        favoriteViewModel.deleteFavorite(id)
     }
 
 }

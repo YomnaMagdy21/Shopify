@@ -1,6 +1,7 @@
 package com.example.shopify.BottomNavigationBar.Favorite.view
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -141,6 +142,8 @@ class FavoriteFragment : Fragment() ,onFavoriteClickListener{
                 }
             }
         }
+
+
     }
 
     fun setUpRecyclerView(){
@@ -164,7 +167,23 @@ class FavoriteFragment : Fragment() ,onFavoriteClickListener{
 
     override fun removeFavorite(id: Long) {
 
+        deleteFav(id)
 
+    }
+
+    override fun goToProductDetails(id: Long) {
+        val bundle = Bundle()
+        bundle.putLong("product_id",id)
+        val fragmentDetails = ProductDetailsFragment()
+        fragmentDetails.arguments = bundle
+
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.frame_layout, fragmentDetails)
+            .addToBackStack(null)
+            .commit()
+    }
+
+    fun deleteFav(id: Long){
         val sharedPreferences = requireContext().getSharedPreferences("draftPref", Context.MODE_PRIVATE)
         val draftOrderId = sharedPreferences.getString("draft_order_id", null)?.toLong()
 
@@ -174,7 +193,7 @@ class FavoriteFragment : Fragment() ,onFavoriteClickListener{
                 Log.i("TAG", "Initial updatedLineItems: $updatedLineItems")
 
                 // Find the item to remove by matching the id (or other unique identifier)
-                val itemToRemove = updatedLineItems.find { it.id == id }
+                val itemToRemove = updatedLineItems.find { it.variant_id == id }
 
                 if (itemToRemove != null) {
                     updatedLineItems.remove(itemToRemove)
@@ -194,10 +213,11 @@ class FavoriteFragment : Fragment() ,onFavoriteClickListener{
         } else {
             Log.e("DraftOrder", "Draft Order ID not found")
         }
+
         favoriteViewModel.deleteFavorite(id)
     }
 
-    private fun fetchDraftOrder(draftOrderId: Long, callback: (FavDraftOrder?) -> Unit) {
+     fun fetchDraftOrder(draftOrderId: Long, callback: (FavDraftOrder?) -> Unit) {
         // Assuming you have a method in your ViewModel to get the current DraftOrder
         favoriteViewModel.getFavorites(draftOrderId)
         lifecycleScope.launch {

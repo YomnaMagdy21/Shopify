@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.shopify.BottomNavigationBar.Favorite.model.AllProductImages
 import com.example.shopify.BottomNavigationBar.Favorite.model.FavDraftOrder
 import com.example.shopify.BottomNavigationBar.Favorite.model.Favorite
 import com.example.shopify.BottomNavigationBar.Favorite.model.ItemLine
@@ -20,13 +21,14 @@ import com.example.shopify.model.draftModel.DraftOrder
 import com.example.shopify.model.draftModel.Draft_orders_list
 import com.example.shopify.model.productDetails.Product
 import com.example.shopify.model.productDetails.ProductModel
+import com.example.shopify.utility.SharedPreference
 
 class FavoriteAdapter(var context: Context, var listener: onFavoriteClickListener):
     ListAdapter<ItemLine, FavoriteAdapter.DayViewHolder>(DayDiffUtil()) {
 
 
     lateinit var binding: FavItemBinding
-    lateinit var product : Product
+  //  lateinit var product : Product
 
 
     class DayViewHolder(var binding: FavItemBinding) : RecyclerView.ViewHolder(binding.root)
@@ -41,16 +43,18 @@ class FavoriteAdapter(var context: Context, var listener: onFavoriteClickListene
 
         holder.binding.productName.text = current?.title
 
-        product = Product(null,null,null,null,current.id,null,null,null,null,null,null,null,null,null,current.title,null,null,null,false)
+    //    product = Product(null,null,null,null,current.id,null,null,null,null,null,null,null,null,null,current.title,null,null,null,false)
         val sharedPreferences = context.getSharedPreferences("imgPref", Context.MODE_PRIVATE)
         val imgUrl = sharedPreferences.getString("img", null)
 
         Log.i("TAG", "onBindViewHolder: image ${imgUrl}")
 //        if(current.id == product.id){
             Glide.with(context)
-                .load(imgUrl)
+                .load(AllProductImages.productImageMap[current.title])
                 .placeholder(R.drawable.bag) // Placeholder image while loading
                 .into(holder.binding.productImg)
+
+        holder.binding.tvProductPriceCategoryCard.text = current.price
        // }
 //        if (!current?.sku.isNullOrEmpty()) {
 //            // Check if the SKU is a URL or a resource identifier
@@ -81,11 +85,18 @@ class FavoriteAdapter(var context: Context, var listener: onFavoriteClickListene
 //        }
 
         holder.binding.cardView.setOnClickListener {
-            listener.onFavClick()
+            listener.goToProductDetails(current.product_id?:8663275405476)
         }
         holder.binding.deleteImg.setOnClickListener {
-            current?.id?.let { it1 -> listener.removeFavorite(it1) }
+            current?.variant_id?.let { it1 -> listener.removeFavorite(it1) }
+            current.variant_id?.let { it1 -> SharedPreference.saveFav(context, it1,false) }
+//           val sharedPreferencesFav = context.getSharedPreferences("favPref", Context.MODE_PRIVATE)
+//
+//            val editor = sharedPreferencesFav.edit()
+//            editor.putBoolean(current.id.toString(), false)
+//          editor.apply()
         }
+
 
 
     }
