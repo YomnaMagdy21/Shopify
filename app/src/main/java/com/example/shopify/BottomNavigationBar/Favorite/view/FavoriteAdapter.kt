@@ -48,7 +48,7 @@ class FavoriteAdapter(var context: Context, var listener: onFavoriteClickListene
         Log.i("TAG", "onBindViewHolder: image ${imgUrl}")
 //        if(current.id == product.id){
             Glide.with(context)
-                .load(current)
+                .load(imgUrl)
                 .placeholder(R.drawable.bag) // Placeholder image while loading
                 .into(holder.binding.productImg)
        // }
