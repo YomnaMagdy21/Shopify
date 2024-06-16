@@ -93,6 +93,11 @@ dependencies {
     implementation ("com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2")
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
 
+    //circular img
+    implementation ("de.hdodenhof:circleimageview:3.1.0")
+    implementation ("com.mikhaellopez:circularimageview:4.3.1")
+
+
 
 
 }
