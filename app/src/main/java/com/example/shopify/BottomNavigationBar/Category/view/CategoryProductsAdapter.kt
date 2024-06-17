@@ -44,9 +44,14 @@ class CategoryProductsAdapter(private val context: Context,
         /*holder.addToCartButton.setOnClickListener {
             onAddToCartClick(product)
         }*/
+      var email = SharedPreference.getUserEmail(context)
+//        product.variants?.get(0)?.id?.let { it1 ->
+//            SharedPreference.saveFav(context,
+//                it1,email,false)
+//        }
         val fav = product.variants?.get(0)?.id?.let { it1 ->
             SharedPreference.getFav(context,
-                it1
+                it1,email
             )
         }
         if (fav==true) {
@@ -56,12 +61,13 @@ class CategoryProductsAdapter(private val context: Context,
         }
 
         holder.fav.setOnClickListener {
+          //  var email = SharedPreference.getUserEmail(context)
             val isFav =
-                product.variants?.get(0)?.id?.let { it1 -> SharedPreference.getFav(context, it1) }
+                product.variants?.get(0)?.id?.let { it1 -> SharedPreference.getFav(context, it1,email) }
             if (isFav == true) {
                 product.variants?.get(0)?.id?.let { it1 ->
                     SharedPreference.saveFav(context,
-                        it1,false)
+                        it1,email,false)
                 }
                 // SharedPreference.saveFav(context, current.variants?.get(0)?.id!!,false)
                 // sharedPreferences.edit().putBoolean(current.id.toString(), false).apply()
@@ -71,7 +77,7 @@ class CategoryProductsAdapter(private val context: Context,
             } else {
                 product.variants?.get(0)?.id?.let { it1 ->
                     SharedPreference.saveFav(context,
-                        it1,true)
+                        it1,email,true)
                 }
 
                 //  sharedPreferences.edit().putBoolean(current.id.toString(), true).apply()

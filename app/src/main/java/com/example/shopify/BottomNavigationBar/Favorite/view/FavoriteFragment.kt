@@ -38,6 +38,7 @@ import com.example.shopify.model.productDetails.ProductModel
 import com.example.shopify.network.ShopifyRemoteDataSourceImp
 import com.example.shopify.productdetails.view.ProductDetailsFragment
 import com.example.shopify.utility.ApiState
+import com.example.shopify.utility.SharedPreference
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.collectLatest
@@ -52,6 +53,8 @@ class FavoriteFragment : Fragment() ,onFavoriteClickListener{
     lateinit var categoryViewModel: CategoryViewModel
     lateinit var categoryViewModelFactory: CategoryViewModelFactory
     private lateinit var favProducts: MutableList<ItemLine>
+
+
 
 
     override fun onCreateView(
@@ -96,12 +99,15 @@ class FavoriteFragment : Fragment() ,onFavoriteClickListener{
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val sharedPreferences = requireContext().getSharedPreferences("draftPref", Context.MODE_PRIVATE)
-        val draftOrderId = sharedPreferences.getString("draft_order_id", null)
+//        val sharedPreferences = requireContext().getSharedPreferences("draftPref", Context.MODE_PRIVATE)
+//        val draftOrderId = sharedPreferences.getString("draft_order_id", null)
+       // SharedPreference.clearPreferences(requireContext())
+        var email = SharedPreference.getUserEmail(requireContext())
+        var draftID = SharedPreference.getDraftOrderId(requireContext(),email)
 
-        if (draftOrderId != null) {
-            favoriteViewModel.getFavorites(draftOrderId.toLong())// Use the draftOrderId as needed
-            Log.d("DraftOrder", "Draft Order ID: $draftOrderId")
+        if (draftID != 10000000000) {
+            favoriteViewModel.getFavorites(draftID.toLong())// Use the draftOrderId as needed
+            Log.d("DraftOrder", "Draft Order ID: $draftID")
         } else {
 
             Log.e("DraftOrder", "Draft Order ID not found")
@@ -113,8 +119,11 @@ class FavoriteFragment : Fragment() ,onFavoriteClickListener{
                 when (result) {
                     is ApiState.Loading -> {
                         Log.i("FavoriteFragment", "onViewCreated: loading...")
+                        binding.progressBar.visibility = View.VISIBLE
                     }
                     is ApiState.Success<*> -> {
+
+                        binding.progressBar.visibility = View.GONE
 
                         favProducts.clear()
                         Log.i("FavoriteFragment", "onViewCreated: success")
@@ -184,11 +193,14 @@ class FavoriteFragment : Fragment() ,onFavoriteClickListener{
     }
 
     fun deleteFav(id: Long){
-        val sharedPreferences = requireContext().getSharedPreferences("draftPref", Context.MODE_PRIVATE)
-        val draftOrderId = sharedPreferences.getString("draft_order_id", null)?.toLong()
+//        val sharedPreferences = requireContext().getSharedPreferences("draftPref", Context.MODE_PRIVATE)
+//        val draftOrderId = sharedPreferences.getString("draft_order_id", null)?.toLong()
 
-        if (draftOrderId != null) {
-            fetchDraftOrder(draftOrderId) { draftOrder ->
+        var email = SharedPreference.getUserEmail(requireContext())
+        var draftID = SharedPreference.getDraftOrderId(requireContext(),email)
+
+        if (draftID != 10000000000) {
+            fetchDraftOrder(draftID.toLong()) { draftOrder ->
                 val updatedLineItems = draftOrder?.line_items?.toMutableList() ?: mutableListOf()
                 Log.i("TAG", "Initial updatedLineItems: $updatedLineItems")
 
@@ -200,15 +212,28 @@ class FavoriteFragment : Fragment() ,onFavoriteClickListener{
                     Log.i("TAG", "Updated updatedLineItems after removal: $updatedLineItems")
 
                     val favDraftOrder = FavDraftOrder(
-                        id = draftOrderId,
+                        id = draftID.toLong(),
                         line_items = updatedLineItems
                     )
                     val favDraftOrderResponse = FavDraftOrderResponse(favDraftOrder)
 
-                    favoriteViewModel.updateFavorite(draftOrderId, favDraftOrderResponse)
+                    favoriteViewModel.updateFavorite(draftID.toLong(), favDraftOrderResponse)
                 } else {
                     Log.i("TAG", "Item not found in updatedLineItems")
                 }
+
+                Log.i("TAG", "deleteFav: draft order id11 ${draftOrder?.id}")
+
+                val draftOrderId = draftOrder?.id
+                if (draftOrder?.id == null) {
+                    Log.i("TAG", "deleteFav: draftOrder.id is null, saving default id")
+                    SharedPreference.saveDraftOrderId(requireContext(), 10000000000, email)
+                } else {
+                    Log.i("TAG", "deleteFav: draft order id is ${draftOrder.id}")
+                    // You can save the actual draftOrder id if needed
+                    SharedPreference.saveDraftOrderId(requireContext(), draftOrder.id, email)
+                }
+
             }
         } else {
             Log.e("DraftOrder", "Draft Order ID not found")

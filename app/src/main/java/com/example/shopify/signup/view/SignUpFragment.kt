@@ -272,7 +272,7 @@ class SignUpFragment : Fragment() {
 
                                             var id = person?.customer?.id
 
-                                            signUpViewModel.createFavDraftOrders(order)
+                                         //   signUpViewModel.createFavDraftOrders(order)
 
                                             parentFragmentManager.beginTransaction().replace(R.id.fragment_container,SignInFragment()).commit()
                                         //    startActivity(Intent(context, BottomNavActivity::class.java))
@@ -313,35 +313,35 @@ class SignUpFragment : Fragment() {
 //            Log.i(TAG, "Draft Order before sending: $draftOrder")
 //            signUpViewModel.createFavDraftOrders(draftOrder)
 
-            lifecycleScope.launch {
-                signUpViewModel.wishList.collectLatest {result ->
-                    when(result){
-                        is ApiState.Loading ->{
-
-                        }
-                        is ApiState.Success<*> ->{
-                            val wishList = result.data as? FavDraftOrderResponse
-                            val sharedPreferences = requireContext().getSharedPreferences("draftPref", Context.MODE_PRIVATE)
-                            val editor = sharedPreferences.edit()
-                            editor.putString("draft_order_id", wishList?.draft_order?.id.toString())
-                            editor.apply()
-                            Log.i(TAG, "onViewCreated: draft order in  = ${wishList?.draft_order?.id}")
-                            if(wishList!=null) {
-
-                                Log.i(
-                                    TAG,
-                                    "onViewCreated: draft order in sign up = ${wishList?.draft_order?.id}"
-                                )
-                            }
-                        }
-                        else->{
-
-                        }
-                    }
-                }
-            }
-
-        }
+//            lifecycleScope.launch {
+//                signUpViewModel.wishList.collectLatest {result ->
+//                    when(result){
+//                        is ApiState.Loading ->{
+//
+//                        }
+//                        is ApiState.Success<*> ->{
+//                            val wishList = result.data as? FavDraftOrderResponse
+//                            val sharedPreferences = requireContext().getSharedPreferences("draftPref", Context.MODE_PRIVATE)
+//                            val editor = sharedPreferences.edit()
+//                            editor.putString("draft_order_id", wishList?.draft_order?.id.toString())
+//                            editor.apply()
+//                            Log.i(TAG, "onViewCreated: draft order in  = ${wishList?.draft_order?.id}")
+//                            if(wishList!=null) {
+//
+//                                Log.i(
+//                                    TAG,
+//                                    "onViewCreated: draft order in sign up = ${wishList?.draft_order?.id}"
+//                                )
+//                            }
+//                        }
+//                        else->{
+//
+//                        }
+//                    }
+//                }
+//            }
+//
+       }
 
 
         binding.google.setOnClickListener {

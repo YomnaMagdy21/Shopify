@@ -85,10 +85,11 @@ class ProductAdapter(var context: Context, var productsOfBrand: List<Product>, v
 //            }else{
 //                holder.fav.setImageResource(R.drawable.favorite_border_24)
 //            }
+            var email = SharedPreference.getUserEmail(context)
 
             val fav = current.variants?.get(0)?.id?.let { it1 ->
                 SharedPreference.getFav(context,
-                    it1
+                    it1,email
                 )
             }
             if (fav==true) {
@@ -98,12 +99,13 @@ class ProductAdapter(var context: Context, var productsOfBrand: List<Product>, v
             }
 
             holder.fav.setOnClickListener {
+//                var email = SharedPreference.getUserEmail(context)
                 val isFav =
-                    current.variants?.get(0)?.id?.let { it1 -> SharedPreference.getFav(context, it1) }
+                    current.variants?.get(0)?.id?.let { it1 -> SharedPreference.getFav(context, it1,email) }
                 if (isFav == true) {
                     current.variants?.get(0)?.id?.let { it1 ->
                         SharedPreference.saveFav(context,
-                            it1,false)
+                            it1,email,false)
                     }
                    // SharedPreference.saveFav(context, current.variants?.get(0)?.id!!,false)
                    // sharedPreferences.edit().putBoolean(current.id.toString(), false).apply()
@@ -113,7 +115,7 @@ class ProductAdapter(var context: Context, var productsOfBrand: List<Product>, v
                 } else {
                     current.variants?.get(0)?.id?.let { it1 ->
                         SharedPreference.saveFav(context,
-                            it1,true)
+                            it1,email,true)
                     }
 
                     //  sharedPreferences.edit().putBoolean(current.id.toString(), true).apply()

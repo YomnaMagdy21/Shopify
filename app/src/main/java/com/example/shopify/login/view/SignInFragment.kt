@@ -29,6 +29,7 @@ import com.example.shopify.signup.view.SignUpFragment
 import com.example.shopify.signup.viewmodel.SignUpViewModel
 import com.example.shopify.signup.viewmodel.SignUpViewModelFactory
 import com.example.shopify.utility.ApiState
+import com.example.shopify.utility.SharedPreference
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -115,6 +116,7 @@ class SignInFragment : Fragment() {
                 return@setOnClickListener
             }
 
+            SharedPreference.saveUserEmail(requireContext(),email)
 
             binding.progressBar.visibility = View.VISIBLE
             Firebase(requireContext()).loginClient(requireContext(), email, password) { isSuccess ->
