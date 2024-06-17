@@ -9,24 +9,48 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.cardview.widget.CardView
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.example.shopify.MainActivity
 import com.example.shopify.R
 import com.example.shopify.databinding.FragmentSettingBinding
 import com.example.shopify.firebase.Firebase
 import com.example.shopify.login.view.SignInFragment
 import com.example.shopify.MyAddress.view.myAddressFragment
+import com.example.shopify.MyAddress.viewModel.MyAddressFactory
+import com.example.shopify.MyAddress.viewModel.MyAddressViewModel
+import com.example.shopify.ShoppingCart.viewModel.ShoppingCardViewModel
+import com.example.shopify.model.ShopifyRepositoryImp
+import com.example.shopify.network.ShopifyRemoteDataSourceImp
+import com.example.shopify.setting.currency.CurrencyApiClient
+import com.example.shopify.setting.currency.CurrencyConverter
+import com.example.shopify.setting.currency.CurrencyRemoteDataSourceImpl
+import com.example.shopify.setting.currency.CurrencyRepository
+import com.example.shopify.setting.viewModel.CurrencyViewModel
+import com.example.shopify.setting.viewModel.CurrencyViewModelFactory
+import com.example.shopify.utility.Constants
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class settingFragment : Fragment() {
 
     private lateinit var binding: FragmentSettingBinding
 
     lateinit var mGoogleSignInClient: GoogleSignInClient
+    private lateinit var viewModel: CurrencyViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Initialize ViewModel
+        val apiService = CurrencyApiClient.getApiService()
+        val remoteDataSource = CurrencyRemoteDataSourceImpl(apiService)
+        val repository = CurrencyRepository(remoteDataSource)
+        val factory = CurrencyViewModelFactory(repository)
+        viewModel = ViewModelProvider(this, factory).get(CurrencyViewModel::class.java)
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.clientID))
@@ -48,6 +72,7 @@ class settingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
 
         val cardView1Adress = view.findViewById<CardView>(R.id.cardView1Adress)
         cardView1Adress.setOnClickListener {
@@ -87,17 +112,55 @@ class settingFragment : Fragment() {
         val option2Button = dialogView.findViewById<Button>(R.id.option2Button)
 
         option1Button.setOnClickListener {
-            // Handle option 1 (USD) selection
-            // e.g., save the selected currency or perform any action
+            // Convert EGP to USD
+            CurrencyConverter.setCurrencyCode("USD")
+            convertCurrency("EGP", "USD", 1.0)
             dialogBuilder.dismiss()
         }
 
         option2Button.setOnClickListener {
-            // Handle option 2 (EUR) selection
-            // e.g., save the selected currency or perform any action
+            // Convert USD to EGP
+            CurrencyConverter.setCurrencyCode("EGP")
+            convertCurrency("USD", "EGP", 1.0)
             dialogBuilder.dismiss()
         }
         dialogBuilder.show()
+    }
+
+    private fun convertCurrency(from: String, to: String, amount: Double) {
+        viewModel.convertCurrency(Constants.API_KEY, from, to, amount)
+        lifecycleScope.launch {
+            viewModel.currencyState.collectLatest { response ->
+                response?.let {
+                    if (it.isSuccessful) {
+                        val rates = it.body()?.rates
+                        val convertedAmount = rates?.get(to)?.rate_for_amount
+                        showConvertedAmountDialog(convertedAmount)
+                    } else {
+                        // Handle error
+                        showErrorDialog("Conversion failed. Please try again.")
+                    }
+                }
+            }
+        }
+    }
+
+    private fun showConvertedAmountDialog(amount: Double?) {
+        //val message = "Converted Amount: ${amount ?: "N/A"}"
+        val message = "converted Sccussfully"
+        AlertDialog.Builder(requireContext())
+            .setTitle("Currency Conversion")
+            .setMessage(message)
+            .setPositiveButton("OK", null)
+            .show()
+    }
+
+    private fun showErrorDialog(message: String) {
+        AlertDialog.Builder(requireContext())
+            .setTitle("Error")
+            .setMessage(message)
+            .setPositiveButton("OK", null)
+            .show()
     }
 
     private fun showAboutUsDialog() {

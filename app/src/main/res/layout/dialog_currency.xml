@@ -29,6 +29,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:backgroundTint="#000000"
-        android:text="EUR"
+        android:text="EGP"
         android:textSize="16sp" />
 </LinearLayout>

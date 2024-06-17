@@ -22,6 +22,7 @@ import com.example.shopify.ShoppingCart.model.PriceRule
 import com.example.shopify.ShoppingCart.model.ShoppingCardRepo
 import com.example.shopify.ShoppingCart.viewModel.PriceRuleViewModelFactory
 import com.example.shopify.ShoppingCart.viewModel.ShoppingCardViewModel
+import com.example.shopify.setting.currency.CurrencyConverter
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.collectLatest
@@ -38,7 +39,6 @@ class shoppingCardFragment : Fragment() {
 
     private var discountAmount: Double = 0.0
     private var couponApplied = false
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -191,7 +191,8 @@ class shoppingCardFragment : Fragment() {
     private fun applyDiscount(totalPrice: Double, priceRule: PriceRule) {
         val discountPercentage = priceRule.value.toDouble() / 100
         discountAmount = totalPrice * discountPercentage
-        discountText.text =  "${"%.2f".format(discountAmount)}"
+        val convertedDiscountAmount = CurrencyConverter.convertToUSD(discountAmount)
+        discountText.text =  "${"%.2f".format(convertedDiscountAmount)}"
         Log.i("discount", "applyDiscount: "+discountAmount)
     }
 
@@ -204,7 +205,9 @@ class shoppingCardFragment : Fragment() {
         if (couponApplied) {
             totalPrice += discountAmount
         }
-        totalPriceTextView.text = "${"%.2f".format(totalPrice)}"
+        val convertedTotalPrice = CurrencyConverter.convertToUSD(totalPrice)
+        totalPriceTextView.text = CurrencyConverter.formatCurrency(convertedTotalPrice)
+        //totalPriceTextView.text = "${"%.2f".format(convertedTotalPrice)}"
     }
 
 

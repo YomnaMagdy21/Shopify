@@ -6,6 +6,7 @@ import com.example.shopify.model.Brands.BrandModel
 import com.example.shopify.model.addressModel.AddNewAddress
 import com.example.shopify.model.addressModel.Address
 import com.example.shopify.model.addressModel.AddressesModel
+import com.example.shopify.model.currencyModel.CurrencyModel
 import com.example.shopify.model.productDetails.ProductModel
 import kotlinx.coroutines.flow.Flow
 import retrofit2.http.Body
