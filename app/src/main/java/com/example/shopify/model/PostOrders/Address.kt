@@ -4,6 +4,11 @@ import java.io.Serializable
 
 
 data class Address(
+    val address1: String? = null,
+    val address2: String? = null,
+    val city: String? = null,
+    val company: String? = null,
+    val country: String? = null,
     val id: Long? = null,
     val email: String? = null,
     val created_at: String? = null,

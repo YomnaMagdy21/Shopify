@@ -19,6 +19,7 @@ import com.example.shopify.model.draftModel.DraftOrder
 import com.example.shopify.model.draftModel.DraftOrderResponse
 import com.example.shopify.payment.paymentFragment
 import com.example.shopify.ShoppingCart.model.PriceRule
+import com.example.shopify.ShoppingCart.model.ShoppingCardIClear
 import com.example.shopify.ShoppingCart.model.ShoppingCardRepo
 import com.example.shopify.ShoppingCart.viewModel.PriceRuleViewModelFactory
 import com.example.shopify.ShoppingCart.viewModel.ShoppingCardViewModel
@@ -28,7 +29,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 
-class shoppingCardFragment : Fragment() {
+class shoppingCardFragment : Fragment() , ShoppingCardIClear{
 
     private lateinit var viewModel: ShoppingCardViewModel
     private lateinit var adapter: ShoppingCardAdapter
@@ -39,6 +40,8 @@ class shoppingCardFragment : Fragment() {
     private var discountAmount: Double = 0.0
     private var couponApplied = false
 
+    private lateinit var recyclerView: RecyclerView
+    private var items: List<Item> = emptyList()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -59,7 +62,7 @@ class shoppingCardFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerViewCardList)
+        recyclerView = view.findViewById<RecyclerView>(R.id.recyclerViewCardList)
         recyclerView.layoutManager = LinearLayoutManager(context)
         products = mutableListOf()
         adapter = ShoppingCardAdapter(emptyList(),::onAddProduct, ::onRemoveProduct)
@@ -79,7 +82,7 @@ class shoppingCardFragment : Fragment() {
                 products.clear()
                 if (draftOrders != null) {
                     products.addAll(draftOrders)
-                    val items = draftOrders.map { draftOrder ->
+                    items = draftOrders.map { draftOrder ->
                         val imageUrl = draftOrder.note_attributes?.find { it.name == "image" }?.value ?: ""
                         Item(
                             title = draftOrder.line_items?.get(0)?.title ?: "No Name",
@@ -220,6 +223,14 @@ class shoppingCardFragment : Fragment() {
         }
         totalPriceTextView.text = "${"%.2f".format(totalPrice)}"
     }
-
+    override fun clearShoppingCart() {
+        viewModel.clearDraftOrders()
+        products.clear()
+        adapter.updateItems(emptyList())
+        adapter.notifyDataSetChanged()
+        totalPriceTextView.text = "0.00"
+        discountText.text = "0.00"
+        println("Shopping cart is cleared.")
+    }
 
 }

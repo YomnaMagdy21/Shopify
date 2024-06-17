@@ -142,4 +142,8 @@ interface ShopifyService {
     @Headers("X-Shopify-Access-Token: ${Constants.adminApiAccessToken}")
     @GET("admin/api/2024-04/orders.json")
     suspend fun getAllOrders() : Response<RetriveOrderModel>
+
+    @Headers("X-Shopify-Access-Token: ${Constants.adminApiAccessToken}")
+    @DELETE("admin/api/2024-04/draft_orders.json")
+    suspend fun clearAllDraftOrder(): Response<DraftOrderResponse>
 }

@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.shopify.BottomNavigationBar.orderItem.viewModel.OrderItemViewModel
 import com.example.shopify.BottomNavigationBar.orderItem.viewModel.OrderItemViewModelFactory
 import com.example.shopify.R
+import com.example.shopify.model.PostOrders.NoteAttribute
 import com.example.shopify.model.PostOrders.Order
 
 
@@ -52,17 +53,49 @@ class OrderItemFragment : Fragment() {
         orderItemViewModel = ViewModelProvider(this, factory).get(OrderItemViewModel::class.java)
 
 
+
+
+        println("Order Items :-------------------")
+        println("user name : ${orderItemViewModel.customerName}")
+        println("address : ${orderItemViewModel.address}")
+        println("phone Number : ${orderItemViewModel.phoneNumber}")
+        println("total Price : ${orderItemViewModel.totalPrice}")
+        println("payment Method : ${orderItemViewModel.paymentMethod}")
+
+
+
+
+
         // Bind data to the UI
         clientName.text = orderItemViewModel.customerName
         address.text = orderItemViewModel.address
         phoneNumber.text = orderItemViewModel.phoneNumber
         totalPrice.text = orderItemViewModel.totalPrice
+        paymentMethod.text = orderItemViewModel.paymentMethod
 
 
-        val imageUrls = order.note_attributes?.filter { it.name == "image" }?.map { it.value ?: "" } ?: emptyList()
+        val noteAttributes = order.note_attributes ?: emptyList()
 
-        orderItemAdapter = OrderItemAdapter(requireContext(), orderItemViewModel.lineItems , imageUrls)
-        print("imagggggggge : $imageUrls")
+
+        orderItemAdapter = OrderItemAdapter(requireContext(), orderItemViewModel.lineItems , noteAttributes)
+
+        println("Order Items")
+
+        println("ID: ${order.id}")
+        println("Address1: ${order.shipping_address?.address1}")
+        println("city: ${order.shipping_address?.address2}")
+        println("country: ${order.shipping_address?.city}")
+        println("phone: ${order.shipping_address?.company}")
+
+        println("Created At: ${order.created_at}")
+        println("Total Price: ${order.total_price}")
+        println("first name: ${order.customer?.first_name}")
+        println("last name: ${order.customer?.last_name}")
+        println("Payment Method: ${order.tags}")
+        println("Note Attributes:")
+        noteAttributes.forEach { noteAttribute ->
+            println("Name: ${noteAttribute.name}, Value: ${noteAttribute.values}")
+        }
         recyclerView.adapter = orderItemAdapter
 
 

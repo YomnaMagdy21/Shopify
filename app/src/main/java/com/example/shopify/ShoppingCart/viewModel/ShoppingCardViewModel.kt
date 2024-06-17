@@ -107,6 +107,13 @@ class ShoppingCardViewModel(private val repo: ShoppingCardRepo) : ViewModel() {
             }
         }
     }
+
+    // clear the draft order
+    fun clearDraftOrders() {
+        _getDraftOrderList.value = emptyList()
+        println("Shopping cart is cleared from the vm.")
+
+    }
 }
 
 class PriceRuleViewModelFactory(private val repository: ShoppingCardRepo) : ViewModelProvider.Factory {

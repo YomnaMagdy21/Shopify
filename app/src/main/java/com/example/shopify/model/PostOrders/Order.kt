@@ -98,5 +98,5 @@ data class Order(
 
 data class NoteAttribute(
     var name: String?=null,
-    var value: String?=null
-)
+    var values: List<String>? = null
+) : Serializable
