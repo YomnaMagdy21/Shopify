@@ -43,6 +43,7 @@ import com.example.shopify.products.view.OnProductClickListener
 import com.example.shopify.products.view.ProductAdapter
 import com.example.shopify.products.viewModel.ProductsOfBrandViewModel
 import com.example.shopify.products.viewModel.ProductsOfBrandViewModelFactory
+import com.example.shopify.setting.currency.CurrencyConverter
 import com.example.shopify.utility.ApiState
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
@@ -170,7 +171,16 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
                         }
 
                         binding.title.text = data?.product?.title
-                        binding.price.text = data?.product?.variants?.get(0)?.price + " EGP"
+                        //convert currency
+                        val convertedPrice = data?.product?.variants?.get(0)?.price?.let {
+                            CurrencyConverter.convertToUSD(
+                                it.toDouble())
+                        }
+                        binding.price.text = convertedPrice?.let {
+                            CurrencyConverter.formatCurrency(
+                                it
+                            )
+                        }
                         binding.descriptionText.text = data?.product?.body_html
 
 
