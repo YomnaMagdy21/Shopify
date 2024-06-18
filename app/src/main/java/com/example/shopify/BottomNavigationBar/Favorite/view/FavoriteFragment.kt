@@ -42,6 +42,7 @@ import com.example.shopify.utility.SharedPreference
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import kotlin.math.log
 
@@ -114,7 +115,7 @@ class FavoriteFragment : Fragment() ,onFavoriteClickListener{
         }
 
 
-        lifecycleScope.launch {
+        lifecycleScope.launchWhenStarted {
             favoriteViewModel.fav.collectLatest { result ->
                 when (result) {
                     is ApiState.Loading -> {
@@ -218,6 +219,7 @@ class FavoriteFragment : Fragment() ,onFavoriteClickListener{
                     val favDraftOrderResponse = FavDraftOrderResponse(favDraftOrder)
 
                     favoriteViewModel.updateFavorite(draftID.toLong(), favDraftOrderResponse)
+                    favoriteViewModel.deleteFavorite(id)
                 } else {
                     Log.i("TAG", "Item not found in updatedLineItems")
                 }
@@ -239,13 +241,13 @@ class FavoriteFragment : Fragment() ,onFavoriteClickListener{
             Log.e("DraftOrder", "Draft Order ID not found")
         }
 
-        favoriteViewModel.deleteFavorite(id)
+
     }
 
      fun fetchDraftOrder(draftOrderId: Long, callback: (FavDraftOrder?) -> Unit) {
         // Assuming you have a method in your ViewModel to get the current DraftOrder
         favoriteViewModel.getFavorites(draftOrderId)
-        lifecycleScope.launch {
+        lifecycleScope.launchWhenStarted {
             favoriteViewModel.fav.collectLatest { result ->
                 when (result) {
                     is ApiState.Success<*> -> {

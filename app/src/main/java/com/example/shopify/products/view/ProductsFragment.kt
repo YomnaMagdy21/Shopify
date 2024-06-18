@@ -450,6 +450,7 @@ class ProductsFragment : Fragment() ,OnProductClickListener {
                     val favDraftOrderResponse = FavDraftOrderResponse(favDraftOrder)
 
                     favoriteViewModel.updateFavorite(draftID, favDraftOrderResponse)
+                    favoriteViewModel.deleteFavorite(id)
                 } else {
                     Log.i("TAG", "Item not found in updatedLineItems")
                 }
@@ -467,7 +468,7 @@ class ProductsFragment : Fragment() ,OnProductClickListener {
             Log.e("DraftOrder", "Draft Order ID not found")
         }
 
-        favoriteViewModel.deleteFavorite(id)
+
     }
 
     private fun setupSearch() {

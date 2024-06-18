@@ -143,6 +143,31 @@ class SignInFragment : Fragment() {
                             val person = result.data as? createCustomersResponse
                             signInViewModel.getCustomerByEmail(email)
 
+                            var userEmail = person?.customers?.get(0)?.email
+                            Log.i(TAG, "onViewCreated: userEmail ${userEmail}")
+                            Log.i(
+                                TAG,
+                                "onViewCreated: userEmail ${person?.customers?.get(0)?.tags}"
+                            )
+//                            if(userEmail != email){
+//                                binding.emailEditText.error = "Invalid Email "
+//                                binding.emailEditText.requestFocus()
+//                                return@collectLatest
+//
+//                            }
+//
+//                           else if(password != person?.customers?.get(0)?.tags){
+//                                binding.password.error = "Incorrect password "
+//                                binding.password.requestFocus()
+//                                return@collectLatest
+//                            }
+//                            else {
+//
+//
+//                                startActivity(Intent(context, BottomNavActivity::class.java))
+//                                Firebase(requireContext()).saveLoginState(true)
+//                                SharedPreference.saveUserEmail(requireContext(), userEmail)
+//                            }
                             if (person != null) {
 
                                 Log.i(TAG, "Customer ID in login: ${person.customers?.get(0)?.id}")
@@ -269,6 +294,7 @@ class SignInFragment : Fragment() {
     }
 
     private fun proceedToNextPage(user: FirebaseUser) {
+        user.email?.let { SharedPreference.saveUserEmail(requireContext(), it) }
         Firebase(requireContext()).checkIfUserExists(user.uid) { userExists ->
             if (userExists) {
                 startActivity(Intent(context, BottomNavActivity::class.java))
@@ -276,7 +302,7 @@ class SignInFragment : Fragment() {
             } else {
                 val customer = Customer(
                     0, user.email, null, null, "", "", "", "", 0, null, null,
-                    true, null, null, null, null
+                    true, null, null, "",null, null
                 )
                 Firebase(requireContext()).writeNewUser(customer)
 
