@@ -72,13 +72,14 @@
                     android:weightSum="1.5" />
 
                 <ImageView
+                    android:id="@+id/fav"
                     android:layout_width="30dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1.5"
                     android:gravity="end"
                     android:paddingVertical="2.5dp"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/baseline_star_border_24" />
+                    android:src="@drawable/favorite_border_24" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

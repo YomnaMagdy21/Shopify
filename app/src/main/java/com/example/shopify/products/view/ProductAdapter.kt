@@ -1,11 +1,14 @@
 package com.example.shopify.products.view
 
 import android.content.Context
+import android.content.SharedPreferences
+import android.provider.ContactsContract.CommonDataKinds.Im
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -13,15 +16,31 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.shopify.BottomNavigationBar.Favorite.model.Favorite
 import com.example.shopify.BottomNavigationBar.Favorite.view.FavoriteAdapter
+import com.example.shopify.BottomNavigationBar.Favorite.view.FavoriteFragment
+import com.example.shopify.BottomNavigationBar.Favorite.viewmodel.FavoriteViewModel
+import com.example.shopify.BottomNavigationBar.Favorite.viewmodel.FavoriteViewModelFactory
 import com.example.shopify.R
 import com.example.shopify.databinding.FavItemBinding
 import com.example.shopify.databinding.ProductItemBinding
 import com.example.shopify.model.productDetails.Product
+ 
+import com.example.shopify.utility.SharedPreference
+
 import com.example.shopify.setting.currency.CurrencyConverter
+ 
 
 class ProductAdapter(var context: Context, var productsOfBrand: List<Product>, var listener: OnProductClickListener): RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
 
+    val sharedPreferences: SharedPreferences = context.getSharedPreferences("favPref", Context.MODE_PRIVATE)
 
+
+
+    //    fun updateFavoriteState(productId: Long, isFavorite: Boolean) {
+//        val editor = sharedPreferences.edit()
+//        editor.putBoolean("fav_$productId", isFavorite)
+//        editor.apply()
+//        notifyDataSetChanged()
+//    }
     fun setProductsBrandsList(productsOfBrand: List<Product>) {
         this.productsOfBrand = productsOfBrand
         notifyDataSetChanged()
@@ -34,6 +53,7 @@ class ProductAdapter(var context: Context, var productsOfBrand: List<Product>, v
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater: LayoutInflater = parent.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val view = inflater.inflate(R.layout.products_of_brand_card, parent, false)
+
         return ViewHolder(view)
     }
 
@@ -57,7 +77,92 @@ class ProductAdapter(var context: Context, var productsOfBrand: List<Product>, v
             }
 
             Glide.with(context).load(it.image?.src).into(holder.productImg)
+
+//            val isFavorite = sharedPreferences.getBoolean("fav_${current.id}", false)
+//            holder.fav.setImageResource(if (isFavorite) R.drawable.favorite_24 else R.drawable.favorite_border_24)
+//
+//            holder.fav.setOnClickListener{
+//                listener.onFavBtnClick(current)
+////                val fav = sharedPreferences.getBoolean("fav", false)
+////                if(fav){
+////                    holder.fav.setImageResource(R.drawable.favorite_24)
+////                }
+////                else{
+////                    holder.fav.setImageResource(R.drawable.favorite_border_24)
+////                }
+//            }
+//            if(current.isFav){
+//                holder.fav.setImageResource(R.drawable.favorite_24)
+//            }else{
+//                holder.fav.setImageResource(R.drawable.favorite_border_24)
+//            }
+            var email = SharedPreference.getUserEmail(context)
+
+            val fav = current.variants?.get(0)?.id?.let { it1 ->
+                SharedPreference.getFav(context,
+                    it1,email
+                )
+            }
+            if (fav==true) {
+                holder.fav.setImageResource(R.drawable.favorite_24)
+            } else {
+                holder.fav.setImageResource(R.drawable.favorite_border_24)
+            }
+
+            holder.fav.setOnClickListener {
+//                var email = SharedPreference.getUserEmail(context)
+                var guest = SharedPreference.getGuest(context)
+                //  var email = SharedPreference.getUserEmail(context)
+                if (guest == "yes") {
+                    val builder = AlertDialog.Builder(context)
+                    builder.setTitle("Warning")
+                    builder.setMessage("You are guest, you can't add to favorite")
+                    builder.setPositiveButton("ok") { dialog, which ->
+
+                    }
+
+                    builder.show()
+                } else {
+
+                    val isFav =
+                        current.variants?.get(0)?.id?.let { it1 ->
+                            SharedPreference.getFav(
+                                context,
+                                it1,
+                                email
+                            )
+                        }
+                    if (isFav == true) {
+                        current.variants?.get(0)?.id?.let { it1 ->
+                            SharedPreference.saveFav(
+                                context,
+                                it1, email, false
+                            )
+                        }
+                        // SharedPreference.saveFav(context, current.variants?.get(0)?.id!!,false)
+                        // sharedPreferences.edit().putBoolean(current.id.toString(), false).apply()
+                        holder.fav.setImageResource(R.drawable.favorite_border_24)
+                        current.variants?.get(0)?.id?.let { it1 -> listener.onClickToRemove(it1) }
+                        //  current.id?.let { it1 -> FavoriteFragment().deleteFav(it1) }
+                    } else {
+                        current.variants?.get(0)?.id?.let { it1 ->
+                            SharedPreference.saveFav(
+                                context,
+                                it1, email, true
+                            )
+                        }
+
+                        //  sharedPreferences.edit().putBoolean(current.id.toString(), true).apply()
+                        holder.fav.setImageResource(R.drawable.favorite_24)
+                        listener.onFavBtnClick(current)
+                    }
+
+                }
+            }
+
         }
+
+
         var product  = productsOfBrand.get(position)
 
         holder.card.setOnClickListener {
@@ -72,6 +177,8 @@ class ProductAdapter(var context: Context, var productsOfBrand: List<Product>, v
         val productPrice : TextView = itemView.findViewById(R.id.tv_product_price_of_brand)
 
         val card: CardView = itemView.findViewById(R.id.products_of_brand_card)
+
+        val fav : ImageView = itemView.findViewById(R.id.iv_add_to_fav)
     }
 
 

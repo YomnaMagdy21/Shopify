@@ -29,6 +29,7 @@ import com.example.shopify.signup.view.SignUpFragment
 import com.example.shopify.signup.viewmodel.SignUpViewModel
 import com.example.shopify.signup.viewmodel.SignUpViewModelFactory
 import com.example.shopify.utility.ApiState
+import com.example.shopify.utility.SharedPreference
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -96,86 +97,161 @@ class SignInFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.guest.setOnClickListener {
+            SharedPreference.saveGuest(requireContext(),"yes")
+            startActivity(Intent(context, BottomNavActivity::class.java))
+            SharedPreference.saveUserEmail(requireContext(),"guest")
+            Firebase(requireContext()).saveLoginState(true)
+        }
+        var email = binding.emailEditText.text.toString().trim()
+        var password = binding.password.text.toString().trim()
+        signInViewModel.getCustomerByEmail(email)
+
         binding.login.setOnClickListener {
-            var email = binding.emailEditText.text.toString()
-            var password = binding.password.text.toString()
+            SharedPreference.saveGuest(requireContext(),"no")
+            var email = binding.emailEditText.text.toString().trim()
+            var password = binding.password.text.toString().trim()
+          //  val firebaseUser = FirebaseAuth.getInstance().currentUser
+
             if (email.isEmpty()) {
                 binding.emailEditText.error = "Email cannot be empty"
                 binding.emailEditText.requestFocus()
                 return@setOnClickListener
             }
-            if (!isValidEmail(email)) {
+           else if (!isValidEmail(email)) {
                 binding.emailEditText.error = "Invalid Email "
                 binding.emailEditText.requestFocus()
                 return@setOnClickListener
             }
-            if (password.isEmpty()) {
+          else  if (password.isEmpty()) {
                 binding.password.error = "Password cannot be empty"
                 binding.password.requestFocus()
                 return@setOnClickListener
             }
+            else {
+
+                SharedPreference.saveUserEmail(requireContext(), email)
+
+//
 
 
-            binding.progressBar.visibility = View.VISIBLE
-            Firebase(requireContext()).loginClient(requireContext(), email, password) { isSuccess ->
-                binding.progressBar.visibility = View.GONE
-                if (!isSuccess) {
-                    binding.password.error = "Incorrect password"
-                    binding.password.requestFocus()
-                }
-            }
-            signInViewModel.getCustomerByEmail(email)
-
-
-            lifecycleScope.launch {
-                signInViewModel.login.collectLatest { result ->
-                    when (result) {
-                        is ApiState.Loading -> {
-                            binding.progressBar.visibility = View.VISIBLE
-                            Log.i(TAG, "Loading state")
-
-                        }
-
-                        is ApiState.Success<*> -> {
+//            val firebaseUser = FirebaseAuth.getInstance().currentUser
+//
+//            if (firebaseUser != null) {
+//                Firebase(requireContext()).fetchUserData(firebaseUser, requireContext()) { firstName, email, password ->
+//                    if (firstName != null && email != null && password != null) {
+//                        var email1 = binding.emailEditText.text.toString().trim()
+//                        var password1 = binding.password.text.toString().trim()
+//                        if(email != email1){
+//                            binding.emailEditText.error = "Incorrect Email "
+//                            binding.emailEditText.requestFocus()
+//                            return@fetchUserData
+//                        }
+//                        if(password1 != password){
+//                            binding.password.error = "Incorrect Password"
+//                            binding.password.requestFocus()
+//                            return@fetchUserData
+//                        }
+                        binding.progressBar.visibility = View.VISIBLE
+                        Firebase(requireContext()).loginClient(requireContext(), email, password) { isSuccess ->
                             binding.progressBar.visibility = View.GONE
-                            val person = result.data as? createCustomersResponse
-                            signInViewModel.getCustomerByEmail(email)
-
-                            if (person != null) {
-
-                                Log.i(TAG, "Customer ID in login: ${person.customers?.get(0)?.id}")
-                                var userID = person.customers?.get(0)?.id
-                                if (userID != null) {
-
-                                    val sharedPreferences = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-                                    val editor = sharedPreferences.edit()
-                                    editor.putString("userID", userID.toString())
-                                    editor.apply()
-
-                                    Log.i(TAG, "Saved userID to SharedPreferences: $userID")
-                                } else {
-                                    Log.i(TAG, "UserID is null")
-                                }
-
-                            } else {
-                                Log.i(TAG, "Received null person")
+                            if (!isSuccess) {
+                                binding.password.error = "Incorrect password"
+                                binding.password.requestFocus()
                             }
                         }
-                        is ApiState.Failure -> {
-                            binding.progressBar.visibility = View.GONE
-                            Log.e(TAG, "API call failed: ${result.msg}")
-                            // Handle the failure state here
-                        }
+//                        // Use the retrieved firstName and email
+//                        Log.d("UserData", "First Name: $firstName, Email: $email")
+//                        // Update UI or perform actions based on retrieved data
+//                    } else {
+//                        // Handle case where data could not be retrieved
+//                        Log.e("UserData", "Error: Unable to fetch user data")
+//                    }
+//                }
+//            }
 
-                        else -> {
 
-                            binding.progressBar.visibility = View.GONE
-                            Log.i(TAG, "Unexpected state: ${result.javaClass.simpleName}")
+                Firebase(requireContext()).saveLoginState(true)
+                lifecycleScope.launch {
+                    signInViewModel.login.collectLatest { result ->
+                        when (result) {
+                            is ApiState.Loading -> {
+                                binding.progressBar.visibility = View.VISIBLE
+                                Log.i(TAG, "Loading state")
+
+                            }
+
+                            is ApiState.Success<*> -> {
+                                binding.progressBar.visibility = View.GONE
+                                val person = result.data as? createCustomersResponse
+                                signInViewModel.getCustomerByEmail(email)
+
+//                                var userEmail = person?.customers?.get(0)?.email
+//                                Log.i(TAG, "onViewCreated: userEmail ${userEmail}")
+//                                Log.i(
+//                                    TAG,
+//                                    "onViewCreated: userEmail ${person?.customers?.get(0)?.tags}"
+//                                )
+//                                if (userEmail != email) {
+//                                    binding.emailEditText.error = "Invalid Email "
+//                                    binding.emailEditText.requestFocus()
+//                                    return@collectLatest
+//
+//                                } else if (password != person?.customers?.get(0)?.tags) {
+//                                    binding.password.error = "Incorrect password "
+//                                    binding.password.requestFocus()
+//                                    return@collectLatest
+//                                } else {
+//
+//
+//                                    startActivity(Intent(context, BottomNavActivity::class.java))
+//                                    Firebase(requireContext()).saveLoginState(true)
+//                                    SharedPreference.saveUserEmail(requireContext(), userEmail)
+//                                }
+                                if (person != null) {
+
+                                    Log.i(
+                                        TAG,
+                                        "Customer ID in login: ${person.customers?.get(0)?.id}"
+                                    )
+                                    var userID = person.customers?.get(0)?.id
+                                    if (userID != null) {
+
+                                        val sharedPreferences =
+                                            requireContext().getSharedPreferences(
+                                                "MyPrefs",
+                                                Context.MODE_PRIVATE
+                                            )
+                                        val editor = sharedPreferences.edit()
+                                        editor.putString("userID", userID.toString())
+                                        editor.apply()
+
+                                        Log.i(TAG, "Saved userID to SharedPreferences: $userID")
+                                    } else {
+                                        Log.i(TAG, "UserID is null")
+                                    }
+
+                                } else {
+                                    Log.i(TAG, "Received null person")
+                                }
+                            }
+
+                            is ApiState.Failure -> {
+                                binding.progressBar.visibility = View.GONE
+                                Log.e(TAG, "API call failed: ${result.msg}")
+                                // Handle the failure state here
+                            }
+
+                            else -> {
+
+                                binding.progressBar.visibility = View.GONE
+                                Log.i(TAG, "Unexpected state: ${result.javaClass.simpleName}")
+                            }
                         }
                     }
                 }
             }
-
         }
         binding.signup.setOnClickListener {
             val transaction = (context as AppCompatActivity).supportFragmentManager.beginTransaction()
@@ -200,6 +276,7 @@ class SignInFragment : Fragment() {
             val signInIntent = mGoogleSignInClient.signInIntent
             startActivityForResult(signInIntent, RC_SIGN_IN)
             binding.progressBar.visibility = View.VISIBLE
+            SharedPreference.saveGuest(requireContext(),"no")
         }
     }
     private fun isValidEmail(email: String): Boolean {
@@ -267,6 +344,7 @@ class SignInFragment : Fragment() {
     }
 
     private fun proceedToNextPage(user: FirebaseUser) {
+        user.email?.let { SharedPreference.saveUserEmail(requireContext(), it) }
         Firebase(requireContext()).checkIfUserExists(user.uid) { userExists ->
             if (userExists) {
                 startActivity(Intent(context, BottomNavActivity::class.java))
@@ -274,7 +352,7 @@ class SignInFragment : Fragment() {
             } else {
                 val customer = Customer(
                     0, user.email, null, null, "", "", "", "", 0, null, null,
-                    true, null, null, null, null
+                    true, null, null, "",null, null
                 )
                 Firebase(requireContext()).writeNewUser(customer)
 
@@ -290,6 +368,7 @@ class SignInFragment : Fragment() {
                             is ApiState.Success<*> -> {
                                 val person = result.data as? createCustomerRequest
                                 Log.i(TAG, "Customer ID: ${person?.customer?.id}")
+
                                 startActivity(Intent(context, BottomNavActivity::class.java))
                                 Toast.makeText(context, "User logged in with Google successfully.", Toast.LENGTH_LONG).show()
                             }

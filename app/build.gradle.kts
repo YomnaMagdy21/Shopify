@@ -91,6 +91,17 @@ dependencies {
 
     implementation ("androidx.navigation:navigation-fragment-ktx:2.7.7")
     implementation ("androidx.navigation:navigation-ui-ktx:2.7.7")
+    implementation ("com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+
+    //circular img
+    implementation ("de.hdodenhof:circleimageview:3.1.0")
+    implementation ("com.mikhaellopez:circularimageview:4.3.1")
+
+    //lottie
+    implementation ("com.airbnb.android:lottie:3.4.0")
+
+
 
     implementation ("com.google.android.gms:play-services-maps:18.0.1")
     implementation ("com.google.android.gms:play-services-location:18.0.0")

@@ -2,9 +2,14 @@ package com.example.shopify.model
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.widget.Toast
 import com.example.shopify.BottomNavigationBar.BottomNavActivity
+ 
+import com.example.shopify.BottomNavigationBar.Favorite.model.FavDraftOrderResponse
+
 import com.example.shopify.Models.orderList.RetriveOrderModel
+ 
 import com.example.shopify.Models.products.CollectProductsModel
 import com.example.shopify.model.Brands.BrandModel
 import com.example.shopify.model.PostOrders.PostOrderModel
@@ -12,15 +17,25 @@ import com.example.shopify.model.RetriveOrder.RetriveOrder
 import com.example.shopify.model.addressModel.AddNewAddress
 import com.example.shopify.model.addressModel.Address
 import com.example.shopify.model.addressModel.AddressesModel
+ 
+import com.example.shopify.model.draftModel.DraftOrderResponse
+import com.example.shopify.model.draftModel.Draft_orders_list
+
 import com.example.shopify.model.currencyModel.CurrencyModel
+ 
 import com.example.shopify.model.productDetails.ProductModel
+import com.example.shopify.network.RetrofitHelper
 import com.example.shopify.network.ShopifyRemoteDataSource
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import kotlinx.coroutines.flow.Flow
+ 
+import kotlinx.coroutines.flow.flow
+
 import retrofit2.http.Body
+ 
 
 class ShopifyRepositoryImp(private var shopifyRemoteDataSource: ShopifyRemoteDataSource) : ShopifyRepository{
     var firebaseAuth = FirebaseAuth.getInstance()
@@ -88,6 +103,46 @@ class ShopifyRepositoryImp(private var shopifyRemoteDataSource: ShopifyRemoteDat
         shopifyRemoteDataSource.removeAddresses(customerId,addressId)
     }
 
+ 
+    override fun getFavDraftOrders(id:Long): Flow<FavDraftOrderResponse?> {
+       return shopifyRemoteDataSource.getFavDraftOrders(id)
+    }
+
+    override  fun createFavDraftOrders(draftOrderResponse: FavDraftOrderResponse): Flow<FavDraftOrderResponse?> {
+        return shopifyRemoteDataSource.createFavDraftOrder(draftOrderResponse)
+    }
+
+    override fun updateFavDraftOrder(
+        id: Long,
+        draftOrderResponse: FavDraftOrderResponse
+    ): Flow<FavDraftOrderResponse?> {
+        return shopifyRemoteDataSource.updateFavDraftOrder(id,draftOrderResponse)
+    }
+
+    override fun deleteFavDraftOrder(
+        id: Long
+    ): Flow<FavDraftOrderResponse?> {
+        return shopifyRemoteDataSource.deleteFavDraftOrder(id)
+    }
+//    override fun createFavDraftOrder(draftOrder: FavDraftOrderResponse): FavDraftOrderResponse? {
+//        return try {
+//            val response = RetrofitHelper.apiService.createFavDraftOrders(draftOrder)
+//            if (response.isSuccessful) {
+//                response.body()
+//            } else {
+//                Log.e(
+//                    "ShoppingCardRepo",
+//                    "Failed to create draft order: ${response.errorBody()?.string()}"
+//                )
+//                null
+//            }
+//        } catch (e: Exception) {
+//            Log.e("ShoppingCardRepo", "Exception creating draft order", e)
+//            null
+//        }
+//    }
+
+
     override suspend fun makeAddressDefault(customerId: Long, addressId: Long): Flow<AddressesModel?> {
         return shopifyRemoteDataSource.makeAddressDefault(customerId,addressId)
     }
@@ -103,6 +158,7 @@ class ShopifyRepositoryImp(private var shopifyRemoteDataSource: ShopifyRemoteDat
     override suspend fun getOrderList(): Flow<RetriveOrderModel?> {
         return  shopifyRemoteDataSource.getOrderList()
     }
+ 
 
 
 }

@@ -1,7 +1,11 @@
 package com.example.shopify.model
 
 import android.content.Context
+ 
+import com.example.shopify.BottomNavigationBar.Favorite.model.FavDraftOrderResponse
+
 import com.example.shopify.Models.orderList.RetriveOrderModel
+ 
 import com.example.shopify.Models.products.CollectProductsModel
 import com.example.shopify.model.Brands.BrandModel
 import com.example.shopify.model.PostOrders.PostOrderModel
@@ -9,7 +13,13 @@ import com.example.shopify.model.RetriveOrder.RetriveOrder
 import com.example.shopify.model.addressModel.AddNewAddress
 import com.example.shopify.model.addressModel.Address
 import com.example.shopify.model.addressModel.AddressesModel
+ 
+import com.example.shopify.model.draftModel.DraftOrder
+import com.example.shopify.model.draftModel.DraftOrderResponse
+import com.example.shopify.model.draftModel.Draft_orders_list
+
 import com.example.shopify.model.currencyModel.CurrencyModel
+ 
 import com.example.shopify.model.productDetails.ProductModel
 import kotlinx.coroutines.flow.Flow
 import retrofit2.http.Body
@@ -42,6 +52,16 @@ interface ShopifyRepository {
 
     suspend fun removeAddresses(customerId :Long , addressId :Long)
 
+ 
+    fun getFavDraftOrders(id:Long):Flow<FavDraftOrderResponse?>
+    fun createFavDraftOrders(draftOrderResponse :FavDraftOrderResponse):Flow<FavDraftOrderResponse?>
+
+    fun updateFavDraftOrder(id:Long,draftOrderResponse :FavDraftOrderResponse):Flow<FavDraftOrderResponse?>
+
+    fun deleteFavDraftOrder(id:Long):Flow<FavDraftOrderResponse?>
+
+
+    //  fun createFavDraftOrder(draftOrder: FavDraftOrderResponse): FavDraftOrderResponse?
     suspend fun makeAddressDefault(customerId: Long, addressId: Long): Flow<AddressesModel?>
 
     suspend fun editAddress(customerId: Long, addressId: Long,addresse: AddNewAddress): Flow<AddressesModel?>
@@ -49,5 +69,6 @@ interface ShopifyRepository {
     suspend fun createOrder(order : PostOrderModel): Flow<RetriveOrder?>
 
     suspend fun getOrderList(): Flow<RetriveOrderModel?>
+ 
 
 }

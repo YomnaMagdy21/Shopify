@@ -1,6 +1,7 @@
 package com.example.shopify.network
 
 import com.example.shopify.utility.Constants
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -13,6 +14,7 @@ object RetrofitHelper {
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
+         //  .addCallAdapterFactory(CoroutineCallAdapterFactory())
     }
 
     val apiService: ShopifyService by lazy {
