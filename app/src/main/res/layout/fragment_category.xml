@@ -1,220 +1,235 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".BottomNavigationBar.Category.view.CategoryFragment">
 
 
+    <TextView
+        android:id="@+id/home_frag_title"
+        android:layout_width="322dp"
+        android:layout_height="69dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="137dp"
+        android:layout_marginBottom="30dp"
+        android:text="@string/category_title"
+        android:textSize="48sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Search Part -->
+    <EditText
+        android:id="@+id/search_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginVertical="20dp"
+        android:background="@drawable/searchview_style"
+        android:hint="@string/search"
+        android:inputType="text"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/home_frag_title"
+
+        />
+
+    <!-- Categories Part -->
+
+    <LinearLayout
+        android:id="@+id/ll_categories"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="16dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_edit_text">
+
+        <!-- Main Categories -->
+
+        <LinearLayout
+            android:id="@+id/ll_main_categories"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="2.5dp"
+            android:layout_marginVertical="10dp"
+            android:orientation="horizontal"
+            android:weightSum="5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/ll_categories">
+
             <TextView
-                android:id="@+id/home_frag_title"
-                android:layout_width="322dp"
-                android:layout_height="69dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="30dp"
-                android:text="@string/category_title"
-                android:layout_marginEnd="137dp"
-                android:textSize="48sp"
-                android:textStyle="bold"
-                android:layout_marginStart="28dp"
-                app:layout_constraintStart_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <!-- Search Part -->
-            <EditText
-                android:id="@+id/search_edit_text"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginVertical="20dp"
-                android:background="@drawable/searchview_style"
-                android:hint="@string/search"
-                android:inputType="text"
-                android:paddingHorizontal="16dp"
+                android:id="@+id/tv_main_category_all"
+                android:layout_width="65dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="3dp"
+                android:background="@drawable/rounded_selected_text_view"
+                android:gravity="center"
+                android:paddingHorizontal="8dp"
                 android:paddingVertical="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/home_frag_title"
+                android:text="@string/all"
+                android:textColor="@color/white"
+                android:weightSum="1" />
 
-                />
 
-            <!-- Categories Part -->
-
-            <LinearLayout
-                android:id="@+id/ll_categories"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/tv_main_category_sale"
+                android:layout_width="65dp"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="16dp"
-                android:orientation="vertical"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/search_edit_text">
+                android:layout_marginHorizontal="3dp"
+                android:background="@drawable/rounded_unselected_text_view"
+                android:gravity="center"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="10dp"
+                android:text="Sale"
+                android:textColor="@color/black"
+                android:weightSum="1" />
 
-                <!-- Main Categories -->
-
-                <LinearLayout
-                    android:id="@+id/ll_main_categories"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="2.5dp"
-                    android:layout_marginVertical="10dp"
-                    android:orientation="horizontal"
-                    android:weightSum="5"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/ll_categories">
-
-                    <TextView
-                        android:id="@+id/tv_main_category_all"
-                        android:layout_width="65dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="3dp"
-                        android:background="@drawable/rounded_selected_text_view"
-                        android:gravity="center"
-                        android:paddingHorizontal="8dp"
-                        android:paddingVertical="10dp"
-                        android:text="@string/all"
-                        android:textColor="@color/white"
-                        android:weightSum="1" />
-
-
-                    <TextView
-                        android:id="@+id/tv_main_category_sale"
-                        android:layout_width="65dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="3dp"
-                        android:background="@drawable/rounded_unselected_text_view"
-                        android:gravity="center"
-                        android:paddingHorizontal="8dp"
-                        android:paddingVertical="10dp"
-                        android:text="Sale"
-                        android:textColor="@color/black"
-                        android:weightSum="1" />
-
-                    <TextView
-                        android:id="@+id/tv_main_category_women"
-                        android:layout_width="65dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="3dp"
-                        android:background="@drawable/rounded_unselected_text_view"
-                        android:gravity="center"
-                        android:paddingHorizontal="8dp"
-                        android:paddingVertical="10dp"
-                        android:weightSum="1"
-                        android:text="@string/women"
-                        android:textColor="@color/black" />
-
-                    <TextView
-                        android:id="@+id/tv_main_category_men"
-                        android:layout_width="65dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="3dp"
-                        android:background="@drawable/rounded_unselected_text_view"
-                        android:gravity="center"
-                        android:paddingHorizontal="8dp"
-                        android:paddingVertical="10dp"
-                        android:text="@string/men"
-                        android:weightSum="1"
-                        android:textColor="@color/black" />
-
-                    <TextView
-                        android:id="@+id/tv_main_category_kids"
-                        android:layout_width="65dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="3dp"
-                        android:background="@drawable/rounded_unselected_text_view"
-                        android:gravity="center"
-                        android:paddingHorizontal="8dp"
-                        android:paddingVertical="10dp"
-                        android:text="@string/kids"
-                        android:weightSum="1"
-                        android:textColor="@color/black" />
-                </LinearLayout>
-
-                <!-- Sub Categories -->
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/ll_sub_categories"
-                    android:layout_marginHorizontal="5dp"
-                    android:layout_marginVertical="10dp"
-                    android:orientation="horizontal"
-                    android:weightSum="3"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/ll_main_categories">
-
-
-                    <ImageView
-                        android:id="@+id/iv_sub_cat_block"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginEnd="10dp"
-                        android:src="@drawable/baseline_block_flipped_24"
-                        android:background="@drawable/rounded_selected_image_view_filter"
-                        android:scaleType="centerCrop"
-                        android:clipToOutline="true" />
-
-                    <ImageView
-                        android:id="@+id/iv_sub_cat_clothes"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_marginHorizontal="10dp"
-                        android:src="@drawable/clothes2222"
-                        android:background="@drawable/rounded_unselected_image_view_filter"
-                        android:scaleType="centerInside"
-                        android:clipToOutline="true" />
-
-                    <ImageView
-                        android:id="@+id/iv_sub_cat_shoes"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_marginHorizontal="10dp"
-                        android:src="@drawable/shoess2222"
-                        android:background="@drawable/rounded_unselected_image_view_filter"
-                        android:scaleType="centerInside"
-                        android:clipToOutline="true" />
-
-                    <ImageView
-                        android:id="@+id/iv_sub_cat_bags"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_marginHorizontal="10dp"
-                        android:src="@drawable/bag22222"
-                        android:background="@drawable/rounded_unselected_image_view_filter"
-                        android:scaleType="centerInside"
-                        android:clipToOutline="true" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_products_in_category"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="75dp"
-                android:layout_marginHorizontal="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ll_categories" />
-
-            <ProgressBar
-                android:id="@+id/progressBar2"
-                style="?android:attr/progressBarStyle"
-                android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/tv_main_category_women"
+                android:layout_width="65dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="@+id/rv_products_in_category"
-                app:layout_constraintBottom_toBottomOf="@+id/rv_products_in_category"
-                app:layout_constraintEnd_toEndOf="@+id/rv_products_in_category"
-                app:layout_constraintStart_toStartOf="@+id/rv_products_in_category"
-                android:visibility="gone" />
+                android:layout_marginHorizontal="3dp"
+                android:background="@drawable/rounded_unselected_text_view"
+                android:gravity="center"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="10dp"
+                android:text="@string/women"
+                android:textColor="@color/black"
+                android:weightSum="1" />
+
+            <TextView
+                android:id="@+id/tv_main_category_men"
+                android:layout_width="65dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="3dp"
+                android:background="@drawable/rounded_unselected_text_view"
+                android:gravity="center"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="10dp"
+                android:text="@string/men"
+                android:textColor="@color/black"
+                android:weightSum="1" />
+
+            <TextView
+                android:id="@+id/tv_main_category_kids"
+                android:layout_width="65dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="3dp"
+                android:background="@drawable/rounded_unselected_text_view"
+                android:gravity="center"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="10dp"
+                android:text="@string/kids"
+                android:textColor="@color/black"
+                android:weightSum="1" />
+        </LinearLayout>
+
+        <!-- Sub Categories -->
+
+        <LinearLayout
+            android:id="@+id/ll_sub_categories"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="5dp"
+            android:layout_marginVertical="10dp"
+            android:orientation="horizontal"
+            android:weightSum="3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/ll_main_categories">
+
+
+            <ImageView
+                android:id="@+id/iv_sub_cat_block"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/rounded_selected_image_view_filter"
+                android:clipToOutline="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/baseline_block_flipped_24" />
+
+            <ImageView
+                android:id="@+id/iv_sub_cat_clothes"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginHorizontal="10dp"
+                android:background="@drawable/rounded_unselected_image_view_filter"
+                android:clipToOutline="true"
+                android:scaleType="centerInside"
+                android:src="@drawable/clothes2222" />
+
+            <ImageView
+                android:id="@+id/iv_sub_cat_shoes"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginHorizontal="10dp"
+                android:background="@drawable/rounded_unselected_image_view_filter"
+                android:clipToOutline="true"
+                android:scaleType="centerInside"
+                android:src="@drawable/shoess2222" />
+
+            <ImageView
+                android:id="@+id/iv_sub_cat_bags"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginHorizontal="10dp"
+                android:background="@drawable/rounded_unselected_image_view_filter"
+                android:clipToOutline="true"
+                android:scaleType="centerInside"
+                android:src="@drawable/bag22222" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_products_in_category"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="75dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ll_categories" />
+
+    <ProgressBar
+        android:id="@+id/progressBar2"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/rv_products_in_category"
+        app:layout_constraintEnd_toEndOf="@+id/rv_products_in_category"
+        app:layout_constraintStart_toStartOf="@+id/rv_products_in_category"
+        app:layout_constraintTop_toTopOf="@+id/rv_products_in_category" />
+
+    <!-- Lottie AnimationView -->
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottieNoNetwork2"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        app:layout_constraintBottom_toBottomOf="@id/rv_products_in_category"
+        app:layout_constraintEnd_toEndOf="@id/rv_products_in_category"
+        app:layout_constraintStart_toStartOf="@id/rv_products_in_category"
+        app:layout_constraintTop_toTopOf="@id/rv_products_in_category"
+        app:lottie_autoPlay="true"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="200dp"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/no_network" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

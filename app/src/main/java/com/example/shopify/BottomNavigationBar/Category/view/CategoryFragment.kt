@@ -5,11 +5,9 @@ import android.app.AlertDialog
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
-import com.example.shopify.R
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,32 +18,30 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.lottie.LottieAnimationView
 import com.example.shopify.BottomNavigationBar.Category.viewModel.CategoryViewModel
 import com.example.shopify.BottomNavigationBar.Category.viewModel.CategoryViewModelFactory
 import com.example.shopify.CheckNetwork.InternetStatus
 import com.example.shopify.CheckNetwork.NetworkConectivityObserver
 import com.example.shopify.CheckNetwork.NetworkObservation
 import com.example.shopify.Models.products.CollectProductsModel
-import com.example.shopify.model.Address
-import com.example.shopify.model.Brands.SmartCollection
-import com.example.shopify.model.Customer
+import com.example.shopify.R
+import com.example.shopify.ShoppingCart.model.ShoppingCardRepo
+import com.example.shopify.ShoppingCart.viewModel.PriceRuleViewModelFactory
+import com.example.shopify.ShoppingCart.viewModel.ShoppingCardViewModel
 import com.example.shopify.model.ShopifyRepositoryImp
 import com.example.shopify.model.category.CustomCollection
 import com.example.shopify.model.category.SubCustomCollections
 import com.example.shopify.network.ShopifyRemoteDataSourceImp
 import com.example.shopify.productdetails.view.ProductDetailsFragment
-import com.example.shopify.ShoppingCart.model.ShoppingCardRepo
-import com.example.shopify.ShoppingCart.viewModel.PriceRuleViewModelFactory
-import com.example.shopify.ShoppingCart.viewModel.ShoppingCardViewModel
 import com.example.shopify.utility.ApiState
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-class CategoryFragment : Fragment() , OnCategoryClickListener {
+class CategoryFragment : Fragment(), OnCategoryClickListener {
 
     private lateinit var tvAll: TextView
     private lateinit var tvWomen: TextView
@@ -72,7 +68,7 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
     private var selectedProductType: SubCustomCollections? = null
     private lateinit var editTextSearch: EditText
     lateinit var networkObservation: NetworkObservation
-
+    private lateinit var lottieAnimationView: LottieAnimationView
 
 
     override fun onCreateView(
@@ -91,17 +87,18 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
         ivAccessories = view.findViewById(R.id.iv_sub_cat_bags)
         ivBlock = view.findViewById(R.id.iv_sub_cat_block)
         editTextSearch = view.findViewById(R.id.search_edit_text)
+        lottieAnimationView = view.findViewById(R.id.lottieNoNetwork2)
 
 
         recyclerView = view.findViewById(R.id.rv_products_in_category)
 
         progressBar = view.findViewById(R.id.progressBar2)
 
-      
-        adapter = CategoryProductsAdapter(requireContext() , this ,  listOf())/*{ product ->
+
+        adapter = CategoryProductsAdapter(requireContext(), this, listOf())/*{ product ->
             addProductToCart(product)
         }*/
-       
+
         recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
         recyclerView.adapter = adapter
 
@@ -118,29 +115,38 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
 
         //shopping card view model initilization
         val factory = PriceRuleViewModelFactory(ShoppingCardRepo())
-        shoppingCartViewModel = ViewModelProvider(this, factory).get(ShoppingCardViewModel::class.java)
+        shoppingCartViewModel =
+            ViewModelProvider(this, factory).get(ShoppingCardViewModel::class.java)
 
         // Click listeners for sub category
         ivTShirts.setOnClickListener {
             selectedProductType = SubCustomCollections.T_SHIRTS
             selectImageView(ivTShirts)
-            fetchProducts()
+            handleNetworkAndFetchData(it) {
+                fetchProducts()
+            }
         }
         ivShoes.setOnClickListener {
             selectedProductType = SubCustomCollections.SHOES
             selectImageView(ivShoes)
-            fetchProducts()
+            handleNetworkAndFetchData(it) {
+                fetchProducts()
+            }
         }
         ivAccessories.setOnClickListener {
             selectedProductType = SubCustomCollections.ACCESSORIES
             selectImageView(ivAccessories)
-            fetchProducts()
+            handleNetworkAndFetchData(it) {
+                fetchProducts()
+            }
         }
 
         ivBlock.setOnClickListener {
             selectedProductType = null
             selectImageView(ivBlock)
-            fetchProducts()
+            handleNetworkAndFetchData(it) {
+                fetchProducts()
+            }
         }
 
         setClickListeners()
@@ -154,14 +160,25 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
 
         return view
     }
-        
-   
+
+    private fun handleNetworkAndFetchData(view: View, fetchAction: () -> Unit) {
+        if (isNetworkAvailable()) {
+            lottieAnimationView.visibility = View.GONE
+            progressBar.visibility = View.VISIBLE
+            fetchAction()
+        } else {
+            lottieAnimationView.visibility = View.VISIBLE
+            progressBar.visibility = View.GONE
+        }
+    }
+
 
     // Click listeners for main category
     private fun setClickListeners() {
         tvAll.setOnClickListener {
             selectedCollectionId = null
             fetchProducts(view = it)
+
         }
         tvSale.setOnClickListener {
             selectedCollectionId = CustomCollection.SALE.id
@@ -186,7 +203,12 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
         view?.let { updateTextViewStyles(it) }
         progressBar.visibility = View.VISIBLE
         recyclerView.visibility = View.GONE
-        categoryViewModel.getProducts(collectionId, selectedProductType?.type)
+        if (view != null) {
+            handleNetworkAndFetchData(view) {
+
+                categoryViewModel.getProducts(collectionId, selectedProductType?.type)
+            }
+        }
     }
 
     private fun updateTextViewStyles(selectedView: View) {
@@ -202,7 +224,7 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
         }
     }
 
-    
+
 //    private fun addProductToCart(product: Product) {
 //        val currentUser = FirebaseAuth.getInstance().currentUser
 //        val userEmail = currentUser?.email
@@ -288,10 +310,8 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
     }
 
 
-
-
     private fun selectImageView(selectedImageView: ImageView) {
-        val imageViews = listOf(ivTShirts, ivShoes, ivAccessories , ivBlock)
+        val imageViews = listOf(ivTShirts, ivShoes, ivAccessories, ivBlock)
         imageViews.forEach { imageView ->
             imageView.setBackgroundResource(R.drawable.rounded_unselected_image_view_filter)
         }
@@ -299,10 +319,10 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
         selectedImageView.setBackgroundResource(R.drawable.rounded_selected_image_view_filter)
     }
 
-    override fun onCategoryClick(id:Long) {
+    override fun onCategoryClick(id: Long) {
 
         val bundle = Bundle()
-        bundle.putLong("product_id",id)
+        bundle.putLong("product_id", id)
         val fragmentDetails = ProductDetailsFragment()
         fragmentDetails.arguments = bundle
 
@@ -316,7 +336,7 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
 //        transaction.commit()
     }
 
-    fun setupSearch(){
+    fun setupSearch() {
         editTextSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
@@ -327,6 +347,7 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
             override fun afterTextChanged(s: Editable?) {}
         })
     }
+
     private fun filterProducts(query: String) {
         lifecycleScope.launch {
             categoryViewModel.accessAllProductList.collect { result ->
@@ -353,11 +374,15 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
                 when (status) {
                     InternetStatus.Available -> {
                         fetchProducts()
+                        lottieAnimationView.visibility = View.GONE
                     }
+
                     InternetStatus.Lost, InternetStatus.UnAvailable -> {
                         progressBar.visibility = View.GONE
                         recyclerView.visibility = View.GONE
-                        showNoConnectionPopup()
+                        lottieAnimationView.visibility = View.VISIBLE
+
+                        // showNoConnectionPopup()
                     }
                 }
             }
@@ -366,12 +391,15 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
         if (!isNetworkAvailable()) {
             progressBar.visibility = View.GONE
             recyclerView.visibility = View.GONE
-            showNoConnectionPopup()
+            lottieAnimationView.visibility = View.VISIBLE
+
+            //   showNoConnectionPopup()
         }
     }
 
     private fun isNetworkAvailable(): Boolean {
-        val connectivityManager = requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val connectivityManager =
+            requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val activeNetwork: NetworkInfo? = connectivityManager.activeNetworkInfo
         return activeNetwork?.isConnectedOrConnecting == true
     }

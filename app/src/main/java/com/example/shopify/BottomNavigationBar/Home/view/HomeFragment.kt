@@ -23,6 +23,7 @@ import com.example.shopify.R
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import com.airbnb.lottie.LottieAnimationView
 import com.example.shopify.BottomNavigationBar.Home.viewModel.HomeViewModel
 import com.example.shopify.BottomNavigationBar.Home.viewModel.HomeViewModelFactory
 import com.example.shopify.CheckNetwork.InternetStatus
@@ -56,6 +57,7 @@ class HomeFragment : Fragment() , OnBrandClickListener {
     private lateinit var progressBar: ProgressBar
     private lateinit var etSearch: EditText
     lateinit var networkObservation: NetworkObservation
+    private lateinit var lottieAnimationView: LottieAnimationView
 
 
    private val images = listOf(
@@ -75,6 +77,7 @@ class HomeFragment : Fragment() , OnBrandClickListener {
         brandsRecyclerView = view.findViewById(R.id.rv_brands_in_home)
         progressBar = view.findViewById(R.id.progressBar)
         etSearch = view.findViewById(R.id.search_edit_text)
+        lottieAnimationView = view.findViewById(R.id.lottieNoNetwork)
 
 
         smartCollections = listOf()
@@ -207,13 +210,15 @@ class HomeFragment : Fragment() , OnBrandClickListener {
             networkObservation.observeOnNetwork().collectLatest { status ->
                 when (status) {
                     InternetStatus.Available -> {
+                        lottieAnimationView.visibility = View.GONE
                         homeViewModel.getBrands()
                         setBrandData()
                     }
                     InternetStatus.Lost, InternetStatus.UnAvailable -> {
                         progressBar.visibility = View.GONE
                         brandsRecyclerView.visibility = View.GONE
-                        showNoConnectionPopup()
+                        lottieAnimationView.visibility = View.VISIBLE
+                    //    showNoConnectionPopup()
                     }
                 }
             }
@@ -222,7 +227,8 @@ class HomeFragment : Fragment() , OnBrandClickListener {
         if (!isNetworkAvailable()) {
             progressBar.visibility = View.GONE
             brandsRecyclerView.visibility = View.GONE
-            showNoConnectionPopup()
+            lottieAnimationView.visibility = View.VISIBLE
+          //  showNoConnectionPopup()
         }
     }
 
