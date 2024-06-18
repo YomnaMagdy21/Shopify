@@ -99,5 +99,11 @@ dependencies {
     // lottie
     implementation ("com.airbnb.android:lottie:6.0.0")
 
+    // Stripe
+    implementation ("com.stripe:stripe-android:17.2.0")
+    implementation ("com.android.volley:volley:1.2.1")
+
+
+
 
 }

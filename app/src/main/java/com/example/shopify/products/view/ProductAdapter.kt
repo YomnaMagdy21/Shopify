@@ -17,6 +17,7 @@ import com.example.shopify.R
 import com.example.shopify.databinding.FavItemBinding
 import com.example.shopify.databinding.ProductItemBinding
 import com.example.shopify.model.productDetails.Product
+import com.example.shopify.setting.currency.CurrencyConverter
 
 class ProductAdapter(var context: Context, var productsOfBrand: List<Product>, var listener: OnProductClickListener): RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
 
@@ -44,7 +45,13 @@ class ProductAdapter(var context: Context, var productsOfBrand: List<Product>, v
 
             val variants = current.variants
             if (variants != null && variants.isNotEmpty()) {
-                holder.productPrice.text = variants[0].price + " EGP"
+               // holder.productPrice.text = variants[0].price
+                val convertedPrice = current.variants?.get(0)?.price?.let {
+                    CurrencyConverter.convertToUSD(
+                        it.toDouble() )
+                }
+                holder.productPrice.text = convertedPrice?.let { CurrencyConverter.formatCurrency(it) }
+
             } else {
                 holder.productPrice.text = "Null" // Or any other suitable message
             }

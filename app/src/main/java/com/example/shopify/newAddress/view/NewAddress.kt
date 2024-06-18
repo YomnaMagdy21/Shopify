@@ -100,13 +100,6 @@ class newAddress : Fragment() {
             val country = country.text.toString()
             val phone = phone.text.toString()
 
-            /*if (validateInputs(address1, city, country, phone)) {
-                val address = Address(address1, city, country,phone, customer_id = userId?.toLong())
-                Log.i("phone", "onViewCreated: "+address)
-                if (userId != null) {
-                    viewModel.addAddresses(userId.toLong(), AddNewAddress(address))
-                }
-            }*/
             if (validateInputs(address1, city, country, phone)) {
                 val address =
                     Address(address1, city, country, phone, customer_id = userId?.toLong())
@@ -161,7 +154,7 @@ class newAddress : Fragment() {
                     is ApiState.Success<*> -> {
                         // Address added successfully, navigate back
                         Snackbar.make(requireView(), "Address added successfully", Snackbar.LENGTH_SHORT).show()
-                        navigateBack()
+                        //navigateBack()
                     }
                     is ApiState.Failure -> {
                         // Show error message
@@ -194,7 +187,7 @@ class newAddress : Fragment() {
         return isValid
     }
 
-    private fun navigateBack(){
+   private fun navigateBack(){
         val newFragment = myAddressFragment()
         parentFragmentManager.beginTransaction()
             .replace(R.id.frame_layout, newFragment)

@@ -43,15 +43,17 @@ import com.example.shopify.products.view.OnProductClickListener
 import com.example.shopify.products.view.ProductAdapter
 import com.example.shopify.products.viewModel.ProductsOfBrandViewModel
 import com.example.shopify.products.viewModel.ProductsOfBrandViewModelFactory
+import com.example.shopify.setting.currency.CurrencyConverter
 import com.example.shopify.utility.ApiState
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
 
-class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClickListener{
+class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClickListener {
 
     private lateinit var binding: FragmentProductDetailsBinding
     lateinit var productDetailsViewModel: ProductDetailsViewModel
@@ -85,10 +87,14 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
             )
         )
 
-        productDetailsViewModel = ViewModelProvider(this, productDetailsViewModelFactory).get(ProductDetailsViewModel::class.java)
+        productDetailsViewModel = ViewModelProvider(
+            this,
+            productDetailsViewModelFactory
+        ).get(ProductDetailsViewModel::class.java)
 
         val factory = PriceRuleViewModelFactory(ShoppingCardRepo())
-        shoppingCartViewModel = ViewModelProvider(this, factory).get(ShoppingCardViewModel::class.java)
+        shoppingCartViewModel =
+            ViewModelProvider(this, factory).get(ShoppingCardViewModel::class.java)
 
         categoryViewModelFactory = CategoryViewModelFactory(
             ShopifyRepositoryImp.getInstance(
@@ -110,7 +116,7 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
             factoryProducts
         ).get(ProductsOfBrandViewModel::class.java)
 
-        categoryAdapter= CategoryProductsAdapter(requireContext() , this ,  listOf())
+        categoryAdapter = CategoryProductsAdapter(requireContext(), this, listOf())
 
         return binding.root
     }
@@ -162,7 +168,7 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
                         //add to card
                         //var data2 = result.data as? Product
 
-                        binding.addToCart.setOnClickListener{
+                        binding.addToCart.setOnClickListener {
                             Log.i("hi", "onViewCreated: hiiiiiiiiiiiiiiiiii")
                             if (data != null) {
                                 addProductToCart(data)
@@ -170,11 +176,21 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
                         }
 
                         binding.title.text = data?.product?.title
-                        binding.price.text = data?.product?.variants?.get(0)?.price + " EGP"
+                        //convert currency
+                        val convertedPrice = data?.product?.variants?.get(0)?.price?.let {
+                            CurrencyConverter.convertToUSD(
+                                it.toDouble()
+                            )
+                        }
+                        binding.price.text = convertedPrice?.let {
+                            CurrencyConverter.formatCurrency(
+                                it
+                            )
+                        }
                         binding.descriptionText.text = data?.product?.body_html
 
 
-                        val random = Random.nextInt(1,5).toFloat()
+                        val random = Random.nextInt(1, 5).toFloat()
                         binding.ratingBar.rating = random
                         val imageUrls = data?.product?.images?.map { it.src } ?: emptyList()
 
@@ -208,7 +224,7 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
 
                         var products = result.data as CollectProductsModel?
                         products?.let {
-                          var  myProducts = it.products
+                            var myProducts = it.products
                             categoryAdapter.updateData(it.products)
                             productsOfBrandAdapter.setProductsBrandsList(it.products)
 
@@ -227,7 +243,7 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
 
             }
         }
-        collectProducts =  listOf()
+        collectProducts = listOf()
 
         lifecycleScope.launch {
             viewModel.accessProductsList.collectLatest { result ->
@@ -236,6 +252,7 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
                         binding.progressBar.visibility = View.VISIBLE
                         Log.i("TAG", "onViewCreated: loading")
                     }
+
                     is ApiState.Success<*> -> {
                         binding.progressBar.visibility = View.GONE
                         val products = result.data as? CollectProductsModel
@@ -248,17 +265,21 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
                             productsOfBrandAdapter.setProductsBrandsList(it.products)
                         }
                     }
+
                     is ApiState.Failure -> {
                         binding.progressBar.visibility = View.GONE
                         Log.i("TAG", "onViewCreated: failureeeeee")
                     }
+
                     else -> {
                         binding.progressBar.visibility = View.GONE
-                        Log.i("TAG", "onViewCreated: unexpected state: ${result::class.java.simpleName}")
+                        Log.i(
+                            "TAG",
+                            "onViewCreated: unexpected state: ${result::class.java.simpleName}"
+                        )
                     }
                 }
             }
-
 
 
 //            viewModel.accessProductsList.collect { result ->
@@ -329,18 +350,20 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
             dialog.show()
 
 
+        }
     }
-    }
-    fun setUpSuggestionsRecView(){
-        categoryAdapter= CategoryProductsAdapter(requireContext() , this ,  listOf())
+
+    fun setUpSuggestionsRecView() {
+        categoryAdapter = CategoryProductsAdapter(requireContext(), this, listOf())
         binding.recV.apply {
             adapter = categoryAdapter
             layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
 
         }
     }
-    fun setUpSuggestionsRecViewFromProduct(){
-        productsOfBrandAdapter= ProductAdapter(requireContext() ,   listOf(),this)
+
+    fun setUpSuggestionsRecViewFromProduct() {
+        productsOfBrandAdapter = ProductAdapter(requireContext(), listOf(), this)
         binding.recV.apply {
             adapter = productsOfBrandAdapter
             layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
@@ -360,7 +383,7 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
 
     override fun onCategoryClick(id: Long) {
         val bundle = Bundle()
-        bundle.putLong("product_id",id)
+        bundle.putLong("product_id", id)
         val fragmentDetails = ProductDetailsFragment()
         fragmentDetails.arguments = bundle
 
@@ -370,7 +393,7 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
             .commit()
     }
 
-    private fun addProductToCart(product: ProductModel) {
+     private fun addProductToCart(product: ProductModel) {
         val currentUser = FirebaseAuth.getInstance().currentUser
         val userEmail = currentUser?.email
 

@@ -12,6 +12,7 @@ import com.example.shopify.model.addressModel.Address
 import com.example.shopify.model.addressModel.AddressesModel
 import com.example.shopify.model.createCustomerRequest
 import com.example.shopify.model.createCustomersResponse
+import com.example.shopify.model.currencyModel.CurrencyModel
 import com.example.shopify.model.productDetails.ProductModel
 import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
@@ -56,5 +57,6 @@ interface ShopifyRemoteDataSource {
 
     // clear draft order
     suspend fun clearAllDraftOrders()
+
 
 }
