@@ -16,13 +16,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.shopify.BottomNavigationBar.Home.view.HomeFragment
 import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.CheckBox
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import com.android.volley.AuthFailureError
 import com.android.volley.Request
@@ -32,7 +25,6 @@ import com.android.volley.toolbox.Volley
 import com.example.shopify.R
 import com.example.shopify.model.addressModel.Address
 import com.example.shopify.MyAddress.view.myAddressFragment
-import com.example.shopify.R
 import com.example.shopify.ShoppingCart.model.ShoppingCardIClear
 import com.example.shopify.ShoppingCart.view.shoppingCardFragment
 import com.example.shopify.model.PostOrders.Customer
@@ -41,7 +33,6 @@ import com.example.shopify.model.PostOrders.NoteAttribute
 import com.example.shopify.model.PostOrders.Order
 import com.example.shopify.model.PostOrders.PostOrderModel
 import com.example.shopify.model.ShopifyRepositoryImp
-import com.example.shopify.model.addressModel.Address
 import com.example.shopify.model.draftModel.DraftOrder
 import com.example.shopify.network.ShopifyRemoteDataSourceImp
 import com.example.shopify.utility.ApiState
@@ -50,7 +41,6 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import com.example.shopify.utility.Constants
 import com.google.android.material.snackbar.Snackbar
-import com.google.gson.Gson
 import com.stripe.android.PaymentConfiguration
 import com.stripe.android.paymentsheet.PaymentSheet
 import com.stripe.android.paymentsheet.PaymentSheetResult
@@ -67,9 +57,8 @@ class paymentFragment : Fragment() {
     lateinit var paymentViewModelFactory: PaymentViewModelFactory
     private lateinit var userEmail: String
     private lateinit var draftOrders: ArrayList<DraftOrder>
-    private var totalPrice: Double = 0.0
 
-    lateinit var checkBoxCash: CheckBox
+    lateinit var checkBoxOffline: CheckBox
     lateinit var checkBoxOnline: CheckBox
     private var paymentMethod: String = ""
 
@@ -113,7 +102,7 @@ class paymentFragment : Fragment() {
         myCurrentAdreesText = view.findViewById(R.id.textView10)
         orderButton = view.findViewById(R.id.placeOrderButton)
 
-        checkBoxCash = view.findViewById(R.id.checkBoxCash)
+        checkBoxOffline = view.findViewById(R.id.checkBoxCash)
         checkBoxOnline = view.findViewById(R.id.checkBoxOnline)
 
         myCurrentAdreesText = view.findViewById(R.id.textView10)
@@ -126,7 +115,7 @@ class paymentFragment : Fragment() {
                 address = addressObj
             } else {
                 Log.e("paymentFragment", "Unexpected type for selected_address")
-                address = userId?.let { loadAddressFromPreferences(it) } ?: Address(
+                address = userId?.let { loadAddressFromPreferences(it) }?: Address(
                     "",
                     "",
                     "",
@@ -138,7 +127,7 @@ class paymentFragment : Fragment() {
             }
         } ?: run {
             // If there are no arguments, load the default address from SharedPreferences
-            address = userId?.let { loadAddressFromPreferences(it) } ?: Address(
+            address = userId?.let { loadAddressFromPreferences(it) }?: Address(
                 "",
                 "",
                 "",
@@ -167,24 +156,10 @@ class paymentFragment : Fragment() {
 
 
         address = arguments?.getSerializable("selected_address") as? Address
-            ?: loadAddressFromPreferences() ?: Address("", "", "", "", "", "", "")
+            ?: Address("", "", "", "", "", "", "")
         myCurrentAdreesText.text =
             "${address.address1}, ${address.address2}, ${address.city}, ${address.company}"
 
-
-        checkBoxCash.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                checkBoxOnline.isChecked = false
-                paymentMethod = "Cash"
-            }
-        }
-
-        checkBoxOnline.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                checkBoxCash.isChecked = false
-                paymentMethod = "Visa"
-            }
-        }
 
         //navigate to shopping card fragment
         val back = view.findViewById<ImageView>(R.id.backImage)
@@ -204,13 +179,34 @@ class paymentFragment : Fragment() {
                 .commit()
         }
 
+        //pay
+        checkBoxOnline.setOnClickListener {
+            if (checkBoxOnline.isChecked) {
+                checkBoxOffline.isChecked = false
+                paymentFlow()
+                paymentMethod = "Visa"
+            } else {
+                Log.i("flow", "Online CheckBox is not checked.")
+            }
+        }
 
+        checkBoxOffline.setOnClickListener {
+            if (checkBoxOffline.isChecked) {
+                checkBoxOnline.isChecked = false
+                paymentMethod = "Cash"
+                //
+            } else {
+                Log.i("flow", "Offline CheckBox is not checked.")
+            }
+        }
+
+        creatStripCustomerId()
 
         // listener of orderButton to create order
         orderButton.setOnClickListener {
             createOrder()
         }
-
+    }
     private fun createOrder() {
         val customer = draftOrders[0].customer ?: return
         val lineItems = draftOrders.flatMap { it.line_items ?: emptyList() }
@@ -305,32 +301,6 @@ class paymentFragment : Fragment() {
 
     }
 
-    private fun loadAddressFromPreferences(): Address? {
-        val sharedPreferences: SharedPreferences =
-            requireContext().getSharedPreferences("default_address", Context.MODE_PRIVATE)
-
-        //pay
-        checkBoxOnline.setOnClickListener {
-            if (checkBoxOnline.isChecked) {
-                checkBoxOffline.isChecked = false
-                paymentFlow()
-            } else {
-                Log.i("flow", "Online CheckBox is not checked.")
-            }
-        }
-
-        checkBoxOffline.setOnClickListener {
-            if (checkBoxOffline.isChecked) {
-                checkBoxOnline.isChecked = false
-                //
-            } else {
-                Log.i("flow", "Offline CheckBox is not checked.")
-            }
-        }
-
-        creatStripCustomerId()
-    }
-
     private fun loadAddressFromPreferences(userId: String): Address? {
         val sharedPreferences: SharedPreferences =
             requireContext().getSharedPreferences("default_address_$userId", Context.MODE_PRIVATE)
@@ -357,6 +327,7 @@ class paymentFragment : Fragment() {
         parentFragmentManager.beginTransaction()
             .replace(R.id.frame_layout, newFragment)
             .commit()
+    }
 
     private fun onPaymentSheetResult(paymentSheetResult: PaymentSheetResult) {
         when (paymentSheetResult) {
@@ -482,4 +453,5 @@ class paymentFragment : Fragment() {
         paymentSheet.presentWithPaymentIntent(clientSecret, PaymentSheet.Configuration("SHOPIFY",
             PaymentSheet.CustomerConfiguration(customerId,ephemeralKey)))
     }
+
 }
