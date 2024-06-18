@@ -110,13 +110,15 @@ class FavoriteFragment : Fragment() ,onFavoriteClickListener{
         if (draftID != 10000000000) {
             favoriteViewModel.getFavorites(draftID.toLong())// Use the draftOrderId as needed
             Log.d("DraftOrder", "Draft Order ID: $draftID")
+            binding.animationView.visibility = View.GONE
         } else {
 
+            binding.animationView.visibility = View.VISIBLE
             Log.e("DraftOrder", "Draft Order ID not found")
         }
 
 
-        lifecycleScope.launchWhenStarted {
+        lifecycleScope.launch {
             favoriteViewModel.fav.collectLatest { result ->
                 when (result) {
                     is ApiState.Loading -> {
@@ -243,10 +245,12 @@ class FavoriteFragment : Fragment() ,onFavoriteClickListener{
                 if (draftOrder?.id == null) {
                     Log.i("TAG", "deleteFav: draftOrder.id is null, saving default id")
                     SharedPreference.saveDraftOrderId(requireContext(), 10000000000, email)
+                    binding.animationView.visibility = View.VISIBLE
                 } else {
                     Log.i("TAG", "deleteFav: draft order id is ${draftOrder.id}")
                     // You can save the actual draftOrder id if needed
                     SharedPreference.saveDraftOrderId(requireContext(), draftOrder.id, email)
+                    binding.animationView.visibility = View.GONE
                 }
 
             }
@@ -260,7 +264,7 @@ class FavoriteFragment : Fragment() ,onFavoriteClickListener{
      fun fetchDraftOrder(draftOrderId: Long, callback: (FavDraftOrder?) -> Unit) {
         // Assuming you have a method in your ViewModel to get the current DraftOrder
         favoriteViewModel.getFavorites(draftOrderId)
-        lifecycleScope.launchWhenStarted {
+        lifecycleScope.launch {
             favoriteViewModel.fav.collectLatest { result ->
                 when (result) {
                     is ApiState.Success<*> -> {

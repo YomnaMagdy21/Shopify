@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -61,28 +62,50 @@ class CategoryProductsAdapter(private val context: Context,
         }
 
         holder.fav.setOnClickListener {
+            var guest = SharedPreference.getGuest(context)
           //  var email = SharedPreference.getUserEmail(context)
-            val isFav =
-                product.variants?.get(0)?.id?.let { it1 -> SharedPreference.getFav(context, it1,email) }
-            if (isFav == true) {
-                product.variants?.get(0)?.id?.let { it1 ->
-                    SharedPreference.saveFav(context,
-                        it1,email,false)
-                }
-                // SharedPreference.saveFav(context, current.variants?.get(0)?.id!!,false)
-                // sharedPreferences.edit().putBoolean(current.id.toString(), false).apply()
-                holder.fav.setImageResource(R.drawable.favorite_border_24)
-                product.variants?.get(0)?.id?.let { it1 -> listener.onClickToRemove(it1) }
-                //  current.id?.let { it1 -> FavoriteFragment().deleteFav(it1) }
-            } else {
-                product.variants?.get(0)?.id?.let { it1 ->
-                    SharedPreference.saveFav(context,
-                        it1,email,true)
+            if(guest == "yes"){
+                val builder = AlertDialog.Builder(context)
+                builder.setTitle("Warning")
+                builder.setMessage("You are guest, you can't add to favorite")
+                builder.setPositiveButton("ok") { dialog, which ->
+
                 }
 
-                //  sharedPreferences.edit().putBoolean(current.id.toString(), true).apply()
-                holder.fav.setImageResource(R.drawable.favorite_24)
-                listener.onFavBtnClick(product)
+                builder.show()
+            }else {
+                val isFav =
+                    product.variants?.get(0)?.id?.let { it1 ->
+                        SharedPreference.getFav(
+                            context,
+                            it1,
+                            email
+                        )
+                    }
+                if (isFav == true) {
+                    product.variants?.get(0)?.id?.let { it1 ->
+                        SharedPreference.saveFav(
+                            context,
+                            it1, email, false
+                        )
+                    }
+                    // SharedPreference.saveFav(context, current.variants?.get(0)?.id!!,false)
+                    // sharedPreferences.edit().putBoolean(current.id.toString(), false).apply()
+                    holder.fav.setImageResource(R.drawable.favorite_border_24)
+                    product.variants?.get(0)?.id?.let { it1 -> listener.onClickToRemove(it1) }
+                    //  current.id?.let { it1 -> FavoriteFragment().deleteFav(it1) }
+                } else {
+                    product.variants?.get(0)?.id?.let { it1 ->
+                        SharedPreference.saveFav(
+                            context,
+                            it1, email, true
+                        )
+                    }
+
+                    //  sharedPreferences.edit().putBoolean(current.id.toString(), true).apply()
+                    holder.fav.setImageResource(R.drawable.favorite_24)
+                    listener.onFavBtnClick(product)
+                }
             }
 
         }

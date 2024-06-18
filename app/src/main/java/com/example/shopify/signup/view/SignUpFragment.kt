@@ -200,6 +200,7 @@ class SignUpFragment : Fragment() {
             }
             if (!isPasswordStrong(password)) {
                 binding.password.error = "Password is not strong enough"
+                binding.password.requestFocus()
                 return@setOnClickListener
             }
             if (password_confirmation.isEmpty()) {

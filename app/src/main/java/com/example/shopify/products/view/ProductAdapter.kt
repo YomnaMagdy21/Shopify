@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -100,29 +101,53 @@ class ProductAdapter(var context: Context, var productsOfBrand: List<Product>, v
 
             holder.fav.setOnClickListener {
 //                var email = SharedPreference.getUserEmail(context)
-                val isFav =
-                    current.variants?.get(0)?.id?.let { it1 -> SharedPreference.getFav(context, it1,email) }
-                if (isFav == true) {
-                    current.variants?.get(0)?.id?.let { it1 ->
-                        SharedPreference.saveFav(context,
-                            it1,email,false)
+                var guest = SharedPreference.getGuest(context)
+                //  var email = SharedPreference.getUserEmail(context)
+                if (guest == "yes") {
+                    val builder = AlertDialog.Builder(context)
+                    builder.setTitle("Warning")
+                    builder.setMessage("You are guest, you can't add to favorite")
+                    builder.setPositiveButton("ok") { dialog, which ->
+
                     }
-                   // SharedPreference.saveFav(context, current.variants?.get(0)?.id!!,false)
-                   // sharedPreferences.edit().putBoolean(current.id.toString(), false).apply()
-                    holder.fav.setImageResource(R.drawable.favorite_border_24)
-                    current.variants?.get(0)?.id?.let { it1 -> listener.onClickToRemove(it1) }
-                  //  current.id?.let { it1 -> FavoriteFragment().deleteFav(it1) }
+
+                    builder.show()
                 } else {
-                    current.variants?.get(0)?.id?.let { it1 ->
-                        SharedPreference.saveFav(context,
-                            it1,email,true)
+
+                    val isFav =
+                        current.variants?.get(0)?.id?.let { it1 ->
+                            SharedPreference.getFav(
+                                context,
+                                it1,
+                                email
+                            )
+                        }
+                    if (isFav == true) {
+                        current.variants?.get(0)?.id?.let { it1 ->
+                            SharedPreference.saveFav(
+                                context,
+                                it1, email, false
+                            )
+                        }
+                        // SharedPreference.saveFav(context, current.variants?.get(0)?.id!!,false)
+                        // sharedPreferences.edit().putBoolean(current.id.toString(), false).apply()
+                        holder.fav.setImageResource(R.drawable.favorite_border_24)
+                        current.variants?.get(0)?.id?.let { it1 -> listener.onClickToRemove(it1) }
+                        //  current.id?.let { it1 -> FavoriteFragment().deleteFav(it1) }
+                    } else {
+                        current.variants?.get(0)?.id?.let { it1 ->
+                            SharedPreference.saveFav(
+                                context,
+                                it1, email, true
+                            )
+                        }
+
+                        //  sharedPreferences.edit().putBoolean(current.id.toString(), true).apply()
+                        holder.fav.setImageResource(R.drawable.favorite_24)
+                        listener.onFavBtnClick(current)
                     }
 
-                    //  sharedPreferences.edit().putBoolean(current.id.toString(), true).apply()
-                    holder.fav.setImageResource(R.drawable.favorite_24)
-                    listener.onFavBtnClick(current)
                 }
-
             }
 
         }

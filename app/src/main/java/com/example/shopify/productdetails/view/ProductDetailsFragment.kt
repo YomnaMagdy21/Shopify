@@ -265,10 +265,23 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
                         //var data2 = result.data as? Product
 
                         binding.addToCart.setOnClickListener{
-                            Log.i("hi", "onViewCreated: hiiiiiiiiiiiiiiiiii")
-                            if (data != null) {
-                                addProductToCart(data)
+                            var guest = SharedPreference.getGuest(requireContext())
+                            //  var email = SharedPreference.getUserEmail(context)
+                            if(guest == "yes"){
+                                val builder = AlertDialog.Builder(context)
+                                builder.setTitle("Warning")
+                                builder.setMessage("You are guest, you can't add to cart")
+                                builder.setPositiveButton("ok") { dialog, which ->
 
+                                }
+
+                                builder.show()
+                            }else {
+                                Log.i("hi", "onViewCreated: hiiiiiiiiiiiiiiiiii")
+                                if (data != null) {
+                                    addProductToCart(data)
+
+                                }
                             }
                         }
 
@@ -285,9 +298,22 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
                             binding.fav.setImageResource(R.drawable.heart_unfilled)
                         }
                         binding.fav.setOnClickListener {
-                            if (data != null) {
-                                addFav(data)
+                            var guest = SharedPreference.getGuest(requireContext())
+                            //  var email = SharedPreference.getUserEmail(context)
+                            if(guest == "yes"){
+                                val builder = AlertDialog.Builder(context)
+                                builder.setTitle("Warning")
+                                builder.setMessage("You are guest, you can't add to favorite")
+                                builder.setPositiveButton("ok") { dialog, which ->
 
+                                }
+
+                                builder.show()
+                            }else {
+                                if (data != null) {
+                                    addFav(data)
+
+                                }
                             }
                         }
 
@@ -368,6 +394,7 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
 
                     }
 
+                    else -> {}
                 }
 
             }
@@ -590,7 +617,7 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
     private fun fetchDraftOrder(draftOrderId: Long, callback: (FavDraftOrder?) -> Unit) {
         // Assuming you have a method in your ViewModel to get the current DraftOrder
         favoriteViewModel.getFavorites(draftOrderId)
-        lifecycleScope.launchWhenStarted {
+        lifecycleScope.launch {
             favoriteViewModel.fav.collectLatest { result ->
                 when (result) {
                     is ApiState.Success<*> -> {
@@ -610,11 +637,11 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
 //
 //        if (draftOrderId != null) {
 
-        if (isDeleteInProgress) {
-            return
-        }
-
-        isDeleteInProgress = true
+//        if (isDeleteInProgress) {
+//            return
+//        }
+//
+//        isDeleteInProgress = true
         var email = SharedPreference.getUserEmail(requireContext())
         var draftID = SharedPreference.getDraftOrderId(requireContext(),email)
 
@@ -660,11 +687,11 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
 
     fun addFav(product: ProductModel) {
 
-        if (isFavProgress) {
-            return
-        }
-
-        isFavProgress = true
+//        if (isFavProgress) {
+//            return
+//        }
+//
+//        isFavProgress = true
 
             //   binding.fav.setImageResource(R.drawable.favorite)
                   var email = SharedPreference.getUserEmail(requireContext())
@@ -719,7 +746,7 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
                     var order = FavDraftOrderResponse(draftOrder)
 
                     signUpViewModel.createFavDraftOrders(order)
-                    lifecycleScope.launchWhenStarted {
+                    lifecycleScope.launch {
                         signUpViewModel.wishList.collectLatest { result ->
                             when (result) {
                                 is ApiState.Loading -> {
