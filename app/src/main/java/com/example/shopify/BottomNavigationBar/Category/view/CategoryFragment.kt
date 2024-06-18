@@ -4,7 +4,7 @@ package com.example.shopify.BottomNavigationBar.Category.view
 import android.content.Context
 
 import android.app.AlertDialog
-import android.content.Context
+
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 
@@ -638,59 +638,64 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
                         val data = result.data as? FavDraftOrderResponse
                         callback(data?.draft_order)
                     }
+
                     else -> {
                         callback(null)
                     }
                 }
             }
         }
+    }
 
 
+        // check internet connection and show data if available
+        private fun checkNetworkAndAppearData() {
+            networkObservation = NetworkConectivityObserver(requireContext())
+            lifecycleScope.launch {
+                networkObservation.observeOnNetwork().collectLatest { status ->
+                    when (status) {
+                        InternetStatus.Available -> {
+                            fetchProducts()
+                        }
 
-    // check internet connection and show data if available
-    private fun checkNetworkAndAppearData() {
-        networkObservation = NetworkConectivityObserver(requireContext())
-        lifecycleScope.launch {
-            networkObservation.observeOnNetwork().collectLatest { status ->
-                when (status) {
-                    InternetStatus.Available -> {
-                        fetchProducts()
-                    }
-                    InternetStatus.Lost, InternetStatus.UnAvailable -> {
-                        progressBar.visibility = View.GONE
-                        recyclerView.visibility = View.GONE
-                        showNoConnectionPopup()
+                        InternetStatus.Lost, InternetStatus.UnAvailable -> {
+                            progressBar.visibility = View.GONE
+                            recyclerView.visibility = View.GONE
+                            showNoConnectionPopup()
+                        }
                     }
                 }
             }
+
+            if (!isNetworkAvailable()) {
+                progressBar.visibility = View.GONE
+                recyclerView.visibility = View.GONE
+                showNoConnectionPopup()
+            }
         }
 
-        if (!isNetworkAvailable()) {
-            progressBar.visibility = View.GONE
-            recyclerView.visibility = View.GONE
-            showNoConnectionPopup()
+        private fun isNetworkAvailable(): Boolean {
+            val connectivityManager =
+                requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val activeNetwork: NetworkInfo? = connectivityManager.activeNetworkInfo
+            return activeNetwork?.isConnectedOrConnecting == true
         }
-    }
 
-    private fun isNetworkAvailable(): Boolean {
-        val connectivityManager = requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val activeNetwork: NetworkInfo? = connectivityManager.activeNetworkInfo
-        return activeNetwork?.isConnectedOrConnecting == true
-    }
-
-    private fun showNoConnectionPopup() {
-        if (context != null) {
-            AlertDialog.Builder(requireContext())
-                .setTitle("Internet Connection")
-                .setMessage("There is no connection.")
-                .setPositiveButton("OK", null)
-                .show()
+        private fun showNoConnectionPopup() {
+            if (context != null) {
+                AlertDialog.Builder(requireContext())
+                    .setTitle("Internet Connection")
+                    .setMessage("There is no connection.")
+                    .setPositiveButton("OK", null)
+                    .show()
+            }
         }
-    }
 
-    fun showSnakeBar() {
-        val snackbar = Snackbar.make(requireView(), "No Internet Connection ", Snackbar.LENGTH_LONG)
-        snackbar.show()
- 
-    }
+        fun showSnakeBar() {
+            val snackbar =
+                Snackbar.make(requireView(), "No Internet Connection ", Snackbar.LENGTH_LONG)
+            snackbar.show()
+
+        }
+
 }
