@@ -14,6 +14,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.shopify.BottomNavigationBar.Category.viewModel.CategoryViewModel
+import com.example.shopify.BottomNavigationBar.Category.viewModel.CategoryViewModelFactory
 import com.example.shopify.R
 import com.example.shopify.model.draftModel.DraftOrder
 import com.example.shopify.model.draftModel.DraftOrderResponse
@@ -22,6 +24,12 @@ import com.example.shopify.ShoppingCart.model.PriceRule
 import com.example.shopify.ShoppingCart.model.ShoppingCardRepo
 import com.example.shopify.ShoppingCart.viewModel.PriceRuleViewModelFactory
 import com.example.shopify.ShoppingCart.viewModel.ShoppingCardViewModel
+import com.example.shopify.model.ShopifyRepository
+import com.example.shopify.model.ShopifyRepositoryImp
+import com.example.shopify.model.productDetails.Product
+import com.example.shopify.network.ShopifyRemoteDataSourceImp
+import com.example.shopify.setting.currency.CurrencyConverter
+import com.example.shopify.utility.ApiState
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.collectLatest
@@ -38,7 +46,6 @@ class shoppingCardFragment : Fragment() {
 
     private var discountAmount: Double = 0.0
     private var couponApplied = false
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -98,7 +105,13 @@ class shoppingCardFragment : Fragment() {
        //navigationg to checkout fragment
         val checkOut = view.findViewById<Button>(R.id.checkOutButton)
         checkOut.setOnClickListener {
-            val newFragment = paymentFragment()
+            val totalPrice = calculateTotalPrice(products)
+            val bundle = Bundle()
+            bundle.putDouble("total_price", totalPrice)
+
+            val newFragment = paymentFragment().apply {
+                arguments = bundle
+            }
             parentFragmentManager.beginTransaction()
                 .replace(R.id.frame_layout, newFragment)
                 .addToBackStack(null)
@@ -135,25 +148,37 @@ class shoppingCardFragment : Fragment() {
         }
     }
 
-   private fun onAddProduct(item: Item) {
-       val draftOrder = products.find { it.line_items?.get(0)?.title == item.title }
-       if (draftOrder != null) {
-           val updatedDraftOrder = draftOrder.copy().apply {
-               line_items?.get(0)?.quantity = line_items?.get(0)?.quantity?.plus(1)
-           }
-           lifecycleScope.launch {
-               viewModel.updateDraftOrder(updatedDraftOrder.id.toString(), DraftOrderResponse(updatedDraftOrder))
-               viewModel.draftOrderResponse.collectLatest { response ->
-                   if (response != null) {
-                       calculateTotalPrice(products)
-                       Log.i("ShoppingCardFragment", "Draft order updated: $response")
-                   } else {
-                       Log.e("ShoppingCardFragment", "Failed to update draft order")
-                   }
-               }
-           }
-       }
-   }
+    private fun onAddProduct(item: Item) {
+        val draftOrder = products.find { it.line_items?.get(0)?.title == item.title }
+        if (draftOrder != null) {
+            val lineItem = draftOrder.line_items?.get(0)
+            if (lineItem != null) {
+                val currentQuantity = lineItem.quantity ?: 0
+
+                if (currentQuantity >= 5) {
+                    Snackbar.make(requireView(), "You reached your limit!!.", Snackbar.LENGTH_SHORT).show()
+                    return
+                }
+
+                val updatedDraftOrder = draftOrder.copy().apply {
+                    line_items?.get(0)?.quantity = currentQuantity + 1
+                }
+
+                lifecycleScope.launch {
+                    viewModel.updateDraftOrder(updatedDraftOrder.id.toString(), DraftOrderResponse(updatedDraftOrder))
+                    viewModel.draftOrderResponse.collectLatest { response ->
+                        if (response != null) {
+                            calculateTotalPrice(products)
+                            Log.i("ShoppingCardFragment", "Draft order updated: $response")
+                        } else {
+                            Log.e("ShoppingCardFragment", "Failed to update draft order")
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 
     private fun onRemoveProduct(item: Item) {
         val draftOrder = products.find { it.line_items?.get(0)?.title == item.title }
@@ -191,7 +216,8 @@ class shoppingCardFragment : Fragment() {
     private fun applyDiscount(totalPrice: Double, priceRule: PriceRule) {
         val discountPercentage = priceRule.value.toDouble() / 100
         discountAmount = totalPrice * discountPercentage
-        discountText.text =  "${"%.2f".format(discountAmount)}"
+        val convertedDiscountAmount = CurrencyConverter.convertToUSD(discountAmount)
+        discountText.text =  "${"%.2f".format(convertedDiscountAmount)}"
         Log.i("discount", "applyDiscount: "+discountAmount)
     }
 
@@ -199,12 +225,16 @@ class shoppingCardFragment : Fragment() {
         return items.sumOf { it.total_price?.toDouble() ?: 0.0 }
     }
 
-    private fun calculateTotalPrice(items: List<DraftOrder>) {
+    private fun calculateTotalPrice(items: List<DraftOrder>): Double {
         var totalPrice = calculateTotalWithoutDiscount(items)
         if (couponApplied) {
             totalPrice += discountAmount
         }
-        totalPriceTextView.text = "${"%.2f".format(totalPrice)}"
+        val convertedTotalPrice = CurrencyConverter.convertToUSD(totalPrice)
+        totalPriceTextView.text = CurrencyConverter.formatCurrency(convertedTotalPrice)
+
+        return convertedTotalPrice
+
     }
 
 

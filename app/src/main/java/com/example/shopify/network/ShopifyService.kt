@@ -15,6 +15,7 @@ import com.example.shopify.model.productDetails.ProductModel
 
 import com.example.shopify.ShoppingCart.model.PriceRulesResponse
 import com.example.shopify.model.addressModel.AddNewAddress
+import com.example.shopify.model.currencyModel.CurrencyModel
 import com.example.shopify.utility.Constants
 import retrofit2.Response
 import retrofit2.http.Body
@@ -59,8 +60,6 @@ interface ShopifyService {
     @Headers("X-Shopify-Access-Token: ${Constants.adminApiAccessToken}")
     @PUT("admin/api/2024-04/draft_orders/{id}.json")
     suspend fun updateDraftOrder(@Path("id") id: String, @Body order: DraftOrderResponse): Response<DraftOrderResponse>
-
-
 
     //Get Brands
     @Headers("X-Shopify-Access-Token: ${Constants.adminApiAccessToken}")
@@ -126,6 +125,14 @@ interface ShopifyService {
     @PUT("admin/api/2024-04/customers/{customerId}/addresses/{addressId}.json")
     suspend fun editAddress(@Path(value="customerId") customerId:Long, @Path(value="addressId") addressId:Long,@Body addresse: AddNewAddress) :Response<AddressesModel>
 
+    //currency convert
+    /*@GET(" https://api.getgeoapi.com/v2/currency/convert")
+    suspend fun convertCurrency(
+        @Query("api_key") access_key: String,
+        @Query("from") from: String,
+        @Query("to") to: String,
+        @Query("amount") amount: Double
+    ) : Response<CurrencyModel>*/
 
 
 }

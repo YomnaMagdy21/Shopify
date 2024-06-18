@@ -8,6 +8,9 @@ import com.example.shopify.model.draftModel.DraftOrder
 import com.example.shopify.model.draftModel.DraftOrderResponse
 import com.example.shopify.ShoppingCart.model.PriceRule
 import com.example.shopify.ShoppingCart.model.ShoppingCardRepo
+import com.example.shopify.model.draftModel.LineItem
+import com.example.shopify.utility.ApiState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -33,6 +36,10 @@ class ShoppingCardViewModel(private val repo: ShoppingCardRepo) : ViewModel() {
     //delete product
     private val _deleteDraftOrderList = MutableStateFlow<DraftOrderResponse?>(null)
     val deleteDraftOrderList : StateFlow<DraftOrderResponse?> = _deleteDraftOrderList
+
+    private val _isCartDraft = MutableStateFlow<Boolean>(false)
+    val isCartDraft: StateFlow<Boolean> = _isCartDraft
+
 
     fun fetchPriceRules() {
         viewModelScope.launch {
@@ -98,7 +105,7 @@ class ShoppingCardViewModel(private val repo: ShoppingCardRepo) : ViewModel() {
                     _getDraftOrderList.value = _getDraftOrderList.value?.map {
                         if (it.id.toString() == id) updatedOrder.draft_order!! else it
                     }
-                    Log.i("modeli", "updateDraftOrder: "+_deleteDraftOrderList.value)
+                    Log.i("modeli", "updateDraftOrder: " + _deleteDraftOrderList.value)
                 } else {
                     Log.e("ShoppingCardViewModel", "Failed to update draft order")
                 }
@@ -107,6 +114,24 @@ class ShoppingCardViewModel(private val repo: ShoppingCardRepo) : ViewModel() {
             }
         }
     }
+
+    fun isProductInCart(variantId: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val draftOrders = repo.getDraftOrders() ?: emptyList()
+                val isInCart = draftOrders.any { draftOrder ->
+                    draftOrder.line_items?.any { it.variant_id == variantId } ?: false
+                }
+                _isCartDraft.value = isInCart
+            } catch (e: Exception) {
+                // Handle exception
+                _isCartDraft.value = false
+                Log.e("ShoppingCardViewModel", "Error checking product in cart", e)
+            }
+        }
+    }
+
+
 }
 
 class PriceRuleViewModelFactory(private val repository: ShoppingCardRepo) : ViewModelProvider.Factory {
