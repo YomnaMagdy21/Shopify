@@ -140,6 +140,7 @@ class paymentFragment : Fragment() {
 
         myCurrentAdreesText.text =
             "${address.address1}, ${address.address2}, ${address.city}, ${address.company}"
+
         totalPriceText = view.findViewById(R.id.textView3)
         totalPriceText.text = totalPrice.toString()
 
@@ -154,11 +155,6 @@ class paymentFragment : Fragment() {
             paymentViewModelFactory
         ).get(PaymentViewModel::class.java)
 
-
-        address = arguments?.getSerializable("selected_address") as? Address
-            ?: Address("", "", "", "", "", "", "")
-        myCurrentAdreesText.text =
-            "${address.address1}, ${address.address2}, ${address.city}, ${address.company}"
 
 
         //navigate to shopping card fragment
