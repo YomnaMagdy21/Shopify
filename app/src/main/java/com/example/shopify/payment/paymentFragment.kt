@@ -22,6 +22,7 @@ import com.example.shopify.model.addressModel.Address
 import com.example.shopify.MyAddress.view.myAddressFragment
 import com.example.shopify.ShoppingCart.view.shoppingCardFragment
 import com.example.shopify.utility.Constants
+import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.stripe.android.PaymentConfiguration
 import com.stripe.android.paymentsheet.PaymentSheet
@@ -33,12 +34,14 @@ class paymentFragment : Fragment() {
 
     private lateinit var address: Address
     lateinit var myCurrentAdreesText: TextView
+    lateinit var totalPriceText : TextView
 
     //payment
     private lateinit var paymentSheet: PaymentSheet
     private lateinit var customerId: String
     private lateinit var ephemeralKey: String
     private lateinit var clientSecret: String
+    private var totalPrice: Double = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,13 +64,31 @@ class paymentFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Retrieve the total price from the arguments
+        arguments?.getDouble("total_price", 0.0)?.let {
+            totalPrice = it
+        }
+
         myCurrentAdreesText = view.findViewById(R.id.textView10)
         val sharedPreferences =
             requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val userId = sharedPreferences.getString("userID", null)
 
-        arguments?.let {
-            address = it.getSerializable("selected_address") as Address
+        arguments?.getSerializable("selected_address")?.let { addressObj ->
+            if (addressObj is Address) {
+                address = addressObj
+            } else {
+                Log.e("paymentFragment", "Unexpected type for selected_address")
+                address = userId?.let { loadAddressFromPreferences(it) } ?: Address(
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                )
+            }
         } ?: run {
             // If there are no arguments, load the default address from SharedPreferences
             address = userId?.let { loadAddressFromPreferences(it) } ?: Address(
@@ -83,6 +104,8 @@ class paymentFragment : Fragment() {
 
         myCurrentAdreesText.text =
             "${address.address1}, ${address.address2}, ${address.city}, ${address.company}"
+        totalPriceText = view.findViewById(R.id.textView3)
+        totalPriceText.text = totalPrice.toString()
 
 
         //navigate to shopping card fragment
@@ -103,11 +126,28 @@ class paymentFragment : Fragment() {
                 .commit()
         }
 
-        //
-        val pay = view.findViewById<CheckBox>(R.id.checkBoxOnline)
-        pay.setOnClickListener{
-            paymentFlow()
+        //pay
+        val checkBoxOnline = view.findViewById<CheckBox>(R.id.checkBoxOnline)
+        val checkBoxOffline = view.findViewById<CheckBox>(R.id.checkBoxCash)
+
+        checkBoxOnline.setOnClickListener {
+            if (checkBoxOnline.isChecked) {
+                checkBoxOffline.isChecked = false
+                paymentFlow()
+            } else {
+                Log.i("flow", "Online CheckBox is not checked.")
+            }
         }
+
+        checkBoxOffline.setOnClickListener {
+            if (checkBoxOffline.isChecked) {
+                checkBoxOnline.isChecked = false
+                //
+            } else {
+                Log.i("flow", "Offline CheckBox is not checked.")
+            }
+        }
+
         creatStripCustomerId()
     }
 
@@ -121,15 +161,16 @@ class paymentFragment : Fragment() {
     private fun onPaymentSheetResult(paymentSheetResult: PaymentSheetResult) {
         when (paymentSheetResult) {
             is PaymentSheetResult.Completed -> {
-                Log.i("flow", "onPaymentSheetResult: scusessssssssss")
+                Snackbar.make(requireView(), "Payment completed successfully!", Snackbar.LENGTH_SHORT).show()
+                totalPriceText.text = " "
             }
 
             is PaymentSheetResult.Failed -> {
-
+                Snackbar.make(requireView(), "Payment failed. Please try again.", Snackbar.LENGTH_SHORT).show()
             }
 
             is PaymentSheetResult.Canceled -> {
-
+                Snackbar.make(requireView(), "Payment was canceled.", Snackbar.LENGTH_SHORT).show()
             }
         }
     }
@@ -214,7 +255,6 @@ class paymentFragment : Fragment() {
             Response.ErrorListener { error->
                 error.printStackTrace()
                 Log.e("keyys", "getClientSecret: Error ${error.message}")
-                //
             }) {
             @Throws(AuthFailureError::class)
             override fun getHeaders(): Map<String, String> {
@@ -226,11 +266,7 @@ class paymentFragment : Fragment() {
             override fun getParams(): Map<String, String> {
                 val param: HashMap<String,String> = HashMap<String,String>()
                 param.put("customer" ,customerId)
-                //val str = amount.toString()
-                val str = 983864
-                //val delim = "."
-                //val list = str.split(delim)
-                //param.put("amount", "${list.get(0)}${list.get(1)}0")
+                val str = (totalPrice * 100).toInt()
                 param.put("amount", str.toString())
                 param.put("currency" ,"EGP")
                 param.put("automatic_payment_methods[enabled]" ,"true")

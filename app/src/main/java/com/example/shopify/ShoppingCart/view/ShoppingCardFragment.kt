@@ -105,7 +105,13 @@ class shoppingCardFragment : Fragment() {
        //navigationg to checkout fragment
         val checkOut = view.findViewById<Button>(R.id.checkOutButton)
         checkOut.setOnClickListener {
-            val newFragment = paymentFragment()
+            val totalPrice = calculateTotalPrice(products)
+            val bundle = Bundle()
+            bundle.putDouble("total_price", totalPrice)
+
+            val newFragment = paymentFragment().apply {
+                arguments = bundle
+            }
             parentFragmentManager.beginTransaction()
                 .replace(R.id.frame_layout, newFragment)
                 .addToBackStack(null)
@@ -174,9 +180,6 @@ class shoppingCardFragment : Fragment() {
     }
 
 
-
-
-
     private fun onRemoveProduct(item: Item) {
         val draftOrder = products.find { it.line_items?.get(0)?.title == item.title }
         if (draftOrder != null) {
@@ -222,14 +225,16 @@ class shoppingCardFragment : Fragment() {
         return items.sumOf { it.total_price?.toDouble() ?: 0.0 }
     }
 
-    private fun calculateTotalPrice(items: List<DraftOrder>) {
+    private fun calculateTotalPrice(items: List<DraftOrder>): Double {
         var totalPrice = calculateTotalWithoutDiscount(items)
         if (couponApplied) {
             totalPrice += discountAmount
         }
         val convertedTotalPrice = CurrencyConverter.convertToUSD(totalPrice)
         totalPriceTextView.text = CurrencyConverter.formatCurrency(convertedTotalPrice)
-        //totalPriceTextView.text = "${"%.2f".format(convertedTotalPrice)}"
+
+        return convertedTotalPrice
+
     }
 
 
