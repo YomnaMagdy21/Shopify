@@ -32,7 +32,7 @@ class BottomNavActivity : AppCompatActivity() {
             when (item.itemId) {
                 R.id.home_id -> replaceFragments(HomeFragment())
                 R.id.category_id -> replaceFragments(CategoryFragment())
-                R.id.cart_id -> replaceFragments(shoppingCardFragment())
+                R.id.cart_id -> replaceFragments(shoppingCardFragment(), "SHOPPING_CARD_FRAGMENT_TAG")
                 R.id.fav_id -> replaceFragments(FavoriteFragment())
                 R.id.me_id -> replaceFragments(MeFragment())
             }
@@ -40,10 +40,14 @@ class BottomNavActivity : AppCompatActivity() {
         }
     }
 
-    private fun replaceFragments(fragment: Fragment) {
+    private fun replaceFragments(fragment: Fragment, tag: String? = null) {
         val fragmentManager: FragmentManager = supportFragmentManager
         val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.frame_layout, fragment)
+        if (tag != null) {
+            fragmentTransaction.replace(R.id.frame_layout, fragment, tag)
+        } else {
+            fragmentTransaction.replace(R.id.frame_layout, fragment)
+        }
         fragmentTransaction.commit()
     }
 }

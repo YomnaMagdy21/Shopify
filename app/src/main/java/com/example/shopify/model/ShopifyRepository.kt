@@ -1,8 +1,11 @@
 package com.example.shopify.model
 
 import android.content.Context
+import com.example.shopify.Models.orderList.RetriveOrderModel
 import com.example.shopify.Models.products.CollectProductsModel
 import com.example.shopify.model.Brands.BrandModel
+import com.example.shopify.model.PostOrders.PostOrderModel
+import com.example.shopify.model.RetriveOrder.RetriveOrder
 import com.example.shopify.model.addressModel.AddNewAddress
 import com.example.shopify.model.addressModel.Address
 import com.example.shopify.model.addressModel.AddressesModel
@@ -43,5 +46,8 @@ interface ShopifyRepository {
 
     suspend fun editAddress(customerId: Long, addressId: Long,addresse: AddNewAddress): Flow<AddressesModel?>
 
+    suspend fun createOrder(order : PostOrderModel): Flow<RetriveOrder?>
 
-    }
+    suspend fun getOrderList(): Flow<RetriveOrderModel?>
+
+}

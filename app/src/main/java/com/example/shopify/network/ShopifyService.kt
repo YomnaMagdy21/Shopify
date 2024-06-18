@@ -1,5 +1,6 @@
 package com.example.shopify.network
 
+import com.example.shopify.Models.orderList.RetriveOrderModel
 import com.example.shopify.Models.products.CollectProductsModel
 
 import com.example.shopify.model.Brands.BrandModel
@@ -14,6 +15,8 @@ import com.example.shopify.model.productDetails.ProductModel
 
 
 import com.example.shopify.ShoppingCart.model.PriceRulesResponse
+import com.example.shopify.model.PostOrders.PostOrderModel
+import com.example.shopify.model.RetriveOrder.RetriveOrder
 import com.example.shopify.model.addressModel.AddNewAddress
 import com.example.shopify.model.currencyModel.CurrencyModel
 import com.example.shopify.utility.Constants
@@ -134,5 +137,17 @@ interface ShopifyService {
         @Query("amount") amount: Double
     ) : Response<CurrencyModel>*/
 
+
+
+    // post order
+    @Headers("X-Shopify-Access-Token: ${Constants.adminApiAccessToken}")
+    @POST("admin/api/2024-04/orders.json")
+    suspend fun createOrder(@Body order: PostOrderModel) : Response<RetriveOrder>
+
+
+    // get all orders
+    @Headers("X-Shopify-Access-Token: ${Constants.adminApiAccessToken}")
+    @GET("admin/api/2024-04/orders.json")
+    suspend fun getAllOrders() : Response<RetriveOrderModel>
 
 }

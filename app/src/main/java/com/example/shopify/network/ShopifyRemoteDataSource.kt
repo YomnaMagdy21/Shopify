@@ -1,9 +1,12 @@
 package com.example.shopify.network
 
+import com.example.shopify.Models.orderList.RetriveOrderModel
 import com.example.shopify.Models.products.CollectProductsModel
 import com.example.shopify.model.Customer
 
 import com.example.shopify.model.Brands.BrandModel
+import com.example.shopify.model.PostOrders.PostOrderModel
+import com.example.shopify.model.RetriveOrder.RetriveOrder
 import com.example.shopify.model.addressModel.AddNewAddress
 import com.example.shopify.model.addressModel.Address
 import com.example.shopify.model.addressModel.AddressesModel
@@ -46,8 +49,14 @@ interface ShopifyRemoteDataSource {
 
     suspend fun editAddress(customerId: Long, addressId: Long,addresse: AddNewAddress): Flow<AddressesModel?>
 
+    // post order
+    suspend fun createOrder(order: PostOrderModel): Flow<RetriveOrder?>
 
+    // get all orders
+    suspend fun getOrderList(): Flow<RetriveOrderModel?>
 
+    // clear draft order
+    suspend fun clearAllDraftOrders()
 
 
 }
