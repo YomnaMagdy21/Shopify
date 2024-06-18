@@ -95,6 +95,9 @@ dependencies {
     implementation ("com.google.android.gms:play-services-maps:18.0.1")
     implementation ("com.google.android.gms:play-services-location:18.0.0")
 
+    
+    // lottie
+    implementation ("com.airbnb.android:lottie:6.0.0")
 
 
 }
