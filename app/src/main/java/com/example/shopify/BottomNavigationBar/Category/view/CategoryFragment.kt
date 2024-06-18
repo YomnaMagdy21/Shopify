@@ -2,6 +2,12 @@ package com.example.shopify.BottomNavigationBar.Category.view
 
 
 import android.content.Context
+
+import android.app.AlertDialog
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
+
 import com.example.shopify.R
 import android.os.Bundle
 import android.text.Editable
@@ -22,11 +28,17 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shopify.BottomNavigationBar.Category.viewModel.CategoryViewModel
 import com.example.shopify.BottomNavigationBar.Category.viewModel.CategoryViewModelFactory
+
 import com.example.shopify.BottomNavigationBar.Favorite.model.FavDraftOrder
 import com.example.shopify.BottomNavigationBar.Favorite.model.FavDraftOrderResponse
 import com.example.shopify.BottomNavigationBar.Favorite.model.ItemLine
 import com.example.shopify.BottomNavigationBar.Favorite.viewmodel.FavoriteViewModel
 import com.example.shopify.BottomNavigationBar.Favorite.viewmodel.FavoriteViewModelFactory
+
+import com.example.shopify.CheckNetwork.InternetStatus
+import com.example.shopify.CheckNetwork.NetworkConectivityObserver
+import com.example.shopify.CheckNetwork.NetworkObservation
+
 import com.example.shopify.Models.products.CollectProductsModel
 import com.example.shopify.model.Address
 import com.example.shopify.model.Brands.SmartCollection
@@ -43,7 +55,11 @@ import com.example.shopify.model.productDetails.Product
 import com.example.shopify.signup.viewmodel.SignUpViewModel
 import com.example.shopify.signup.viewmodel.SignUpViewModelFactory
 import com.example.shopify.utility.ApiState
+
 import com.example.shopify.utility.SharedPreference
+
+import com.google.android.material.snackbar.Snackbar
+
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -76,8 +92,12 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
     private var selectedCollectionId: Long? = null
     private var selectedProductType: SubCustomCollections? = null
     private lateinit var editTextSearch: EditText
+
     private lateinit var favoriteViewModel: FavoriteViewModel
     private lateinit var favoriteViewModelFactory: FavoriteViewModelFactory
+
+
+    lateinit var networkObservation: NetworkObservation
 
 
 
@@ -174,7 +194,7 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
         // Default selection: get all products "without any filtration"
         fetchProducts()
         setupSearch()
-
+        checkNetworkAndAppearData()
 
 
         return view
@@ -624,5 +644,53 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
                 }
             }
         }
+
+
+
+    // check internet connection and show data if available
+    private fun checkNetworkAndAppearData() {
+        networkObservation = NetworkConectivityObserver(requireContext())
+        lifecycleScope.launch {
+            networkObservation.observeOnNetwork().collectLatest { status ->
+                when (status) {
+                    InternetStatus.Available -> {
+                        fetchProducts()
+                    }
+                    InternetStatus.Lost, InternetStatus.UnAvailable -> {
+                        progressBar.visibility = View.GONE
+                        recyclerView.visibility = View.GONE
+                        showNoConnectionPopup()
+                    }
+                }
+            }
+        }
+
+        if (!isNetworkAvailable()) {
+            progressBar.visibility = View.GONE
+            recyclerView.visibility = View.GONE
+            showNoConnectionPopup()
+        }
+    }
+
+    private fun isNetworkAvailable(): Boolean {
+        val connectivityManager = requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetwork: NetworkInfo? = connectivityManager.activeNetworkInfo
+        return activeNetwork?.isConnectedOrConnecting == true
+    }
+
+    private fun showNoConnectionPopup() {
+        if (context != null) {
+            AlertDialog.Builder(requireContext())
+                .setTitle("Internet Connection")
+                .setMessage("There is no connection.")
+                .setPositiveButton("OK", null)
+                .show()
+        }
+    }
+
+    fun showSnakeBar() {
+        val snackbar = Snackbar.make(requireView(), "No Internet Connection ", Snackbar.LENGTH_LONG)
+        snackbar.show()
+ 
     }
 }

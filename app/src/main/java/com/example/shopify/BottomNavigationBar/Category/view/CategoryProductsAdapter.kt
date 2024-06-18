@@ -13,7 +13,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.shopify.R
 import com.example.shopify.model.productDetails.Product
+
 import com.example.shopify.utility.SharedPreference
+
+import com.example.shopify.setting.currency.CurrencyConverter
+ 
 
 class CategoryProductsAdapter(private val context: Context,
                               var listener: OnCategoryClickListener,
@@ -37,11 +41,17 @@ class CategoryProductsAdapter(private val context: Context,
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         var product  = myProducts.get(position)
         holder.productName.text = product.title?.split("|")?.last()?.trim()
-        holder.productPrice.text = product.variants?.get(0)?.price + " EGP"
+       // holder.productPrice.text = product.variants?.get(0)?.price
         Glide.with(context).load(product.image?.src).into(holder.productImage)
         holder.card.setOnClickListener {
             listener.onCategoryClick(product.id?: 8663275405476)
         }
+
+        val convertedPrice = product.variants?.get(0)?.price?.let {
+            CurrencyConverter.convertToUSD(
+                it.toDouble() )
+        }
+        holder.productPrice.text = convertedPrice?.let { CurrencyConverter.formatCurrency(it) }
         /*holder.addToCartButton.setOnClickListener {
             onAddToCartClick(product)
         }*/

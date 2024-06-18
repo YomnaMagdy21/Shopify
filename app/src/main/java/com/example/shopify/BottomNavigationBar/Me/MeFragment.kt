@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.cardview.widget.CardView
 import com.example.shopify.BottomNavigationBar.Favorite.view.FavoriteFragment
-import com.example.shopify.BottomNavigationBar.OrderList.OrderListFragment
+import com.example.shopify.BottomNavigationBar.OrderList.view.OrderListFragment
 import com.example.shopify.R
 import com.example.shopify.setting.view.settingFragment
 

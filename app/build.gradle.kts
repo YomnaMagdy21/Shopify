@@ -56,6 +56,7 @@ dependencies {
     implementation("com.google.firebase:firebase-database:21.0.0")
     implementation ("com.google.android.gms:play-services-auth:21.2.0")
     implementation("com.google.firebase:firebase-auth-ktx:23.0.0")
+    implementation("com.google.android.gms:play-services-location:21.3.0")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
@@ -100,6 +101,18 @@ dependencies {
     //lottie
     implementation ("com.airbnb.android:lottie:3.4.0")
 
+
+
+    implementation ("com.google.android.gms:play-services-maps:18.0.1")
+    implementation ("com.google.android.gms:play-services-location:18.0.0")
+
+    
+    // lottie
+    implementation ("com.airbnb.android:lottie:6.0.0")
+
+    // Stripe
+    implementation ("com.stripe:stripe-android:17.2.0")
+    implementation ("com.android.volley:volley:1.2.1")
 
 
 

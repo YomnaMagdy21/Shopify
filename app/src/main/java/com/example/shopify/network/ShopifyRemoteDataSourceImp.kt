@@ -1,19 +1,29 @@
 package com.example.shopify.network
 
+ 
 import android.util.Log
 import com.example.shopify.BottomNavigationBar.Favorite.model.FavDraftOrderResponse
+
+import com.example.shopify.Models.orderList.RetriveOrderModel
+ 
 import com.example.shopify.Models.products.CollectProductsModel
 import com.example.shopify.model.Customer
 
 import com.example.shopify.model.Brands.BrandModel
+import com.example.shopify.model.PostOrders.PostOrderModel
+import com.example.shopify.model.RetriveOrder.RetriveOrder
 import com.example.shopify.model.addressModel.AddNewAddress
 import com.example.shopify.model.addressModel.Address
 import com.example.shopify.model.addressModel.AddressesModel
 
 import com.example.shopify.model.createCustomerRequest
 import com.example.shopify.model.createCustomersResponse
+ 
 import com.example.shopify.model.draftModel.DraftOrderResponse
 import com.example.shopify.model.draftModel.Draft_orders_list
+
+import com.example.shopify.model.currencyModel.CurrencyModel
+ 
 import com.example.shopify.model.productDetails.ProductModel
 
 import kotlinx.coroutines.flow.Flow
@@ -22,6 +32,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 
 import retrofit2.Response
+import retrofit2.http.Body
 
 class ShopifyRemoteDataSourceImp :ShopifyRemoteDataSource {
     val shopifyService:ShopifyService by lazy {
@@ -95,6 +106,7 @@ class ShopifyRemoteDataSourceImp :ShopifyRemoteDataSource {
         shopifyService.removeCustomerAddresse(customerId,addressId)
     }
 
+ 
     override fun getFavDraftOrders(id:Long): Flow<FavDraftOrderResponse?> {
         return flow {
             emit(shopifyService.getFavDraftOrders(id).body())
@@ -140,6 +152,36 @@ class ShopifyRemoteDataSourceImp :ShopifyRemoteDataSource {
 //        }
 //    }
 
+
+    override suspend fun makeAddressDefault(customerId: Long, addressId: Long): Flow<AddressesModel?> {
+        return flowOf(shopifyService.makeAddressDefault(customerId,addressId).body())
+    }
+
+    override suspend fun editAddress(customerId: Long, addressId: Long,addresse: AddNewAddress): Flow<AddressesModel?> {
+        return flowOf(shopifyService.editAddress(customerId,addressId,addresse).body())
+    }
+    override suspend fun createOrder(order: PostOrderModel): Flow<RetriveOrder?> {
+        return  flowOf(shopifyService.createOrder(order).body())
+    }
+
+    override suspend fun getOrderList(): Flow<RetriveOrderModel?> {
+        return  flowOf(shopifyService.getAllOrders().body())
+    }
+
+
+    override suspend fun clearAllDraftOrders() {
+        val response = shopifyService.getDraftOrders()
+        if (response.isSuccessful) {
+            val draftOrders = response.body()?.draft_orders ?: emptyList()
+            for (draftOrder in draftOrders) {
+                shopifyService.deleteProductFromDraftOrder(draftOrder.id.toString())
+            }
+        } else {
+            // Handle the error
+            throw Exception("Failed to fetch draft orders")
+        }
+    }
+ 
 
 
 
