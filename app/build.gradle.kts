@@ -95,6 +95,10 @@ dependencies {
     implementation ("com.google.android.gms:play-services-maps:18.0.1")
     implementation ("com.google.android.gms:play-services-location:18.0.0")
 
+    // Stripe
+    implementation ("com.stripe:stripe-android:17.2.0")
+    implementation ("com.android.volley:volley:1.2.1")
+
 
 
 }
