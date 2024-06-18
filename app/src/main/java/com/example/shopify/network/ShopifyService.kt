@@ -61,8 +61,6 @@ interface ShopifyService {
     @PUT("admin/api/2024-04/draft_orders/{id}.json")
     suspend fun updateDraftOrder(@Path("id") id: String, @Body order: DraftOrderResponse): Response<DraftOrderResponse>
 
-
-
     //Get Brands
     @Headers("X-Shopify-Access-Token: ${Constants.adminApiAccessToken}")
     @GET("/admin/api/2024-04/smart_collections.json")
