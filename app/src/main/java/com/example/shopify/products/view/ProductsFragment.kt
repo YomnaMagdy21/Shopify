@@ -241,6 +241,8 @@ class ProductsFragment : Fragment() ,OnProductClickListener {
         // Implementation for goToDetails
         val bundle = Bundle()
         bundle.putLong("product_id",id)
+        brandId?.let { bundle.putLong("brand_id", it) }
+    //    brandId?.let { SharedPreference.saveBrandID(requireContext(),id, it) }
         val fragmentDetails = ProductDetailsFragment()
         fragmentDetails.arguments = bundle
 
@@ -258,6 +260,11 @@ class ProductsFragment : Fragment() ,OnProductClickListener {
 //        editor.putBoolean(product.id.toString(), true)
 //        editor.apply()
         // product.id?.let { productsOfBrandAdapter.updateFavoriteState(it, true) }
+
+//        brandId?.let { product?.id?.let { it1 ->
+//            SharedPreference.saveBrandID(requireContext(),
+//                it1, it)
+//        } }
         var email = SharedPreference.getUserEmail(requireContext())
         var draftID = SharedPreference.getDraftOrderId(requireContext(), email)
         if (draftID == 10000000000) {

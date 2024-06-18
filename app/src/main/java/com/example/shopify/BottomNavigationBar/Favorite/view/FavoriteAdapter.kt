@@ -90,7 +90,7 @@ class FavoriteAdapter(var context: Context, var listener: onFavoriteClickListene
         var email = SharedPreference.getUserEmail(context)
         holder.binding.deleteImg.setOnClickListener {
             current?.variant_id?.let { it1 -> listener.removeFavorite(it1) }
-            current.variant_id?.let { it1 -> SharedPreference.saveFav(context, it1,email,false) }
+          //  current.variant_id?.let { it1 -> SharedPreference.saveFav(context, it1,email,false) }
 //           val sharedPreferencesFav = context.getSharedPreferences("favPref", Context.MODE_PRIVATE)
 //
 //            val editor = sharedPreferencesFav.edit()

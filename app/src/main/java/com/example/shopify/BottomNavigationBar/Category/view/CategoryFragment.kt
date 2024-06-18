@@ -342,6 +342,14 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
 
         val bundle = Bundle()
         bundle.putLong("product_id",id)
+        bundle.putLong("category_id",id)
+       /// bundle.putString("type",selectedProductType?.type)
+//        selectedProductType?.type?.let {
+//            SharedPreference.saveCollectionType(requireContext(),id,
+//                it
+//            )
+//        }
+
         val fragmentDetails = ProductDetailsFragment()
         fragmentDetails.arguments = bundle
 
@@ -356,6 +364,13 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
     }
 
     override fun onFavBtnClick(product: Product) {
+//        selectedProductType?.type?.let {
+//            product.id?.let { it1 ->
+//                SharedPreference.saveCollectionType(requireContext(), it1,
+//                    it
+//                )
+//            }
+//        }
         var email = SharedPreference.getUserEmail(requireContext())
         var draftID = SharedPreference.getDraftOrderId(requireContext(), email)
         if (draftID == 10000000000) {

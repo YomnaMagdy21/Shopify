@@ -1,22 +1,17 @@
 package com.example.shopify.productdetails.view
 
 import android.app.AlertDialog
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.shopify.BottomNavigationBar.Category.view.CategoryFragment
 import com.example.shopify.BottomNavigationBar.Category.view.CategoryProductsAdapter
 import com.example.shopify.BottomNavigationBar.Category.view.OnCategoryClickListener
 import com.example.shopify.BottomNavigationBar.Category.viewModel.CategoryViewModel
@@ -58,7 +53,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kotlin.math.log
 import kotlin.random.Random
 
 
@@ -82,6 +76,7 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
     lateinit var favoriteViewModelFactory: FavoriteViewModelFactory
     lateinit var signUpViewModel: SignUpViewModel
     lateinit var signUpViewModelFactory: SignUpViewModelFactory
+    private var brandId: Long? = null
 
     private var isDeleteInProgress = false
     private var isFavProgress =false
@@ -90,6 +85,10 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        arguments?.let {
+            brandId = it.getLong("brand_id")
+            Log.d("ProductsOfBrandFragment", "Received ID: $brandId")
+        }
 
     }
 
@@ -155,6 +154,7 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
 
 
 
+
         draftOrder = FavDraftOrderResponse()
 
         return binding.root
@@ -175,19 +175,42 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
 
 
         setUpRecyclerView()
-        setUpSuggestionsRecView()
 
 
 
-        //setUpSuggestionsRecViewFromProduct()
 
         val bundle = arguments
 
-//        val productID = bundle?.getLong("product_id")
-//        if (productID != null) {
+        val productID = bundle?.getLong("product_id")
+        productID?.let {
+            productDetailsViewModel.getProductInfo(it)
+        }
+        var brand_ID = bundle?.getLong("brand_id")
+        Log.d("ProductsOfBrandFragment", "Received Brand ID: $brand_ID")
+
+        brand_ID?.let {
+            Log.d("ProductsOfBrandFragment", "Fetching products for brand ID: $it")
+            viewModel.getProductsOfBrands(it)
+        }
+        setUpSuggestionsRecViewFromProduct()
+        Log.d("ProductsOfBrandFragment", "Called setUpSuggestionsRecViewFromProduct()")
+
+        val categoryID = bundle?.getLong("category_id")
+
+        if (categoryID?.toInt() != 0) {
+            Log.d("ProductsOfBrandFragment", "Received Category ID: $categoryID")
+            setUpSuggestionsRecView()
+            Log.d("ProductsOfBrandFragment", "Called setUpSuggestionsRecView()")
+        }
+        var fav_id=bundle?.getLong("favorite_id")
+        if(fav_id?.toInt() != 0){
+            binding.sug.visibility = View.GONE
+        }else{
+            binding.sug.visibility = View.VISIBLE
+        }
+
 //
-//            productDetailsViewModel.getProductInfo(productID)
-//        }
+
 //
 //        val productId = bundle?.getLong("product_ID")
 //        Log.i("TAG", "onViewCreated: productID : $productID")
@@ -195,11 +218,16 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
 //           // setUpSuggestionsRecViewFromProduct()
 //            productDetailsViewModel.getProductInfo(productId)
 //        }
-        val productID = bundle?.getLong("product_id")
-        productID?.let {
-            productDetailsViewModel.getProductInfo(it)
-           // viewModel.getProductsOfBrands(productID)
-        }
+
+//        val productID = bundle?.getLong("product_id")
+//        productID?.let {
+//            productDetailsViewModel.getProductInfo(it)
+//        }
+//        brandId?.let { viewModel.getProductsOfBrands(it) }
+
+
+        // viewModel.getProductsOfBrands()
+
 //        val sharedPreferences = requireContext().getSharedPreferences("draftPref", Context.MODE_PRIVATE)
 //        val draftOrderId = sharedPreferences.getString("draft_order_id", null)
 
@@ -543,6 +571,7 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
     override fun goToDetails(id: Long) {
         val bundle = Bundle()
         bundle.putLong("product_id",id)
+        brandId?.let { bundle.putLong("brand_id", it) }
         val fragmentDetails = ProductDetailsFragment()
         fragmentDetails.arguments = bundle
 

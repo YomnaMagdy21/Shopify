@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -177,13 +178,24 @@ class FavoriteFragment : Fragment() ,onFavoriteClickListener{
 
     override fun removeFavorite(id: Long) {
 
-        deleteFav(id)
 
+
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Remove Item")
+        builder.setMessage("Are you sure you want to remove this item?")
+        builder.setPositiveButton("Yes") { dialog, which ->
+            deleteFav(id)
+        }
+        builder.setNegativeButton("No") { dialog, which ->
+            dialog.dismiss()
+        }
+        builder.show()
     }
 
     override fun goToProductDetails(id: Long) {
         val bundle = Bundle()
         bundle.putLong("product_id",id)
+        bundle.putLong("favorite_id",id)
         val fragmentDetails = ProductDetailsFragment()
         fragmentDetails.arguments = bundle
 
@@ -220,6 +232,7 @@ class FavoriteFragment : Fragment() ,onFavoriteClickListener{
 
                     favoriteViewModel.updateFavorite(draftID.toLong(), favDraftOrderResponse)
                     favoriteViewModel.deleteFavorite(id)
+                   SharedPreference.saveFav(requireContext(), id,email,false)
                 } else {
                     Log.i("TAG", "Item not found in updatedLineItems")
                 }

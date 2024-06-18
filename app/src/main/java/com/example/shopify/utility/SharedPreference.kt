@@ -1,8 +1,6 @@
 package com.example.shopify.utility
 
 import android.content.Context
-import android.content.SharedPreferences
-import com.example.shopify.model.productDetails.Product
 
 object SharedPreference {
 
@@ -43,6 +41,25 @@ object SharedPreference {
            // Log.i("SharedPreference", "getDraftOrderID retrieved id: $draftOrderID for email: $email")
             return draftOrderID
         }
+    }
+
+    fun saveBrandID(context: Context,product_id:Long,brand_id:Long) {
+        val prefs = context.getSharedPreferences("favPref", Context.MODE_PRIVATE)
+        prefs.edit().putLong(product_id.toString(), brand_id).apply()
+    }
+
+    fun getBrandID(context: Context,product_id:Long): Long {
+        val prefs = context.getSharedPreferences("favPref", Context.MODE_PRIVATE)
+        return prefs.getLong(product_id.toString(), 0) ?: 0
+    }
+    fun saveCollectionType(context: Context,product_id:Long,type:String) {
+        val prefs = context.getSharedPreferences("favPref", Context.MODE_PRIVATE)
+        prefs.edit().putString(product_id.toString(), type).apply()
+    }
+
+    fun getCollectionType(context: Context, product_id: Long): String {
+        val prefs = context.getSharedPreferences("favPref", Context.MODE_PRIVATE)
+        return prefs.getString(product_id.toString(), "") ?: ""
     }
     fun clearPreferences(context: Context) {
         val prefs = context.getSharedPreferences("favPref", Context.MODE_PRIVATE)
