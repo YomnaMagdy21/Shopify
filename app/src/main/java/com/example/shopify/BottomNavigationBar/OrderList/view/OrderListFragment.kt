@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.ProgressBar
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,6 +31,8 @@ class OrderListFragment : Fragment(), OnOrderClickListener {
     private lateinit var orderListViewModel: OrderListViewModel
     private lateinit var factory: OrderListViewModelFactory
     private val currency = "EGP"
+    private lateinit var progressBar: ProgressBar
+    lateinit var backImage : ImageView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,6 +40,9 @@ class OrderListFragment : Fragment(), OnOrderClickListener {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_order_list, container, false)
         recyclerView = view.findViewById(R.id.rv_order_list)
+        progressBar = view.findViewById(R.id.progressBar3)
+        backImage = view.findViewById(R.id.iv_backRow)
+
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         factory = OrderListViewModelFactory(
             ShopifyRepositoryImp.getInstance(
@@ -50,14 +57,20 @@ class OrderListFragment : Fragment(), OnOrderClickListener {
         orderListAdapter = OrderListAdapter(requireContext(), emptyList(), currency, this)
         recyclerView.adapter = orderListAdapter
 
+        backImage.setOnClickListener {
+            parentFragmentManager.popBackStack()
+        }
 
         viewLifecycleOwner.lifecycleScope.launch {
             orderListViewModel.accessOrderList.collect {
                 when (it) {
                     is ApiState.Loading -> {
-                        // loading progress bar
+                        progressBar.visibility = View.VISIBLE
+                        recyclerView.visibility = View.GONE
                     }
                     is ApiState.Success<*> -> {
+                        progressBar.visibility = View.GONE
+                        recyclerView.visibility = View.VISIBLE
                         val orders = (it.data as RetriveOrderModel).orders
                         if (orders.isNullOrEmpty()) {
                             println("No orders available")
@@ -94,6 +107,8 @@ class OrderListFragment : Fragment(), OnOrderClickListener {
                         orderListAdapter.updateData(orders)
                     }
                     is ApiState.Failure -> {
+                        progressBar.visibility = View.GONE
+                        recyclerView.visibility = View.GONE
 
                     }
                 }

@@ -107,4 +107,17 @@ class ShopifyRemoteDataSourceImp :ShopifyRemoteDataSource {
     override suspend fun getOrderList(): Flow<RetriveOrderModel?> {
         return  flowOf(shopifyService.getAllOrders().body())
     }
+
+    override suspend fun clearAllDraftOrders() {
+        val response = shopifyService.getDraftOrders()
+        if (response.isSuccessful) {
+            val draftOrders = response.body()?.draft_orders ?: emptyList()
+            for (draftOrder in draftOrders) {
+                shopifyService.deleteProductFromDraftOrder(draftOrder.id.toString())
+            }
+        } else {
+            // Handle the error
+            throw Exception("Failed to fetch draft orders")
+        }
+    }
 }

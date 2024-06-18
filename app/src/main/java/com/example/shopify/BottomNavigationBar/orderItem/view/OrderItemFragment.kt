@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,7 +24,7 @@ class OrderItemFragment : Fragment() {
     lateinit var  phoneNumber : TextView
     lateinit var  totalPrice : TextView
     lateinit var  paymentMethod : TextView
-
+    lateinit var backImage : ImageView
     private lateinit var orderItemViewModel: OrderItemViewModel
     private lateinit var factory: OrderItemViewModelFactory
 
@@ -44,6 +45,7 @@ class OrderItemFragment : Fragment() {
         phoneNumber = view.findViewById(R.id.client_phone_value)
         totalPrice = view.findViewById(R.id.client_total_price_value)
         paymentMethod = view.findViewById(R.id.client_payment_method_value)
+        backImage = view.findViewById(R.id.iv_backRow)
 
         // get data passed from OrderList
         val order = arguments?.getSerializable("order") as Order
@@ -52,7 +54,9 @@ class OrderItemFragment : Fragment() {
 
         orderItemViewModel = ViewModelProvider(this, factory).get(OrderItemViewModel::class.java)
 
-
+        backImage.setOnClickListener {
+            parentFragmentManager.popBackStack()
+        }
 
 
         println("Order Items :-------------------")
@@ -74,10 +78,10 @@ class OrderItemFragment : Fragment() {
         paymentMethod.text = orderItemViewModel.paymentMethod
 
 
-        val noteAttributes = order.note_attributes ?: emptyList()
+       // val noteAttributes = order.note_attributes ?: emptyList()
 
 
-        orderItemAdapter = OrderItemAdapter(requireContext(), orderItemViewModel.lineItems , noteAttributes)
+        orderItemAdapter = OrderItemAdapter(requireContext(), orderItemViewModel.lineItems /*, noteAttributes*/)
 
         println("Order Items")
 
@@ -93,9 +97,9 @@ class OrderItemFragment : Fragment() {
         println("last name: ${order.customer?.last_name}")
         println("Payment Method: ${order.tags}")
         println("Note Attributes:")
-        noteAttributes.forEach { noteAttribute ->
-            println("Name: ${noteAttribute.name}, Value: ${noteAttribute.values}")
-        }
+//        noteAttributes.forEach { noteAttribute ->
+//            println("Name: ${noteAttribute.name}, Value: ${noteAttribute.values}")
+//        }
         recyclerView.adapter = orderItemAdapter
 
 

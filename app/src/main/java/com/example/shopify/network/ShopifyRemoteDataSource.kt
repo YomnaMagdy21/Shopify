@@ -54,4 +54,7 @@ interface ShopifyRemoteDataSource {
     // get all orders
     suspend fun getOrderList(): Flow<RetriveOrderModel?>
 
+    // clear draft order
+    suspend fun clearAllDraftOrders()
+
 }

@@ -133,24 +133,23 @@ class paymentFragment : Fragment() {
             createOrder()
         }
 
-        lifecycleScope.launch {
-            paymentViewModel.accessOrder.collectLatest { state ->
-                when (state) {
-                    is ApiState.Success<*> -> {
-                        orderCreatedPopup()
-                        navigateToHomeFragment()
-                    }
-
-                    is ApiState.Failure -> {
-                        // Handle error
-                    }
-
-                    else -> {
-                        // Handle loading
-                    }
-                }
-            }
-        }
+//        lifecycleScope.launch {
+//            paymentViewModel.accessOrder.collectLatest { state ->
+//                when (state) {
+//                    is ApiState.Success<*> -> {
+//
+//                    }
+//
+//                    is ApiState.Failure -> {
+//                        // Handle error
+//                    }
+//
+//                    else -> {
+//                        // Handle loading
+//                    }
+//                }
+//            }
+//        }
     }
 
     private fun createOrder() {
@@ -171,12 +170,13 @@ class paymentFragment : Fragment() {
             draftOrder.note_attributes?.forEach { noteAttr ->
                 noteAttributes.add(
                     NoteAttribute(
-                        name = noteAttr.name,
-                        values = listOf(noteAttr.value ?: "")
+                        name = "image",
+                        values = listOf(noteAttr.value ?: "")   // list of image of each draft order
                     )
                 )
             }
         }
+        // 3 draft orders -> 3 images
 
 
         val order = Order(
@@ -240,7 +240,8 @@ class paymentFragment : Fragment() {
     private fun clearShoppingCart() {
         val shoppingCardFragment = parentFragmentManager.findFragmentByTag("SHOPPING_CARD_FRAGMENT_TAG") as? ShoppingCardIClear
         shoppingCardFragment?.clearShoppingCart()
-
+        orderCreatedPopup()
+        navigateToHomeFragment()
         println("1111111111111111111111111111111111111Shopping cart is cleared.-------------------------------------------")
 
     }

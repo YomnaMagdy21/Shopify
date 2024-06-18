@@ -109,11 +109,23 @@ class ShoppingCardViewModel(private val repo: ShoppingCardRepo) : ViewModel() {
     }
 
     // clear the draft order
-    fun clearDraftOrders() {
-        _getDraftOrderList.value = emptyList()
-        println("Shopping cart is cleared from the vm.")
+    fun clearAllDraftOrder() {
+        viewModelScope.launch {
+            try {
+                val draftOrders = repo.getDraftOrders()
 
+                draftOrders?.forEach { draftOrder ->
+                    repo.deleteDraftOrder(draftOrder.id.toString())
+                }
+
+                _getDraftOrderList.value = emptyList()
+                Log.i("ShoppingCardViewModel", "All draft orders cleared successfully")
+            } catch (e: Exception) {
+                Log.e("ShoppingCardViewModel", "Failed to clear all draft orders", e)
+            }
+        }
     }
+
 }
 
 class PriceRuleViewModelFactory(private val repository: ShoppingCardRepo) : ViewModelProvider.Factory {

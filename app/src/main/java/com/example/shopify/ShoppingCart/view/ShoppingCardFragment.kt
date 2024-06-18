@@ -224,13 +224,19 @@ class shoppingCardFragment : Fragment() , ShoppingCardIClear{
         totalPriceTextView.text = "${"%.2f".format(totalPrice)}"
     }
     override fun clearShoppingCart() {
-        viewModel.clearDraftOrders()
-        products.clear()
-        adapter.updateItems(emptyList())
-        adapter.notifyDataSetChanged()
-        totalPriceTextView.text = "0.00"
-        discountText.text = "0.00"
-        println("Shopping cart is cleared.")
+        viewModel.clearAllDraftOrder()
+        lifecycleScope.launch {
+            viewModel.draftOrderList.collectLatest { draftOrders ->
+                if (draftOrders?.isEmpty() == true) {
+                    products.clear()
+                    adapter.updateItems(emptyList())
+                    totalPriceTextView.text = "0.00"
+                    Log.i("shoppingCardFragment", "Shopping Cart is cleared")
+                } else {
+                    Log.i("shoppingCardFragment", "Failed to clear shopping cart")
+                }
+            }
+        }
     }
 
 }

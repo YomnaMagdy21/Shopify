@@ -65,16 +65,5 @@ class ShoppingCardRepo {
         }
     }
 
-    // delete all products from draft order
-    suspend fun clearDraftOrder(): Boolean {
-        val response = RetrofitHelper.apiService.clearAllDraftOrder()
-        if (response.isSuccessful) {
-            return response.isSuccessful
-            Log.i("del", "deleteDraftOrder: "+response.isSuccessful)
-        } else {
-            throw Exception("failed to delete")
-        }
-    }
-
 }
 
