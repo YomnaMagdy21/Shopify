@@ -8,7 +8,7 @@ data class Order(
     val shipping_address: Address? = null,
     val financial_status: String? = null,
     val fulfillment_status: String? = null,
-    val email: String? = null,
+    var email: String? = null,
     val customer: Customer? = null,
     val id: Long? = null,
 
