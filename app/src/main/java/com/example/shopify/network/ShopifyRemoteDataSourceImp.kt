@@ -136,6 +136,12 @@ class ShopifyRemoteDataSourceImp :ShopifyRemoteDataSource {
         }
     }
 
+    override fun getSpecificOrder(id: Long): Flow<RetriveOrder?> {
+        return flow {
+            emit(shopifyService.getOrder(id).body())
+        }
+    }
+
 
 //    override fun createFavDraftOrder(draftOrderResponse: FavDraftOrderResponse): Flow<FavDraftOrderResponse?> {
 //        return flow {
