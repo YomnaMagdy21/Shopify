@@ -36,7 +36,7 @@
             >
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="45dp"
                 android:id="@+id/ll_properties_product_of_brand_first"
                 android:orientation="horizontal"
                 android:weightSum="2">
@@ -60,17 +60,19 @@
                 android:id="@+id/ll_properties_product_of_brand_second"
                 android:orientation="horizontal"
                 android:weightSum="3">
+
                 <TextView
                     android:id="@+id/tv_product_price_of_brand"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="350.00 EGP"
-                    android:textSize="14sp"
-                    android:layout_weight="1.5"
                     android:layout_marginHorizontal="12dp"
-                    android:padding="5dp"
+                    android:layout_weight="1.5"
                     android:gravity="center"
-                    />
+                    android:padding="5dp"
+                    android:text="350.00 EGP"
+                    android:textColor="@color/purple"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
 
 
                 <ImageView

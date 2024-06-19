@@ -1,5 +1,6 @@
 package com.example.shopify.ShoppingCart.view
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -9,22 +10,46 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+
+import androidx.appcompat.app.AlertDialog
+
 import androidx.fragment.app.Fragment
+
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+
+import com.airbnb.lottie.Lottie
+
+import com.example.shopify.BottomNavigationBar.Category.viewModel.CategoryViewModel
+import com.example.shopify.BottomNavigationBar.Category.viewModel.CategoryViewModelFactory
+import com.example.shopify.BottomNavigationBar.Home.view.HomeFragment
+import com.example.shopify.MainActivity
+
 import com.airbnb.lottie.LottieAnimationView
+
 import com.example.shopify.R
 import com.example.shopify.ShoppingCart.model.PriceRule
 import com.example.shopify.ShoppingCart.model.ShoppingCardIClear
 import com.example.shopify.ShoppingCart.model.ShoppingCardRepo
 import com.example.shopify.ShoppingCart.viewModel.PriceRuleViewModelFactory
 import com.example.shopify.ShoppingCart.viewModel.ShoppingCardViewModel
+
+import com.example.shopify.login.view.SignInFragment
+import com.example.shopify.model.ShopifyRepository
+import com.example.shopify.model.ShopifyRepositoryImp
+import com.example.shopify.model.productDetails.Product
+import com.example.shopify.network.ShopifyRemoteDataSourceImp
+import com.example.shopify.setting.currency.CurrencyConverter
+import com.example.shopify.utility.ApiState
+import com.example.shopify.utility.SharedPreference
+
 import com.example.shopify.model.draftModel.DraftOrder
 import com.example.shopify.model.draftModel.DraftOrderResponse
 import com.example.shopify.payment.paymentFragment
 import com.example.shopify.setting.currency.CurrencyConverter
+
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.collectLatest
@@ -39,12 +64,15 @@ class shoppingCardFragment : Fragment(), ShoppingCardIClear {
     private lateinit var totalPriceTextView: TextView
     private lateinit var discountText: TextView
 
+    private lateinit var lottie : LottieAnimationView
     private var discountAmount: Double = 0.0
     private var couponApplied = false
 
     private lateinit var recyclerView: RecyclerView
     private var items: List<Item> = emptyList()
+
     private lateinit var lottieAnimationView: LottieAnimationView
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,7 +101,13 @@ class shoppingCardFragment : Fragment(), ShoppingCardIClear {
         recyclerView.adapter = adapter
         totalPriceTextView = view.findViewById(R.id.textView3)
         discountText = view.findViewById(R.id.textView7)
+
+        lottie = view.findViewById(R.id.animationView)
+
+        lottie.visibility = View.VISIBLE
+
         lottieAnimationView = view.findViewById(R.id.lottie_no_data)
+
 
 
         //cards
@@ -102,8 +136,16 @@ class shoppingCardFragment : Fragment(), ShoppingCardIClear {
                     }
                     adapter.updateItems(items)
                     calculateTotalPrice(draftOrders)
-                    checkRecyclerViewEmptyState()
+
+                    lottie.visibility = View.GONE
                 }
+                else{
+                    lottie.visibility = View.VISIBLE
+
+                    checkRecyclerViewEmptyState()
+ 
+                }
+
             }
         }
 
@@ -137,6 +179,30 @@ class shoppingCardFragment : Fragment(), ShoppingCardIClear {
             if (inputText.isNotEmpty()) {
                 validateCoupon(inputText, textView)
             }
+        }
+        var guest = SharedPreference.getGuest(requireContext())
+
+        if(guest == "yes"){
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setTitle("Warning")
+            builder.setMessage("You are guest, you can login to use cart")
+            builder.setNegativeButton("Cancel") { dialog, which ->
+
+                val newFragment = HomeFragment()
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.frame_layout, newFragment)
+                    .addToBackStack(null)
+                    .commit()
+
+            }
+            builder.setPositiveButton("Login") { dialog, which ->
+
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.home_fragment, SignInFragment())
+                    .commit()
+            }
+
+            builder.show()
         }
 
     }

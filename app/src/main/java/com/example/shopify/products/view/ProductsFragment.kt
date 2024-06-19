@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.lottie.LottieAnimationView
 import com.example.shopify.BottomNavigationBar.Category.viewModel.CategoryViewModel
 import com.example.shopify.BottomNavigationBar.Category.viewModel.CategoryViewModelFactory
 import com.example.shopify.BottomNavigationBar.Favorite.model.FavDraftOrder
@@ -74,6 +75,7 @@ class ProductsFragment : Fragment() ,OnProductClickListener {
     private lateinit var favoriteViewModel: FavoriteViewModel
     private lateinit var favoriteViewModelFactory: FavoriteViewModelFactory
 
+    private lateinit var lottieAnimationView: LottieAnimationView
 
 
 
@@ -100,6 +102,7 @@ class ProductsFragment : Fragment() ,OnProductClickListener {
         filterImg = view.findViewById(R.id.filter)
         filterSlider = view.findViewById(R.id.filterSlider)
         editTextSearch = view.findViewById(R.id.search_edit_text)
+        lottieAnimationView = view.findViewById(R.id.animationView)
 
         categoryViewModelFactory = CategoryViewModelFactory(
             ShopifyRepositoryImp.getInstance(
@@ -234,8 +237,18 @@ class ProductsFragment : Fragment() ,OnProductClickListener {
             val productPrice = product.variants?.firstOrNull()?.price?.toFloatOrNull()
             productPrice != null && productPrice <= price
         }
-        productsOfBrandAdapter.setProductsBrandsList(filteredProducts)
+
+        if (filteredProducts.isEmpty()) {
+
+            lottieAnimationView.visibility = View.VISIBLE
+            productsOfBrandAdapter.setProductsBrandsList(emptyList())
+        } else {
+
+            lottieAnimationView.visibility = View.GONE
+            productsOfBrandAdapter.setProductsBrandsList(filteredProducts)
+        }
     }
+
 
     override fun goToDetails(id:Long) {
         // Implementation for goToDetails
@@ -490,102 +503,24 @@ class ProductsFragment : Fragment() ,OnProductClickListener {
         })
     }
 
+
     private fun filterBrands(query: String) {
         val filteredList = collectProducts.filter {
             it.title?.contains(query, ignoreCase = true) ?: true
         }
-        productsOfBrandAdapter.setProductsBrandsList(filteredList)
-    }
 
-    private fun addProductToFav(product: Product) {
-        val currentUser = FirebaseAuth.getInstance().currentUser
-        val userEmail = currentUser?.email
-
-        Log.d("AddToFav", "Attempting to add product to fav: $product")
-
-        if (currentUser != null) {
-            val variantId = product?.variants?.get(0)?.id
-            if (variantId != null) {
-                if (categoryViewModel.addedProductIds.contains(variantId)) {
-                    Snackbar.make(requireView(), "Product already in cart", Snackbar.LENGTH_SHORT).show()
-                    return
-                }
-
-                Log.d("AddToFav", "Product not already in cart. Proceeding to add.")
-
-              //  var order = FavDraftOrder()
-               // order.email = userEmail
-
-               // order.note = "fav"
-                var order = DraftOrder()
-                order.email = userEmail
-                var draft_orders = DraftOrderResponse()
-                order.note = "fav"
-                var lineItems = LineItem()
-                lineItems.quantity = 1
-                lineItems.variant_id = product.variants!![0].id
-                order.line_items = listOf(lineItems)
-                var note_attribute = NoteAttribute()
-                note_attribute.name = "image"
-                note_attribute.value = product.images!![0].src
-                order.note_attributes = listOf(note_attribute)
-
-
-
-                Log.d("DraftOrder", "Creating Draft Order: $draft_orders")
-
-               // favoriteViewModel.createFavDraftOrders(draft_orders)
-
-                val sharedPreferences = requireContext().getSharedPreferences("draftPref", Context.MODE_PRIVATE)
-                val draftOrderId = sharedPreferences.getString("draft_order_id", null)
-
-                if (draftOrderId != null) {
-                 //   favoriteViewModel.updateFavorite(draftOrderId.toLong(),draft_orders)
-                    Log.d("DraftOrder", "Draft Order ID: $draftOrderId")
-                } else {
-
-                    Log.e("DraftOrder", "Draft Order ID not found")
-                }
-
-
-                lifecycleScope.launch {
-                    favoriteViewModel.wishList.collectLatest {result ->
-                        when(result){
-                            is ApiState.Loading ->{
-
-                                Log.i("TAG", "addProductToFav:loadingggg ")
-                            }
-                            is ApiState.Success<*> ->{
-                                val wishList = result.data as? FavDraftOrderResponse
-                                val sharedPreferences = requireContext().getSharedPreferences("draftPref", Context.MODE_PRIVATE)
-                                val editor = sharedPreferences.edit()
-                                editor.putString("draft_order_id", wishList?.draft_order?.id.toString())
-                                editor.apply()
-                                Log.i("TAG", "onViewCreated: draft order in fav = ${wishList?.draft_order?.id}")
-                            }
-                            else->{
-
-                            }
-                        }
-                    }
-                }
-
-                lifecycleScope.launch {
-                    favoriteViewModel.fav.collect { draftOrderResponse ->
-                        if (draftOrderResponse != null) {
-                            // Add the id
-                            variantId.let { categoryViewModel.addedProductIds.add(it) }
-                            Snackbar.make(requireView(), "Added to Fav", Snackbar.LENGTH_SHORT).show()
-                        } else {
-                            Log.e("AddToFav", "Failed to create draft order")
-                        }
-                    }
-                }
-            }
+        if (filteredList.isEmpty()) {
+            // Show LottieAnimationView or any other UI element indicating no data
+            lottieAnimationView.visibility = View.VISIBLE
+            productsOfBrandAdapter.setProductsBrandsList(emptyList()) // Clear adapter data if needed
         } else {
-            Snackbar.make(requireView(), "User Not Logged In", Snackbar.LENGTH_SHORT).show()
+            // Hide LottieAnimationView or any other UI element indicating no data
+            lottieAnimationView.visibility = View.GONE
+            productsOfBrandAdapter.setProductsBrandsList(filteredList)
         }
     }
+
+
     private fun fetchDraftOrder(draftOrderId: Long, callback: (FavDraftOrder?) -> Unit) {
         // Assuming you have a method in your ViewModel to get the current DraftOrder
         favoriteViewModel.getFavorites(draftOrderId)
