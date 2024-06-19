@@ -72,6 +72,16 @@ object SharedPreference {
         return prefs.getString("Guest", "") ?: ""
     }
 
+    fun saveFirstName(context: Context,email:String,name:String) {
+        val prefs = context.getSharedPreferences("favPref", Context.MODE_PRIVATE)
+        prefs.edit().putString(email, name).apply()
+    }
+
+    fun getFirstName(context: Context,email:String): String {
+        val prefs = context.getSharedPreferences("favPref", Context.MODE_PRIVATE)
+        return prefs.getString(email, "") ?: ""
+    }
+
 
     fun clearPreferences(context: Context) {
         val prefs = context.getSharedPreferences("favPref", Context.MODE_PRIVATE)
