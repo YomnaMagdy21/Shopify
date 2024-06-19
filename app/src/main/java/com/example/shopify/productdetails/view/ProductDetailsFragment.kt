@@ -689,9 +689,10 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
                 var email = SharedPreference.getUserEmail(requireContext())
                 var draftID = SharedPreference.getDraftOrderId(requireContext(), email)
 
+               // updatedLineItems.clear()
                 if (draftID != 10000000000) {
                     fetchDraftOrder(draftID) { draftOrder ->
-                         updatedLineItems =
+                       var  updatedLineItems =
                             draftOrder?.line_items?.toMutableList() ?: mutableListOf()
                         Log.i("TAG", "Initial updatedLineItems: $updatedLineItems")
 

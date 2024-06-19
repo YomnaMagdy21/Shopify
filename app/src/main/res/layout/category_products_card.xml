@@ -69,6 +69,7 @@
                     android:text="350.00 EGP"
                     android:textColor="@color/purple"
                     android:textSize="14sp"
+                    android:textStyle="bold"
                     android:weightSum="1.5" />
 
                 <ImageView
