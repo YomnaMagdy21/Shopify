@@ -186,6 +186,7 @@ class ProductsFragment : Fragment() ,OnProductClickListener {
 
                 filterSlider.visibility = View.GONE
                 filterImg.setImageResource(R.drawable.filter)
+                lottieAnimationView.visibility = View.GONE
 
                 // to show all products after unfilter the filterImg
                 productsOfBrandAdapter.setProductsBrandsList(collectProducts)
