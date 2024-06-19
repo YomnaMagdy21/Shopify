@@ -48,7 +48,7 @@ import com.example.shopify.utility.SharedPreference
 import com.example.shopify.model.draftModel.DraftOrder
 import com.example.shopify.model.draftModel.DraftOrderResponse
 import com.example.shopify.payment.paymentFragment
-import com.example.shopify.setting.currency.CurrencyConverter
+
 
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth

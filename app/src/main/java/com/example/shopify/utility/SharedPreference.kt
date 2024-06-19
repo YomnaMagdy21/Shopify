@@ -24,24 +24,29 @@ object SharedPreference {
         return prefs.getString("Email", "") ?: ""
     }
 
-    private val lock = Any()
+
+
 
     fun saveDraftOrderId(context: Context, id: Long, email: String) {
-        synchronized(lock) {
-            val prefs = context.getSharedPreferences("favPref", Context.MODE_PRIVATE)
-            //Log.i("SharedPreference", "saveDraftOrderID called with id: $id for email: $email")
-            prefs.edit().putLong(email, id).apply()
-        }
+        val prefs = context.getSharedPreferences("favPref", Context.MODE_PRIVATE)
+        prefs.edit().putLong(email, id).apply()
     }
 
     fun getDraftOrderId(context: Context, email: String): Long {
-        synchronized(lock) {
-            val prefs = context.getSharedPreferences("favPref", Context.MODE_PRIVATE)
-            val draftOrderID = prefs.getLong(email, 10000000000)
-           // Log.i("SharedPreference", "getDraftOrderID retrieved id: $draftOrderID for email: $email")
-            return draftOrderID
+        val prefs = context.getSharedPreferences("favPref", Context.MODE_PRIVATE)
+        // Use contains to check if the value exists and is of type Long
+        return if (prefs.contains(email)) {
+            try {
+                prefs.getLong(email, 10000000000)
+            } catch (e: ClassCastException) {
+                // Handle the case where the value is not a Long (fallback to default value)
+                10000000000
+            }
+        } else {
+            10000000000
         }
     }
+
 
     fun saveBrandID(context: Context,product_id:Long,brand_id:Long) {
         val prefs = context.getSharedPreferences("favPref", Context.MODE_PRIVATE)
@@ -72,15 +77,16 @@ object SharedPreference {
         return prefs.getString("Guest", "") ?: ""
     }
 
-    fun saveFirstName(context: Context,email:String,name:String) {
+    fun saveFirstName(context: Context, email: String, name: String) {
         val prefs = context.getSharedPreferences("favPref", Context.MODE_PRIVATE)
-        prefs.edit().putString(email, name).apply()
+        prefs.edit().putString(email + "_name", name).apply()
     }
 
-    fun getFirstName(context: Context,email:String): String {
+    fun getFirstName(context: Context, email: String): String {
         val prefs = context.getSharedPreferences("favPref", Context.MODE_PRIVATE)
-        return prefs.getString(email, "") ?: ""
+        return prefs.getString(email + "_name", "") ?: ""
     }
+
 
 
 
