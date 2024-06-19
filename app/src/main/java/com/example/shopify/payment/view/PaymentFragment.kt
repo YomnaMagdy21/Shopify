@@ -1,4 +1,4 @@
-package com.example.shopify.payment
+package com.example.shopify.payment.view
 
 import android.app.AlertDialog
 import android.content.Context
@@ -13,7 +13,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import com.example.shopify.BottomNavigationBar.Home.view.HomeFragment
 import android.util.Log
 import android.widget.Toast
@@ -35,10 +34,9 @@ import com.example.shopify.model.PostOrders.PostOrderModel
 import com.example.shopify.model.ShopifyRepositoryImp
 import com.example.shopify.model.draftModel.DraftOrder
 import com.example.shopify.network.ShopifyRemoteDataSourceImp
-import com.example.shopify.utility.ApiState
+import com.example.shopify.payment.viewModel.PaymentViewModelFactory
+import com.example.shopify.payment.viewModel.PaymentViewModel
 import com.google.gson.Gson
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import com.example.shopify.utility.Constants
 import com.google.android.material.snackbar.Snackbar
 import com.stripe.android.PaymentConfiguration
@@ -51,6 +49,7 @@ class paymentFragment : Fragment() {
 
     private lateinit var address: Address
     lateinit var myCurrentAdreesText: TextView
+    lateinit var edit : TextView
 
     lateinit var orderButton: Button
     lateinit var paymentViewModel: PaymentViewModel
@@ -106,6 +105,8 @@ class paymentFragment : Fragment() {
         checkBoxOnline = view.findViewById(R.id.checkBoxOnline)
 
         myCurrentAdreesText = view.findViewById(R.id.textView10)
+        edit = view.findViewById(R.id.textViewEdit)
+
         val sharedPreferences =
             requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val userId = sharedPreferences.getString("userID", null)
@@ -128,7 +129,7 @@ class paymentFragment : Fragment() {
         } ?: run {
             // If there are no arguments, load the default address from SharedPreferences
             address = userId?.let { loadAddressFromPreferences(it) }?: Address(
-                "",
+                "Add your Address Please",
                 "",
                 "",
                 "",
@@ -167,7 +168,7 @@ class paymentFragment : Fragment() {
                 .commit()
         }
         //navigate to address list fragment
-        myCurrentAdreesText.setOnClickListener {
+        edit.setOnClickListener {
             val newFragment = myAddressFragment()
             parentFragmentManager.beginTransaction()
                 .replace(R.id.frame_layout, newFragment)
@@ -185,7 +186,6 @@ class paymentFragment : Fragment() {
                 Log.i("flow", "Online CheckBox is not checked.")
             }
         }
-
         checkBoxOffline.setOnClickListener {
             if (checkBoxOffline.isChecked) {
                 checkBoxOnline.isChecked = false
@@ -195,7 +195,6 @@ class paymentFragment : Fragment() {
                 Log.i("flow", "Offline CheckBox is not checked.")
             }
         }
-
         creatStripCustomerId()
 
         // listener of orderButton to create order
@@ -330,6 +329,7 @@ class paymentFragment : Fragment() {
             is PaymentSheetResult.Completed -> {
                 Snackbar.make(requireView(), "Payment completed successfully!", Snackbar.LENGTH_SHORT).show()
                 totalPriceText.text = " "
+                createOrder()
             }
 
             is PaymentSheetResult.Failed -> {
@@ -349,7 +349,6 @@ class paymentFragment : Fragment() {
                 try {
                     val jsonObject = JSONObject(response)
                     customerId = jsonObject.getString("id")
-                    Toast.makeText(requireContext(),"Customer Id: "+customerId,Toast.LENGTH_SHORT).show()
                     getEphericalKey(customerId)
                 } catch (e: JSONException) {
                     e.printStackTrace()

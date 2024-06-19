@@ -14,23 +14,16 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.shopify.BottomNavigationBar.Category.viewModel.CategoryViewModel
-import com.example.shopify.BottomNavigationBar.Category.viewModel.CategoryViewModelFactory
 import com.example.shopify.R
 import com.example.shopify.model.draftModel.DraftOrder
 import com.example.shopify.model.draftModel.DraftOrderResponse
-import com.example.shopify.payment.paymentFragment
+import com.example.shopify.payment.view.paymentFragment
 import com.example.shopify.ShoppingCart.model.PriceRule
 import com.example.shopify.ShoppingCart.model.ShoppingCardIClear
 import com.example.shopify.ShoppingCart.model.ShoppingCardRepo
 import com.example.shopify.ShoppingCart.viewModel.PriceRuleViewModelFactory
 import com.example.shopify.ShoppingCart.viewModel.ShoppingCardViewModel
-import com.example.shopify.model.ShopifyRepository
-import com.example.shopify.model.ShopifyRepositoryImp
-import com.example.shopify.model.productDetails.Product
-import com.example.shopify.network.ShopifyRemoteDataSourceImp
 import com.example.shopify.setting.currency.CurrencyConverter
-import com.example.shopify.utility.ApiState
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.collectLatest
@@ -111,20 +104,23 @@ class shoppingCardFragment : Fragment() , ShoppingCardIClear{
         val checkOut = view.findViewById<Button>(R.id.checkOutButton)
         checkOut.setOnClickListener {
             val totalPrice = calculateTotalPrice(products)
-            val bundle = Bundle().apply {
-                putSerializable("products", ArrayList(products))
-                putDouble("total_price", totalPrice)
-                putString("email", userEmail)
-                putString("name", userName)
-
+            if (totalPrice > 0 && products.isNotEmpty()) {
+                val bundle = Bundle().apply {
+                    putSerializable("products", ArrayList(products))
+                    putDouble("total_price", totalPrice)
+                    putString("email", userEmail)
+                    putString("name", userName)
+                }
+                val newFragment = paymentFragment().apply {
+                    arguments = bundle
+                }
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.frame_layout, newFragment)
+                    .addToBackStack(null)
+                    .commit()
+            } else {
+                Snackbar.make(view, "Please add items to the cart before proceeding to checkout.", Snackbar.LENGTH_LONG).show()
             }
-            val newFragment = paymentFragment().apply {
-                arguments = bundle
-            }
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.frame_layout, newFragment)
-                .addToBackStack(null)
-                .commit()
         }
 
         //coupone validation

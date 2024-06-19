@@ -19,7 +19,8 @@ import com.example.shopify.model.addressModel.Address
 class MyAddressAdapter(private var addresses: List<Address>,
                        private val onItemClick: (Address) -> Unit,
                        private val onDeleteButtonClick: (Address) -> Unit,
-                       private val onEditButtonClick: (Address) -> Unit) : RecyclerView.Adapter<MyAddressAdapter.ViewHolder>() {
+                       private val onEditButtonClick: (Address) -> Unit,
+                       private val onCannotDeleteDefault: () -> Unit) : RecyclerView.Adapter<MyAddressAdapter.ViewHolder>() {
 
     private var selectedAddressPosition: Int = -1
     private var defaultAddressId: Long? = null
@@ -55,7 +56,11 @@ class MyAddressAdapter(private var addresses: List<Address>,
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
                     val address = addresses[position]
-                    onDeleteButtonClick(address)
+                    if (address.id == defaultAddressId) {
+                          onCannotDeleteDefault()
+                    } else {
+                        onDeleteButtonClick(address)
+                    }
                 }
             }
 

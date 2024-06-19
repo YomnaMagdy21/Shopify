@@ -19,14 +19,13 @@ import com.example.shopify.model.ShopifyRepositoryImp
 import com.example.shopify.model.addressModel.Address
 import com.example.shopify.model.addressModel.AddressesModel
 import com.example.shopify.network.ShopifyRemoteDataSourceImp
-import com.example.shopify.payment.paymentFragment
+import com.example.shopify.payment.view.paymentFragment
 import com.example.shopify.MyAddress.viewModel.MyAddressFactory
 import com.example.shopify.MyAddress.viewModel.MyAddressViewModel
 import com.example.shopify.newAddress.view.newAddress
 import com.example.shopify.setting.view.settingFragment
 import com.example.shopify.utility.ApiState
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -96,7 +95,6 @@ class myAddressFragment : Fragment() {
                             .show()
                     }
                 }
-                Log.i("delete", "onViewCreated: " + address.id)
             }, onEditButtonClick = { address ->
                 val bundle = Bundle().apply {
                     putSerializable("address", address)
@@ -112,6 +110,9 @@ class myAddressFragment : Fragment() {
                     .replace(R.id.frame_layout, editAddressFragment)
                     .addToBackStack(null)
                     .commit()
+            },
+            onCannotDeleteDefault = {
+                Snackbar.make(view, "You cannot delete your default address", Snackbar.LENGTH_SHORT).show()
             }
         )
 

@@ -1,4 +1,4 @@
-package com.example.shopify.payment
+package com.example.shopify.payment.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
