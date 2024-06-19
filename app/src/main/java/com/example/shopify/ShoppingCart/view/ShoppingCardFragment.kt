@@ -3,41 +3,35 @@ package com.example.shopify.ShoppingCart.view
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.shopify.BottomNavigationBar.Category.viewModel.CategoryViewModel
-import com.example.shopify.BottomNavigationBar.Category.viewModel.CategoryViewModelFactory
+import com.airbnb.lottie.LottieAnimationView
 import com.example.shopify.R
-import com.example.shopify.model.draftModel.DraftOrder
-import com.example.shopify.model.draftModel.DraftOrderResponse
-import com.example.shopify.payment.paymentFragment
 import com.example.shopify.ShoppingCart.model.PriceRule
 import com.example.shopify.ShoppingCart.model.ShoppingCardIClear
 import com.example.shopify.ShoppingCart.model.ShoppingCardRepo
 import com.example.shopify.ShoppingCart.viewModel.PriceRuleViewModelFactory
 import com.example.shopify.ShoppingCart.viewModel.ShoppingCardViewModel
-import com.example.shopify.model.ShopifyRepository
-import com.example.shopify.model.ShopifyRepositoryImp
-import com.example.shopify.model.productDetails.Product
-import com.example.shopify.network.ShopifyRemoteDataSourceImp
+import com.example.shopify.model.draftModel.DraftOrder
+import com.example.shopify.model.draftModel.DraftOrderResponse
+import com.example.shopify.payment.paymentFragment
 import com.example.shopify.setting.currency.CurrencyConverter
-import com.example.shopify.utility.ApiState
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 
-class shoppingCardFragment : Fragment() , ShoppingCardIClear{
+class shoppingCardFragment : Fragment(), ShoppingCardIClear {
 
     private lateinit var viewModel: ShoppingCardViewModel
     private lateinit var adapter: ShoppingCardAdapter
@@ -50,6 +44,8 @@ class shoppingCardFragment : Fragment() , ShoppingCardIClear{
 
     private lateinit var recyclerView: RecyclerView
     private var items: List<Item> = emptyList()
+    private lateinit var lottieAnimationView: LottieAnimationView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -73,10 +69,12 @@ class shoppingCardFragment : Fragment() , ShoppingCardIClear{
         recyclerView = view.findViewById<RecyclerView>(R.id.recyclerViewCardList)
         recyclerView.layoutManager = LinearLayoutManager(context)
         products = mutableListOf()
-        adapter = ShoppingCardAdapter(emptyList(),::onAddProduct, ::onRemoveProduct)
+        adapter = ShoppingCardAdapter(emptyList(), ::onAddProduct, ::onRemoveProduct)
         recyclerView.adapter = adapter
         totalPriceTextView = view.findViewById(R.id.textView3)
         discountText = view.findViewById(R.id.textView7)
+        lottieAnimationView = view.findViewById(R.id.lottie_no_data)
+
 
         //cards
         val currentUser = FirebaseAuth.getInstance().currentUser
@@ -91,7 +89,8 @@ class shoppingCardFragment : Fragment() , ShoppingCardIClear{
                 if (draftOrders != null) {
                     products.addAll(draftOrders)
                     items = draftOrders.map { draftOrder ->
-                        val imageUrl = draftOrder.note_attributes?.find { it.name == "image" }?.value ?: ""
+                        val imageUrl =
+                            draftOrder.note_attributes?.find { it.name == "image" }?.value ?: ""
                         Item(
                             title = draftOrder.line_items?.get(0)?.title ?: "No Name",
                             price = draftOrder.total_price ?: "0.0",
@@ -103,11 +102,12 @@ class shoppingCardFragment : Fragment() , ShoppingCardIClear{
                     }
                     adapter.updateItems(items)
                     calculateTotalPrice(draftOrders)
+                    checkRecyclerViewEmptyState()
                 }
             }
         }
 
-       //navigationg to checkout fragment
+        //navigationg to checkout fragment
         val checkOut = view.findViewById<Button>(R.id.checkOutButton)
         checkOut.setOnClickListener {
             val totalPrice = calculateTotalPrice(products)
@@ -165,7 +165,8 @@ class shoppingCardFragment : Fragment() , ShoppingCardIClear{
                 val currentQuantity = lineItem.quantity ?: 0
 
                 if (currentQuantity >= 5) {
-                    Snackbar.make(requireView(), "You reached your limit!!.", Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(requireView(), "You reached your limit!!.", Snackbar.LENGTH_SHORT)
+                        .show()
                     return
                 }
 
@@ -174,7 +175,10 @@ class shoppingCardFragment : Fragment() , ShoppingCardIClear{
                 }
 
                 lifecycleScope.launch {
-                    viewModel.updateDraftOrder(updatedDraftOrder.id.toString(), DraftOrderResponse(updatedDraftOrder))
+                    viewModel.updateDraftOrder(
+                        updatedDraftOrder.id.toString(),
+                        DraftOrderResponse(updatedDraftOrder)
+                    )
                     viewModel.draftOrderResponse.collectLatest { response ->
                         if (response != null) {
                             calculateTotalPrice(products)
@@ -208,7 +212,10 @@ class shoppingCardFragment : Fragment() , ShoppingCardIClear{
                         }
                     }
                 } else {
-                    viewModel.updateDraftOrder(updatedDraftOrder.id.toString(), DraftOrderResponse(updatedDraftOrder))
+                    viewModel.updateDraftOrder(
+                        updatedDraftOrder.id.toString(),
+                        DraftOrderResponse(updatedDraftOrder)
+                    )
                     viewModel.draftOrderResponse.collectLatest { response ->
                         if (response != null) {
                             calculateTotalPrice(products)
@@ -226,8 +233,8 @@ class shoppingCardFragment : Fragment() , ShoppingCardIClear{
         val discountPercentage = priceRule.value.toDouble() / 100
         discountAmount = totalPrice * discountPercentage
         val convertedDiscountAmount = CurrencyConverter.convertToUSD(discountAmount)
-        discountText.text =  "${"%.2f".format(convertedDiscountAmount)}"
-        Log.i("discount", "applyDiscount: "+discountAmount)
+        discountText.text = "${"%.2f".format(convertedDiscountAmount)}"
+        Log.i("discount", "applyDiscount: " + discountAmount)
     }
 
     private fun calculateTotalWithoutDiscount(items: List<DraftOrder>): Double {
@@ -245,6 +252,7 @@ class shoppingCardFragment : Fragment() , ShoppingCardIClear{
         return convertedTotalPrice
 
     }
+
     override fun clearShoppingCart() {
         viewModel.clearAllDraftOrder()
         lifecycleScope.launch {
@@ -260,5 +268,18 @@ class shoppingCardFragment : Fragment() , ShoppingCardIClear{
             }
         }
     }
+    private fun checkRecyclerViewEmptyState() {
+        if (products.isEmpty()) {
+            lottieAnimationView.visibility = View.VISIBLE
+        } else {
+            lottieAnimationView.visibility = View.GONE
+            recyclerView.visibility = View.VISIBLE
+        }
+    }
+    override fun onResume() {
+        super.onResume()
+        checkRecyclerViewEmptyState()
+    }
+
 
 }

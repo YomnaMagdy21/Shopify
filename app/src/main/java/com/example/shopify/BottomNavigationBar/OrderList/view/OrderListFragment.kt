@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.lottie.LottieAnimationView
 import com.example.shopify.BottomNavigationBar.OrderList.viewModel.OrderListViewModel
 import com.example.shopify.BottomNavigationBar.OrderList.viewModel.OrderListViewModelFactory
 import com.example.shopify.BottomNavigationBar.orderItem.view.OrderItemFragment
@@ -34,6 +35,7 @@ class OrderListFragment : Fragment(), OnOrderClickListener {
     private val currency = "EGP"
     private lateinit var progressBar: ProgressBar
     lateinit var backImage : ImageView
+    private lateinit var lottieAnimationView: LottieAnimationView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,6 +45,7 @@ class OrderListFragment : Fragment(), OnOrderClickListener {
         recyclerView = view.findViewById(R.id.rv_order_list)
         progressBar = view.findViewById(R.id.progressBar3)
         backImage = view.findViewById(R.id.iv_backRow)
+        lottieAnimationView = view.findViewById(R.id.lottie_no_data2)
 
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         factory = OrderListViewModelFactory(
@@ -70,14 +73,23 @@ class OrderListFragment : Fragment(), OnOrderClickListener {
                     is ApiState.Loading -> {
                         progressBar.visibility = View.VISIBLE
                         recyclerView.visibility = View.GONE
+                        lottieAnimationView.visibility = View.GONE
                     }
                     is ApiState.Success<*> -> {
                         progressBar.visibility = View.GONE
                         recyclerView.visibility = View.VISIBLE
+                        lottieAnimationView.visibility = View.GONE
+
                         val orders = (it.data as List<Order>)
                         if (orders.size==0){
                             println("No orders available")
+                            progressBar.visibility = View.GONE
+                            recyclerView.visibility = View.GONE
+                            lottieAnimationView.visibility = View.VISIBLE
                         }else{
+                            progressBar.visibility = View.GONE
+                            recyclerView.visibility = View.VISIBLE
+                            lottieAnimationView.visibility = View.GONE
                             orderListAdapter.updateData(orders)
 
                         }
@@ -87,6 +99,7 @@ class OrderListFragment : Fragment(), OnOrderClickListener {
                     is ApiState.Failure -> {
                         progressBar.visibility = View.GONE
                         recyclerView.visibility = View.GONE
+                        lottieAnimationView.visibility = View.VISIBLE
 
                     }
                 }

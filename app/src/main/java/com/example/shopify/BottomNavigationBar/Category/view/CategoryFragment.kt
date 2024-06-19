@@ -26,6 +26,7 @@ import androidx.lifecycle.lifecycleScope
 
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.lottie.LottieAnimationView
 import com.example.shopify.BottomNavigationBar.Category.viewModel.CategoryViewModel
 import com.example.shopify.BottomNavigationBar.Category.viewModel.CategoryViewModelFactory
 
@@ -95,6 +96,7 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
 
     private lateinit var favoriteViewModel: FavoriteViewModel
     private lateinit var favoriteViewModelFactory: FavoriteViewModelFactory
+    private lateinit var lottieAnimationView: LottieAnimationView
 
 
 
@@ -117,7 +119,8 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
         ivAccessories = view.findViewById(R.id.iv_sub_cat_bags)
         ivBlock = view.findViewById(R.id.iv_sub_cat_block)
         editTextSearch = view.findViewById(R.id.search_edit_text)
-
+        lottieAnimationView = view.findViewById(R.id.lottie_no_data3)
+        lottieAnimationView.visibility = View.GONE
 
         recyclerView = view.findViewById(R.id.rv_products_in_category)
 
@@ -318,23 +321,30 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
                     is ApiState.Success<*> -> {
                         progressBar.visibility = View.GONE
                         recyclerView.visibility = View.VISIBLE
+                        lottieAnimationView.visibility = View.GONE
 
 
-                        var products = result.data as CollectProductsModel?
-                        products?.let {
-                            adapter.updateData(it.products)
+                        val products = (result.data as? CollectProductsModel)?.products
+                        if (products.isNullOrEmpty()) {
+                            lottieAnimationView.visibility = View.VISIBLE
+                            recyclerView.visibility = View.GONE
+                        } else {
+                            lottieAnimationView.visibility = View.GONE
+                            recyclerView.visibility = View.VISIBLE
+                            adapter.updateData(products)
                         }
                     }
 
                     is ApiState.Failure -> {
                         progressBar.visibility = View.GONE
                         recyclerView.visibility = View.GONE
-
+                        lottieAnimationView.visibility = View.VISIBLE
                     }
 
                     is ApiState.Loading -> {
                         progressBar.visibility = View.VISIBLE
                         recyclerView.visibility = View.GONE
+                        lottieAnimationView.visibility = View.GONE
 
                     }
 
