@@ -130,7 +130,11 @@ class myAddressFragment : Fragment() {
 
         val back = view.findViewById<ImageView>(R.id.backImage)
         back.setOnClickListener {
-            val newFragment = settingFragment()
+            val source = arguments?.getString("source")
+            val newFragment = when (source) {
+                "payment" -> paymentFragment()
+                else -> settingFragment()
+            }
             parentFragmentManager.beginTransaction()
                 .replace(R.id.frame_layout, newFragment)
                 .addToBackStack(null)

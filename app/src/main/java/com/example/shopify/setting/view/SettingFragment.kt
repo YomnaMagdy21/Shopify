@@ -76,12 +76,17 @@ class settingFragment : Fragment() {
 
         val cardView1Adress = view.findViewById<CardView>(R.id.cardView1Adress)
         cardView1Adress.setOnClickListener {
-            val newFragment = myAddressFragment()
+            val myAddressFragment = myAddressFragment().apply {
+                arguments = Bundle().apply {
+                    putString("source", "setting")
+                }
+            }
             parentFragmentManager.beginTransaction()
-                .replace(R.id.frame_layout, newFragment)
+                .replace(R.id.frame_layout, myAddressFragment)
                 .addToBackStack(null)
                 .commit()
         }
+
         binding.logOutButton.setOnClickListener {
             Firebase(requireContext()).logout()
             val intent = Intent(requireContext(), MainActivity::class.java)
