@@ -7,6 +7,7 @@ import com.example.shopify.BottomNavigationBar.Favorite.model.FavDraftOrderRespo
 import com.example.shopify.Models.orderList.RetriveOrderModel
  
 import com.example.shopify.Models.products.CollectProductsModel
+import com.example.shopify.ShoppingCart.model.PriceRule
 import com.example.shopify.model.Brands.BrandModel
 import com.example.shopify.model.PostOrders.PostOrderModel
 import com.example.shopify.model.RetriveOrder.RetriveOrder
@@ -69,6 +70,7 @@ interface ShopifyRepository {
     suspend fun createOrder(order : PostOrderModel): Flow<RetriveOrder?>
 
     suspend fun getOrderList(): Flow<RetriveOrderModel?>
+
     fun getSpecificOrder(id:Long):Flow<RetriveOrder?>
 
 

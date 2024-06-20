@@ -1,4 +1,4 @@
-package com.example.shopify.payment
+package com.example.shopify.payment.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,8 +13,11 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
 class PaymentViewModel   (var repository: ShopifyRepository) : ViewModel() {
+
     private  var _order = MutableStateFlow<ApiState>(ApiState.Loading)
     var  accessOrder : StateFlow<ApiState> = _order
+    var totalPrice: Double = 0.0
+
     val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
         throwable.printStackTrace()
     }
@@ -27,8 +30,7 @@ class PaymentViewModel   (var repository: ShopifyRepository) : ViewModel() {
 
             }
         }
-
-
     }
+
 
 }

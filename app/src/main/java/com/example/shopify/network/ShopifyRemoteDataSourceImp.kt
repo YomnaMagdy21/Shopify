@@ -7,6 +7,8 @@ import com.example.shopify.BottomNavigationBar.Favorite.model.FavDraftOrderRespo
 import com.example.shopify.Models.orderList.RetriveOrderModel
  
 import com.example.shopify.Models.products.CollectProductsModel
+import com.example.shopify.ShoppingCart.model.PriceRule
+import com.example.shopify.ShoppingCart.model.PriceRulesResponse
 import com.example.shopify.model.Customer
 
 import com.example.shopify.model.Brands.BrandModel
@@ -23,7 +25,8 @@ import com.example.shopify.model.draftModel.DraftOrderResponse
 import com.example.shopify.model.draftModel.Draft_orders_list
 
 import com.example.shopify.model.currencyModel.CurrencyModel
- 
+import com.example.shopify.model.draftModel.DraftOrder
+
 import com.example.shopify.model.productDetails.ProductModel
 
 import kotlinx.coroutines.flow.Flow
@@ -187,7 +190,6 @@ class ShopifyRemoteDataSourceImp :ShopifyRemoteDataSource {
             throw Exception("Failed to fetch draft orders")
         }
     }
- 
 
 
 

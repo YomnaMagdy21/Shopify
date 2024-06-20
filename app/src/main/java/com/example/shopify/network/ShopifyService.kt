@@ -2,29 +2,21 @@ package com.example.shopify.network
 
 
 import com.example.shopify.BottomNavigationBar.Favorite.model.FavDraftOrderResponse
-
 import com.example.shopify.Models.orderList.RetriveOrderModel
- 
 import com.example.shopify.Models.products.CollectProductsModel
-
 import com.example.shopify.model.Brands.BrandModel
 import com.example.shopify.model.addressModel.Address
 import com.example.shopify.model.addressModel.AddressesModel
-
 import com.example.shopify.model.createCustomerRequest
 import com.example.shopify.model.draftModel.DraftOrderResponse
 import com.example.shopify.model.draftModel.Draft_orders_list
 import com.example.shopify.model.createCustomersResponse
 import com.example.shopify.model.productDetails.ProductModel
-
-
 import com.example.shopify.ShoppingCart.model.PriceRulesResponse
 import com.example.shopify.model.PostOrders.PostOrderModel
 import com.example.shopify.model.RetriveOrder.RetriveOrder
 import com.example.shopify.model.addressModel.AddNewAddress
-import com.example.shopify.model.currencyModel.CurrencyModel
 import com.example.shopify.utility.Constants
-import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -149,16 +141,6 @@ interface ShopifyService {
     @Headers("X-Shopify-Access-Token: ${Constants.adminApiAccessToken}")
     @PUT("admin/api/2024-04/customers/{customerId}/addresses/{addressId}.json")
     suspend fun editAddress(@Path(value="customerId") customerId:Long, @Path(value="addressId") addressId:Long,@Body addresse: AddNewAddress) :Response<AddressesModel>
-
-    //currency convert
-    /*@GET(" https://api.getgeoapi.com/v2/currency/convert")
-    suspend fun convertCurrency(
-        @Query("api_key") access_key: String,
-        @Query("from") from: String,
-        @Query("to") to: String,
-        @Query("amount") amount: Double
-    ) : Response<CurrencyModel>*/
-
 
 
     // post order

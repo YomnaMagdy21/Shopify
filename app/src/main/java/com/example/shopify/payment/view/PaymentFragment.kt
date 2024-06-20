@@ -1,4 +1,4 @@
-package com.example.shopify.payment
+package com.example.shopify.payment.view
 
 import android.app.AlertDialog
 import android.content.Context
@@ -13,10 +13,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import com.example.shopify.BottomNavigationBar.Home.view.HomeFragment
 import android.util.Log
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import com.android.volley.AuthFailureError
 import com.android.volley.Request
 import com.android.volley.Response
@@ -35,15 +35,15 @@ import com.example.shopify.model.PostOrders.PostOrderModel
 import com.example.shopify.model.ShopifyRepositoryImp
 import com.example.shopify.model.draftModel.DraftOrder
 import com.example.shopify.network.ShopifyRemoteDataSourceImp
-import com.example.shopify.utility.ApiState
+import com.example.shopify.payment.viewModel.PaymentViewModelFactory
+import com.example.shopify.payment.viewModel.PaymentViewModel
 import com.google.gson.Gson
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import com.example.shopify.utility.Constants
 import com.google.android.material.snackbar.Snackbar
 import com.stripe.android.PaymentConfiguration
 import com.stripe.android.paymentsheet.PaymentSheet
 import com.stripe.android.paymentsheet.PaymentSheetResult
+import kotlinx.coroutines.launch
 import org.json.JSONException
 import org.json.JSONObject
 
@@ -51,6 +51,7 @@ class paymentFragment : Fragment() {
 
     private lateinit var address: Address
     lateinit var myCurrentAdreesText: TextView
+    lateinit var edit : TextView
 
     lateinit var orderButton: Button
     lateinit var paymentViewModel: PaymentViewModel
@@ -69,20 +70,21 @@ class paymentFragment : Fragment() {
     private lateinit var customerId: String
     private lateinit var ephemeralKey: String
     private lateinit var clientSecret: String
-    private var totalPrice: Double = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
-        arguments?.let {
-            draftOrders = it.getSerializable("products") as ArrayList<DraftOrder>
-            totalPrice = it.getDouble("total_price")
-            userEmail = it.getString("email") ?: ""
-        }
-        
+
+        paymentViewModelFactory = PaymentViewModelFactory(ShopifyRepositoryImp.getInstance(ShopifyRemoteDataSourceImp.getInstance()))
+        paymentViewModel = ViewModelProvider(requireActivity(), paymentViewModelFactory).get(PaymentViewModel::class.java)
         //initalizting
         PaymentConfiguration.init(requireContext(), Constants.PUBLISH_KEY)
         paymentSheet = PaymentSheet(this, ::onPaymentSheetResult)
+        
+        arguments?.let {
+            draftOrders = it.getSerializable("products") as ArrayList<DraftOrder>
+            paymentViewModel.totalPrice = it.getDouble("total_price")
+            userEmail = it.getString("email") ?: ""
+        }
 
 
     }
@@ -98,7 +100,6 @@ class paymentFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         myCurrentAdreesText = view.findViewById(R.id.textView10)
         orderButton = view.findViewById(R.id.placeOrderButton)
 
@@ -106,6 +107,8 @@ class paymentFragment : Fragment() {
         checkBoxOnline = view.findViewById(R.id.checkBoxOnline)
 
         myCurrentAdreesText = view.findViewById(R.id.textView10)
+        edit = view.findViewById(R.id.textViewEdit)
+
         val sharedPreferences =
             requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val userId = sharedPreferences.getString("userID", null)
@@ -128,7 +131,7 @@ class paymentFragment : Fragment() {
         } ?: run {
             // If there are no arguments, load the default address from SharedPreferences
             address = userId?.let { loadAddressFromPreferences(it) }?: Address(
-                "",
+                "Add your Address Please",
                 "",
                 "",
                 "",
@@ -142,19 +145,7 @@ class paymentFragment : Fragment() {
             "${address.address1}, ${address.address2}, ${address.city}, ${address.company}"
 
         totalPriceText = view.findViewById(R.id.textView3)
-        totalPriceText.text = totalPrice.toString()
-
-
-        paymentViewModelFactory = PaymentViewModelFactory(
-            ShopifyRepositoryImp.getInstance(
-                ShopifyRemoteDataSourceImp.getInstance()
-            )
-        )
-        paymentViewModel = ViewModelProvider(
-            requireActivity(),
-            paymentViewModelFactory
-        ).get(PaymentViewModel::class.java)
-
+        totalPriceText.text = paymentViewModel.totalPrice.toString()
 
 
         //navigate to shopping card fragment
@@ -167,10 +158,14 @@ class paymentFragment : Fragment() {
                 .commit()
         }
         //navigate to address list fragment
-        myCurrentAdreesText.setOnClickListener {
-            val newFragment = myAddressFragment()
+        edit.setOnClickListener {
+            val myAddressFragment = myAddressFragment().apply {
+                arguments = Bundle().apply {
+                    putString("source", "payment")
+                }
+            }
             parentFragmentManager.beginTransaction()
-                .replace(R.id.frame_layout, newFragment)
+                .replace(R.id.frame_layout, myAddressFragment)
                 .addToBackStack(null)
                 .commit()
         }
@@ -185,7 +180,6 @@ class paymentFragment : Fragment() {
                 Log.i("flow", "Online CheckBox is not checked.")
             }
         }
-
         checkBoxOffline.setOnClickListener {
             if (checkBoxOffline.isChecked) {
                 checkBoxOnline.isChecked = false
@@ -195,13 +189,19 @@ class paymentFragment : Fragment() {
                 Log.i("flow", "Offline CheckBox is not checked.")
             }
         }
-
         creatStripCustomerId()
 
         // listener of orderButton to create order
         orderButton.setOnClickListener {
-            createOrder()
-        }
+            if (paymentMethod.isEmpty()) {
+                Snackbar.make(view, "Please choose a payment method.", Snackbar.LENGTH_SHORT).show()
+            } else if (paymentMethod == "Cash") {
+                createOrder()
+            } else {
+                Snackbar.make(view, "Please complete the payment process.", Snackbar.LENGTH_SHORT).show()
+            }
+         }
+
     }
     private fun createOrder() {
         val customer = draftOrders[0].customer ?: return
@@ -243,7 +243,7 @@ class paymentFragment : Fragment() {
             fulfillment_status = "unfulfilled",
             email = customer.email,
             id = null,                                                     // will be auto-generated
-            total_price = totalPrice.toString(),
+            total_price = paymentViewModel.totalPrice.toString(),
             currency = "EGP",
             tags = paymentMethod,
             customer = Customer(
@@ -329,7 +329,8 @@ class paymentFragment : Fragment() {
         when (paymentSheetResult) {
             is PaymentSheetResult.Completed -> {
                 Snackbar.make(requireView(), "Payment completed successfully!", Snackbar.LENGTH_SHORT).show()
-                totalPriceText.text = " "
+                //totalPriceText.text = " "
+                createOrder()
             }
 
             is PaymentSheetResult.Failed -> {
@@ -349,7 +350,6 @@ class paymentFragment : Fragment() {
                 try {
                     val jsonObject = JSONObject(response)
                     customerId = jsonObject.getString("id")
-                    Toast.makeText(requireContext(),"Customer Id: "+customerId,Toast.LENGTH_SHORT).show()
                     getEphericalKey(customerId)
                 } catch (e: JSONException) {
                     e.printStackTrace()
@@ -433,7 +433,7 @@ class paymentFragment : Fragment() {
             override fun getParams(): Map<String, String> {
                 val param: HashMap<String,String> = HashMap<String,String>()
                 param.put("customer" ,customerId)
-                val str = (totalPrice * 100).toInt()
+                val str = (paymentViewModel.totalPrice * 100).toInt()
                 param.put("amount", str.toString())
                 param.put("currency" ,"EGP")
                 param.put("automatic_payment_methods[enabled]" ,"true")
@@ -449,5 +449,6 @@ class paymentFragment : Fragment() {
         paymentSheet.presentWithPaymentIntent(clientSecret, PaymentSheet.Configuration("SHOPIFY",
             PaymentSheet.CustomerConfiguration(customerId,ephemeralKey)))
     }
+
 
 }
