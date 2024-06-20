@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.lottie.LottieAnimationView
 import com.example.shopify.R
 import com.example.shopify.model.ShopifyRepositoryImp
 import com.example.shopify.model.addressModel.Address
@@ -35,6 +36,7 @@ class myAddressFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var myAddressAdapter: MyAddressAdapter
     private lateinit var viewModel: MyAddressViewModel
+    private lateinit var lottieAnimationView: LottieAnimationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,6 +62,7 @@ class myAddressFragment : Fragment() {
         recyclerView = view.findViewById(R.id.RVAddresses)
         recyclerView.layoutManager = LinearLayoutManager(context)
 
+        lottieAnimationView = view.findViewById(R.id.animationView)
         //get user id and pass it
         val sharedPreferences =
             requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
@@ -151,11 +154,16 @@ class myAddressFragment : Fragment() {
                     is ApiState.Success<*> -> {
                         var products = apiState.data as AddressesModel?
                         products?.let {
-                            if (it.addresses != null) {
+                            if (!it.addresses.isNullOrEmpty()) {
                                 val defaultAddressId = userId?.let { it1 -> getDefaultAddressIdFromSharedPreferences(it1) }
                                 myAddressAdapter.updateAddresses(it.addresses, defaultAddressId)
+                                lottieAnimationView.visibility = View.GONE
+                                Log.i("address", "onViewCreated: Gone")
+
                             } else {
                                 Log.i("address", "onViewCreated: hiiiiiiii")
+                                lottieAnimationView.visibility = View.VISIBLE
+                                lottieAnimationView.playAnimation()
                             }
                         }
                     }

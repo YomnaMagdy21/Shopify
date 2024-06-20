@@ -161,5 +161,9 @@ class ShopifyRepositoryImp(private var shopifyRemoteDataSource: ShopifyRemoteDat
         return  shopifyRemoteDataSource.getOrderList()
     }
 
+    override fun getSpecificOrder(id: Long): Flow<RetriveOrder?> {
+        return shopifyRemoteDataSource.getSpecificOrder(id)
+    }
+
 
 }

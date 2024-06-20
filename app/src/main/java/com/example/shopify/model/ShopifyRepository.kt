@@ -71,5 +71,7 @@ interface ShopifyRepository {
 
     suspend fun getOrderList(): Flow<RetriveOrderModel?>
 
+    fun getSpecificOrder(id:Long):Flow<RetriveOrder?>
+
 
 }

@@ -19,13 +19,39 @@ class OrderListViewModel(private val repository: ShopifyRepository) : ViewModel(
         throwable.printStackTrace()
     }
 
-    fun getOrders() {
+//    fun getOrders() {
+//        viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
+//            repository.getOrderList().catch { error ->
+//                _orderList.value = ApiState.Failure(error)
+//            }.collect { orders ->
+//                _orderList.value = ApiState.Success(orders)
+//            }
+//        }
+//    }
+
+    fun getSpecOrders(id: Long) {
         viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
-            repository.getOrderList().catch { error ->
+            repository.getSpecificOrder(id).catch { error ->
                 _orderList.value = ApiState.Failure(error)
             }.collect { orders ->
                 _orderList.value = ApiState.Success(orders)
             }
         }
     }
+
+    fun getSpecOrders(customerEmail: String) {
+        viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
+            repository.getOrderList().catch { error ->
+                _orderList.value = ApiState.Failure(error)
+            }.collect { orders ->
+                orders?.orders?.let { orderList ->
+                    val filteredOrders = orderList.filter { order ->
+                        order.email.equals(customerEmail, ignoreCase = true)
+                    }
+                    _orderList.value = ApiState.Success(filteredOrders)
+                }
+            }
+        }
+    }
+
 }

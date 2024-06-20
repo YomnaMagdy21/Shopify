@@ -41,6 +41,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlin.math.log
 
 
 class SignInFragment : Fragment() {
@@ -187,6 +188,11 @@ class SignInFragment : Fragment() {
                                 val person = result.data as? createCustomersResponse
                                 signInViewModel.getCustomerByEmail(email)
 
+                                Log.i(TAG, "onViewCreated: first name ${person?.customers?.get(0)?.first_name}")
+                                var firstName = person?.customers?.get(0)?.first_name
+                                if (firstName != null) {
+                                    SharedPreference.saveFirstName(requireContext(),email,firstName)
+                                }
 //                                var userEmail = person?.customers?.get(0)?.email
 //                                Log.i(TAG, "onViewCreated: userEmail ${userEmail}")
 //                                Log.i(

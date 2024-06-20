@@ -80,4 +80,5 @@ interface ShopifyRemoteDataSource {
         id: Long
     ): Flow<FavDraftOrderResponse?>
 
+    fun getSpecificOrder(id:Long):Flow<RetriveOrder?>
 }

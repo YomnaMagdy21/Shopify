@@ -1,6 +1,7 @@
 package com.example.shopify.BottomNavigationBar.Favorite.view
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
@@ -24,9 +25,12 @@ import com.example.shopify.BottomNavigationBar.Favorite.model.ItemLine
 import com.example.shopify.BottomNavigationBar.Favorite.model.Items
 import com.example.shopify.BottomNavigationBar.Favorite.viewmodel.FavoriteViewModel
 import com.example.shopify.BottomNavigationBar.Favorite.viewmodel.FavoriteViewModelFactory
+import com.example.shopify.BottomNavigationBar.Home.view.HomeFragment
+import com.example.shopify.MainActivity
 import com.example.shopify.R
 import com.example.shopify.ShoppingCart.view.Item
 import com.example.shopify.databinding.FragmentFavoriteBinding
+import com.example.shopify.login.view.SignInFragment
 import com.example.shopify.login.viewmodel.SignInViewModel
 import com.example.shopify.login.viewmodel.SignInViewModelFactory
 import com.example.shopify.model.ShopifyRepositoryImp
@@ -104,6 +108,8 @@ class FavoriteFragment : Fragment() ,onFavoriteClickListener{
 //        val sharedPreferences = requireContext().getSharedPreferences("draftPref", Context.MODE_PRIVATE)
 //        val draftOrderId = sharedPreferences.getString("draft_order_id", null)
        // SharedPreference.clearPreferences(requireContext())
+        binding.progressBar.visibility = View.GONE
+
         var email = SharedPreference.getUserEmail(requireContext())
         var draftID = SharedPreference.getDraftOrderId(requireContext(),email)
 
@@ -111,9 +117,38 @@ class FavoriteFragment : Fragment() ,onFavoriteClickListener{
             favoriteViewModel.getFavorites(draftID.toLong())// Use the draftOrderId as needed
             Log.d("DraftOrder", "Draft Order ID: $draftID")
             binding.animationView.visibility = View.GONE
+          //  binding.animationViewGuest.visibility = View.GONE
         } else {
+            binding.progressBar.visibility = View.GONE
 
-            binding.animationView.visibility = View.VISIBLE
+            var guest = SharedPreference.getGuest(requireContext())
+            if(guest == "yes"){
+                binding.progressBar.visibility = View.GONE
+                val builder = AlertDialog.Builder(requireContext())
+                builder.setTitle("Warning")
+                builder.setMessage("You are guest, you can login to use favorite")
+                builder.setNegativeButton("Cancel") { dialog, which ->
+
+                    val newFragment = HomeFragment()
+                    parentFragmentManager.beginTransaction()
+                        .replace(R.id.frame_layout, newFragment)
+                        .addToBackStack(null)
+                        .commit()
+
+                }
+                builder.setPositiveButton("Login") { dialog, which ->
+
+                    parentFragmentManager.beginTransaction()
+                        .replace(R.id.home_fragment, SignInFragment())
+                        .commit()
+                }
+
+                builder.show()
+            }
+            else {
+                binding.animationView.visibility = View.VISIBLE
+            }
+
             Log.e("DraftOrder", "Draft Order ID not found")
         }
 
@@ -147,9 +182,13 @@ class FavoriteFragment : Fragment() ,onFavoriteClickListener{
 
                     }
                     is ApiState.Failure -> {
+                        binding.progressBar.visibility = View.GONE
+
                         Log.e("FavoriteFragment", "onViewCreated: failure: ${result.msg}")
                     }
                     else -> {
+                        binding.progressBar.visibility = View.GONE
+
                         Log.i("FavoriteFragment", "onViewCreated: unknown state")
                     }
                 }

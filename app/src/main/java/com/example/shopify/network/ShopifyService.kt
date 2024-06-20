@@ -154,4 +154,10 @@ interface ShopifyService {
     @GET("admin/api/2024-04/orders.json")
     suspend fun getAllOrders() : Response<RetriveOrderModel>
 
+
+    // get specific order by id
+    @Headers("X-Shopify-Access-Token: ${Constants.adminApiAccessToken}")
+    @GET("admin/api/2024-04/orders/{order_id}.json")
+    suspend fun getOrder(@Path("order_id") orderId: Long): Response<RetriveOrder>
+
 }

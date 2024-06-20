@@ -689,9 +689,10 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
                 var email = SharedPreference.getUserEmail(requireContext())
                 var draftID = SharedPreference.getDraftOrderId(requireContext(), email)
 
+               // updatedLineItems.clear()
                 if (draftID != 10000000000) {
                     fetchDraftOrder(draftID) { draftOrder ->
-                        val updatedLineItems =
+                       var  updatedLineItems =
                             draftOrder?.line_items?.toMutableList() ?: mutableListOf()
                         Log.i("TAG", "Initial updatedLineItems: $updatedLineItems")
 
@@ -843,67 +844,69 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
                         }
                     } else {
                         fetchDraftOrder(draftID) { draftOrder ->
+                            updatedLineItems.clear()
+                            if (draftOrder != null) {
+                                val productTitle = product.product?.title
+                                val productVariantId = product.product?.variants?.get(0)?.id
+                                val productImageSrc = product.product?.image?.src
 
-                            val productTitle = product.product?.title
-                            val productVariantId = product.product?.variants?.get(0)?.id
-                            val productImageSrc = product.product?.image?.src
+                                if (productTitle != null && productVariantId != null && productImageSrc != null) {
+                                    // Ensure properties are correctly assigned
+                                    val properties = listOf(productImageSrc)
 
-                            if (productTitle != null && productVariantId != null && productImageSrc != null) {
-                                // Ensure properties are correctly assigned
-                                val properties = listOf(productImageSrc)
-
-                                val newLineItem = ItemLine(
-                                    title = productTitle,
-                                    variant_id = productVariantId,
-                                    quantity = 1,
-                                    sku = productImageSrc
-                                    // properties = properties
-                                )
+                                    val newLineItem = ItemLine(
+                                        title = productTitle,
+                                        variant_id = productVariantId,
+                                        quantity = 1,
+                                        sku = productImageSrc
+                                        // properties = properties
+                                    )
 
 
-                                updatedLineItems =
-                                    draftOrder?.line_items?.toMutableList()
-                                        ?: mutableListOf()
-                                Log.i(
-                                    "TAG",
-                                    "onViewCreated: updatedLineItems111 ${updatedLineItems}"
-                                )
-                                val itemExists =
-                                    updatedLineItems.any { it.variant_id == newLineItem.variant_id }
-
-                                if (!itemExists) {
-                                    updatedLineItems.add(newLineItem)
+                                    updatedLineItems =
+                                        draftOrder?.line_items?.toMutableList()
+                                            ?: mutableListOf()
                                     Log.i(
                                         "TAG",
-                                        "onViewCreated: updatedLineItems222 ${updatedLineItems}"
+                                        "onViewCreated: updatedLineItems111 ${updatedLineItems}"
                                     )
-                                    Log.i(
-                                        "TAG",
-                                        "onViewCreated: updatedLineItems3333 ${updatedLineItems}"
-                                    )
+                                    val itemExists =
+                                        updatedLineItems.any { it.variant_id == newLineItem.variant_id }
+
+                                    if (!itemExists) {
+                                        updatedLineItems.add(newLineItem)
+                                        Log.i(
+                                            "TAG",
+                                            "onViewCreated: updatedLineItems222 ${updatedLineItems}"
+                                        )
+                                        Log.i(
+                                            "TAG",
+                                            "onViewCreated: updatedLineItems3333 ${updatedLineItems}"
+                                        )
 
 
-                                    val favDraftOrder = FavDraftOrder(
-                                        id = draftID,
-                                        line_items = updatedLineItems
-                                    )
-                                    val favDraftOrderResponse =
-                                        FavDraftOrderResponse(favDraftOrder)
+                                        val favDraftOrder = FavDraftOrder(
+                                            id = draftID,
+                                            line_items = updatedLineItems
+                                        )
+                                        val favDraftOrderResponse =
+                                            FavDraftOrderResponse(favDraftOrder)
 
 
-                                    favoriteViewModel.updateFavorite(
-                                        draftID,
-                                        favDraftOrderResponse
-                                    )
+                                        favoriteViewModel.updateFavorite(
+                                            draftID,
+                                            favDraftOrderResponse
+                                        )
+
+                                    }
 
                                 }
-
                             }
                         }
                     }
+
+
                 }
-
-
             }
 
 

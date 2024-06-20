@@ -55,7 +55,6 @@ class HomeFragment : Fragment() , OnBrandClickListener {
     lateinit var smartCollections: List<SmartCollection>
     private lateinit var progressBar: ProgressBar
     private lateinit var etSearch: EditText
-    lateinit var networkObservation: NetworkObservation
 
 
    private val images = listOf(
@@ -93,10 +92,9 @@ class HomeFragment : Fragment() , OnBrandClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
-//        setBrandData()
-//        homeViewModel.getBrands()
+        setBrandData()
+        homeViewModel.getBrands()
         setupSearch()
-        checkNetworkAndAppearData()
 
     }
 
@@ -199,52 +197,4 @@ class HomeFragment : Fragment() , OnBrandClickListener {
         }
         brandsAdapter.setBrandsList(filteredList)
     }
-
-    // check internet connection and show data if available
-    private fun checkNetworkAndAppearData() {
-        networkObservation = NetworkConectivityObserver(requireContext())
-        lifecycleScope.launch {
-            networkObservation.observeOnNetwork().collectLatest { status ->
-                when (status) {
-                    InternetStatus.Available -> {
-                        homeViewModel.getBrands()
-                        setBrandData()
-                    }
-                    InternetStatus.Lost, InternetStatus.UnAvailable -> {
-                        progressBar.visibility = View.GONE
-                        brandsRecyclerView.visibility = View.GONE
-                        showNoConnectionPopup()
-                    }
-                }
-            }
-        }
-        // Check network when i open the app
-        if (!isNetworkAvailable()) {
-            progressBar.visibility = View.GONE
-            brandsRecyclerView.visibility = View.GONE
-            showNoConnectionPopup()
-        }
-    }
-
-    private fun isNetworkAvailable(): Boolean {
-        val connectivityManager = requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val activeNetwork: NetworkInfo? = connectivityManager.activeNetworkInfo
-        return activeNetwork?.isConnectedOrConnecting == true
-    }
-
-    private fun showNoConnectionPopup() {
-        if (context != null) {
-            AlertDialog.Builder(requireContext())
-                .setTitle("Internet Connection")
-                .setMessage("There is no connection.")
-                .setPositiveButton("OK", null)
-                .show()
-            println("no connection in pop up")
-        }
-    }
-    fun showSnakeBar() {
-        val snackbar = Snackbar.make(requireView(), "No Internet Connection ", Snackbar.LENGTH_LONG)
-        snackbar.show()
-    }
-
 }

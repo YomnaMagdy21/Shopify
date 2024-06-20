@@ -26,6 +26,7 @@ import androidx.lifecycle.lifecycleScope
 
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.lottie.LottieAnimationView
 import com.example.shopify.BottomNavigationBar.Category.viewModel.CategoryViewModel
 import com.example.shopify.BottomNavigationBar.Category.viewModel.CategoryViewModelFactory
 
@@ -95,9 +96,9 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
 
     private lateinit var favoriteViewModel: FavoriteViewModel
     private lateinit var favoriteViewModelFactory: FavoriteViewModelFactory
+    private lateinit var lottieAnimationView: LottieAnimationView
 
 
-    lateinit var networkObservation: NetworkObservation
 
 
 
@@ -118,7 +119,8 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
         ivAccessories = view.findViewById(R.id.iv_sub_cat_bags)
         ivBlock = view.findViewById(R.id.iv_sub_cat_block)
         editTextSearch = view.findViewById(R.id.search_edit_text)
-
+        lottieAnimationView = view.findViewById(R.id.lottie_no_data3)
+        lottieAnimationView.visibility = View.GONE
 
         recyclerView = view.findViewById(R.id.rv_products_in_category)
 
@@ -194,7 +196,6 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
         // Default selection: get all products "without any filtration"
         fetchProducts()
         setupSearch()
-        checkNetworkAndAppearData()
 
 
         return view
@@ -320,23 +321,30 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
                     is ApiState.Success<*> -> {
                         progressBar.visibility = View.GONE
                         recyclerView.visibility = View.VISIBLE
+                        lottieAnimationView.visibility = View.GONE
 
 
-                        var products = result.data as CollectProductsModel?
-                        products?.let {
-                            adapter.updateData(it.products)
+                        val products = (result.data as? CollectProductsModel)?.products
+                        if (products.isNullOrEmpty()) {
+                            lottieAnimationView.visibility = View.VISIBLE
+                            recyclerView.visibility = View.GONE
+                        } else {
+                            lottieAnimationView.visibility = View.GONE
+                            recyclerView.visibility = View.VISIBLE
+                            adapter.updateData(products)
                         }
                     }
 
                     is ApiState.Failure -> {
                         progressBar.visibility = View.GONE
                         recyclerView.visibility = View.GONE
-
+                        lottieAnimationView.visibility = View.VISIBLE
                     }
 
                     is ApiState.Loading -> {
                         progressBar.visibility = View.VISIBLE
                         recyclerView.visibility = View.GONE
+                        lottieAnimationView.visibility = View.GONE
 
                     }
 
@@ -646,56 +654,4 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
             }
         }
     }
-
-
-        // check internet connection and show data if available
-        private fun checkNetworkAndAppearData() {
-            networkObservation = NetworkConectivityObserver(requireContext())
-            lifecycleScope.launch {
-                networkObservation.observeOnNetwork().collectLatest { status ->
-                    when (status) {
-                        InternetStatus.Available -> {
-                            fetchProducts()
-                        }
-
-                        InternetStatus.Lost, InternetStatus.UnAvailable -> {
-                            progressBar.visibility = View.GONE
-                            recyclerView.visibility = View.GONE
-                            showNoConnectionPopup()
-                        }
-                    }
-                }
-            }
-
-            if (!isNetworkAvailable()) {
-                progressBar.visibility = View.GONE
-                recyclerView.visibility = View.GONE
-                showNoConnectionPopup()
-            }
-        }
-
-        private fun isNetworkAvailable(): Boolean {
-            val connectivityManager =
-                requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-            val activeNetwork: NetworkInfo? = connectivityManager.activeNetworkInfo
-            return activeNetwork?.isConnectedOrConnecting == true
-        }
-
-        private fun showNoConnectionPopup() {
-            if (context != null) {
-                AlertDialog.Builder(requireContext())
-                    .setTitle("Internet Connection")
-                    .setMessage("There is no connection.")
-                    .setPositiveButton("OK", null)
-                    .show()
-            }
-        }
-
-        fun showSnakeBar() {
-            val snackbar =
-                Snackbar.make(requireView(), "No Internet Connection ", Snackbar.LENGTH_LONG)
-            snackbar.show()
-
-        }
-
 }
