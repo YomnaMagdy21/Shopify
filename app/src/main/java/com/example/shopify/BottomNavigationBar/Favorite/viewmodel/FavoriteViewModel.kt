@@ -61,15 +61,15 @@ class FavoriteViewModel (private val _repo: ShopifyRepository): ViewModel() {
         }
     }
 
-    fun createFavDraftOrders(draftOrder: FavDraftOrderResponse){
-        viewModelScope.launch(Dispatchers.IO){
-            _repo.createFavDraftOrders(draftOrder)
-                .catch {err->
-                    _wishList.value= ApiState.Failure(err)
-                }
-                .collect{
-                    _wishList.value= ApiState.Success(it)
-                }
-        }
-    }
+//    fun createFavDraftOrders(draftOrder: FavDraftOrderResponse){
+//        viewModelScope.launch(Dispatchers.IO){
+//            _repo.createFavDraftOrders(draftOrder)
+//                .catch {err->
+//                    _wishList.value= ApiState.Failure(err)
+//                }
+//                .collect{
+//                    _wishList.value= ApiState.Success(it)
+//                }
+//        }
+//    }
 }
