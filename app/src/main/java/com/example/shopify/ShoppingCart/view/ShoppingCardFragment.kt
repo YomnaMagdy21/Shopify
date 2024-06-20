@@ -130,8 +130,10 @@ class shoppingCardFragment : Fragment() , ShoppingCardIClear{
 
         applyButton.setOnClickListener {
             val inputText = editText.text.toString()
-            if (inputText.isNotEmpty()) {
+            if (inputText.isNotEmpty() && products.isNotEmpty()) {
                 validateCoupon(inputText, textView)
+            } else if (products.isEmpty()) {
+                Snackbar.make(requireView(), "Your cart is empty. Add items before applying a coupon.", Snackbar.LENGTH_SHORT).show()
             }
         }
 
