@@ -84,9 +84,9 @@ class shoppingCardFragment : Fragment(), ShoppingCardIClear {
         totalPriceTextView = view.findViewById(R.id.textView3)
         discountText = view.findViewById(R.id.textView7)
 
-        lottie = view.findViewById(R.id.animationView)
-
-        lottie.visibility = View.VISIBLE
+//        lottie = view.findViewById(R.id.animationView)
+//
+//        lottie.visibility = View.VISIBLE
 
         lottieAnimationView = view.findViewById(R.id.lottie_no_data)
 
@@ -118,12 +118,9 @@ class shoppingCardFragment : Fragment(), ShoppingCardIClear {
                     }
                     adapter.updateItems(items)
                     calculateTotalPrice(draftOrders)
-
-                    lottie.visibility = View.GONE
+                    checkRecyclerViewEmptyState()
                 }
                 else{
-                    lottie.visibility = View.VISIBLE
-
                     checkRecyclerViewEmptyState()
  
                 }
@@ -236,6 +233,7 @@ class shoppingCardFragment : Fragment(), ShoppingCardIClear {
                         if (response != null) {
                             calculateTotalPrice(products)
                             Log.i("ShoppingCardFragment", "Draft order updated: $response")
+                            checkRecyclerViewEmptyState()
                         } else {
                             Log.e("ShoppingCardFragment", "Failed to update draft order")
                         }
@@ -260,6 +258,7 @@ class shoppingCardFragment : Fragment(), ShoppingCardIClear {
                             products.remove(draftOrder)
                             calculateTotalPrice(products)
                             Log.i("ShoppingCardFragment", "Draft order deleted: $response")
+                            checkRecyclerViewEmptyState()
                         } else {
                             Log.e("ShoppingCardFragment", "Failed to delete draft order")
                         }
@@ -273,6 +272,7 @@ class shoppingCardFragment : Fragment(), ShoppingCardIClear {
                         if (response != null) {
                             calculateTotalPrice(products)
                             Log.i("ShoppingCardFragment", "Draft order updated: $response")
+                            checkRecyclerViewEmptyState()
                         } else {
                             Log.e("ShoppingCardFragment", "Failed to update draft order")
                         }
@@ -314,6 +314,7 @@ class shoppingCardFragment : Fragment(), ShoppingCardIClear {
                     products.clear()
                     adapter.updateItems(emptyList())
                     totalPriceTextView.text = "0.00"
+                    checkRecyclerViewEmptyState()
                     Log.i("shoppingCardFragment", "Shopping Cart is cleared")
                 } else {
                     Log.i("shoppingCardFragment", "Failed to clear shopping cart")

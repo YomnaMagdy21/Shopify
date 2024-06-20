@@ -228,7 +228,7 @@
         app:layout_constraintTop_toTopOf="@+id/rv_products_in_category"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
-        app:lottie_rawRes="@raw/animation_1718733450789"
+        app:lottie_rawRes="@raw/animation_1718797747132"
 
         />
 
