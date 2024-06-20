@@ -14,6 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.forEach
 import kotlinx.coroutines.launch
 
@@ -103,17 +104,23 @@ class ShoppingCardViewModel(private val repo: ShoppingCardRepo) : ViewModel() {
     // clear the draft order
     fun clearAllDraftOrder() {
         viewModelScope.launch {
-            repo.getDraftOrders()
-                .catch { e -> Log.e("ShoppingCardViewModel", "Failed to clear draft orders", e) }
-                .collect { draftOrders ->
-                    draftOrders.forEach { draftOrder ->
-                        repo.deleteDraftOrder(draftOrder.id.toString())
-                    }
-                    _getDraftOrderList.value = emptyList()
+            try {
+                _getDraftOrderList.value?.forEach { draftOrder ->
+                    repo.deleteDraftOrder(draftOrder.id.toString())
+                        .collect { success ->
+                            if (success) {
+                                _getDraftOrderList.value = emptyList()
+                                Log.i("ShoppingCardViewModel", "All draft orders cleared successfully")
+                            } else {
+                                Log.e("ShoppingCardViewModel", "Failed to delete draft order")
+                            }
+                        }
                 }
+            } catch (e: Exception) {
+                Log.e("ShoppingCardViewModel", "Failed to clear all draft orders", e)
+            }
         }
     }
-
 }
 
 class PriceRuleViewModelFactory(private val repository: ShoppingCardRepo) : ViewModelProvider.Factory {

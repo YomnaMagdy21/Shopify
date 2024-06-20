@@ -10,28 +10,17 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-
 import androidx.appcompat.app.AlertDialog
-
 import androidx.fragment.app.Fragment
-
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-
-import com.example.shopify.R
+import com.airbnb.lottie.LottieAnimationView
 import com.example.shopify.model.draftModel.DraftOrder
 import com.example.shopify.model.draftModel.DraftOrderResponse
 import com.example.shopify.payment.view.paymentFragment
-import com.airbnb.lottie.Lottie
-
-import com.example.shopify.BottomNavigationBar.Category.viewModel.CategoryViewModel
-import com.example.shopify.BottomNavigationBar.Category.viewModel.CategoryViewModelFactory
 import com.example.shopify.BottomNavigationBar.Home.view.HomeFragment
-import com.example.shopify.MainActivity
-
-import com.airbnb.lottie.LottieAnimationView
 
 import com.example.shopify.R
 import com.example.shopify.ShoppingCart.model.PriceRule
@@ -41,17 +30,8 @@ import com.example.shopify.ShoppingCart.viewModel.PriceRuleViewModelFactory
 import com.example.shopify.ShoppingCart.viewModel.ShoppingCardViewModel
 import com.example.shopify.setting.currency.CurrencyConverter
 import com.example.shopify.login.view.SignInFragment
-import com.example.shopify.model.ShopifyRepository
-import com.example.shopify.model.ShopifyRepositoryImp
-import com.example.shopify.model.productDetails.Product
-import com.example.shopify.network.ShopifyRemoteDataSourceImp
-import com.example.shopify.setting.currency.CurrencyConverter
-import com.example.shopify.utility.ApiState
 import com.example.shopify.utility.SharedPreference
 
-import com.example.shopify.model.draftModel.DraftOrder
-import com.example.shopify.model.draftModel.DraftOrderResponse
-import com.example.shopify.payment.paymentFragment
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.collectLatest
