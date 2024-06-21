@@ -5,6 +5,9 @@ import com.example.shopify.BottomNavigationBar.Favorite.model.FavDraftOrderRespo
 import com.example.shopify.Models.orderList.RetriveOrderModel
 import com.example.shopify.Models.products.CollectProductsModel
 import com.example.shopify.model.Brands.BrandModel
+import com.example.shopify.model.Brands.Image
+import com.example.shopify.model.Brands.SmartCollection
+import com.example.shopify.model.PostOrders.Order
 import com.example.shopify.model.PostOrders.PostOrderModel
 import com.example.shopify.model.RetriveOrder.RetriveOrder
 import com.example.shopify.model.addressModel.AddNewAddress
@@ -23,6 +26,7 @@ class FakeShopifyRepository : ShopifyRepository{
     var productInfoData = ProductModel(product)
     var favDraftOrder = FavDraftOrder()
     var favDraftOrderResponse=FavDraftOrderResponse(favDraftOrder)
+
     var customer=
         Customer(null,null,null,null,"","","",null,null,null,null,true,null,null,null,null,null)
 
@@ -31,8 +35,25 @@ class FakeShopifyRepository : ShopifyRepository{
    var customerRequest = createCustomerRequest(customer1)
 
     var fakeRemoteDataSource=FakeRemoteDataSource()
+
+
+    var smartCollections : List<SmartCollection> = listOf(SmartCollection("11" , "body", true, "handle" , 2425, Image("","",1,"",20), "", "", listOf(), "", "","","" ))
+
+    var brandModel = BrandModel(smartCollections)
+
+    val productCategory = listOf(Product(null,null,null,null,24125,null,
+        listOf(),null,"women",null,null,null,"",null,"product2",null,null,null,false))
+
+    val collectProductsModel = CollectProductsModel(productCategory)
+
+
+    var order: List<Order> = listOf( Order(null , null , null , null , "nermeenzaitoon@gmail.com" , null , 24125))
+    var retriveOrderModel = RetriveOrderModel(order)
+
+
     override suspend fun getBrands(): Flow<BrandModel?> {
-        TODO("Not yet implemented")
+            return flowOf(brandModel)
+
     }
 
     override fun createNewCustomer(customer: createCustomerRequest): Flow<createCustomerRequest?> {
@@ -60,14 +81,14 @@ class FakeShopifyRepository : ShopifyRepository{
     }
 
     override suspend fun getCollectionProducts(id: Long): Flow<CollectProductsModel?> {
-        TODO("Not yet implemented")
+        return flowOf(collectProductsModel)
     }
 
     override suspend fun getProducts(
         collectionId: Long?,
         productType: String?
     ): Flow<CollectProductsModel?> {
-        TODO("Not yet implemented")
+        return flowOf(collectProductsModel)
     }
 
     override suspend fun getAddresses(customerId: Long): Flow<AddressesModel?> {
@@ -132,7 +153,7 @@ class FakeShopifyRepository : ShopifyRepository{
     }
 
     override suspend fun getOrderList(): Flow<RetriveOrderModel?> {
-        TODO("Not yet implemented")
+        return flowOf(retriveOrderModel)
     }
 
     override fun getSpecificOrder(id: Long): Flow<RetriveOrder?> {
