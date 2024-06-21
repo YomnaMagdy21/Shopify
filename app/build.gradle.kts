@@ -131,4 +131,7 @@ dependencies {
     androidTestImplementation ("androidx.test:runner:1.4.0")
     androidTestImplementation ("androidx.test.ext:junit:1.1.3")
 
+    testImplementation ("org.robolectric:robolectric:4.7.3")
+
+
 }
