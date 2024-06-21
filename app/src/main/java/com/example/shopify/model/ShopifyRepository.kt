@@ -31,9 +31,6 @@ interface ShopifyRepository {
 
     fun createNewCustomer(customer: createCustomerRequest):Flow<createCustomerRequest?>
 
-    // get all products of category
-    suspend fun getAllProducts(): Flow<CollectProductsModel?>
-
     fun getCustomerByEmail(email: String):Flow<createCustomersResponse?>
     fun getCustomerById(customerId: Long):Flow<createCustomerRequest?>
 
@@ -70,8 +67,6 @@ interface ShopifyRepository {
     suspend fun createOrder(order : PostOrderModel): Flow<RetriveOrder?>
 
     suspend fun getOrderList(): Flow<RetriveOrderModel?>
-
-    fun getSpecificOrder(id:Long):Flow<RetriveOrder?>
 
     //cart
     suspend fun updateDraftOrder(id: String, draftOrder: DraftOrderResponse): Flow<DraftOrderResponse?>

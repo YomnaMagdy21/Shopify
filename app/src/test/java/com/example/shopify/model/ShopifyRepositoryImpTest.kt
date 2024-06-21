@@ -1,18 +1,30 @@
 package com.example.shopify.model
 
-import com.example.shopify.BottomNavigationBar.Favorite.model.FavDraftOrder
 import com.example.shopify.BottomNavigationBar.Favorite.model.FavDraftOrderResponse
+import com.example.shopify.Models.orderList.RetriveOrderModel
+import com.example.shopify.Models.products.CollectProductsModel
+import com.example.shopify.getOrAwaitValue
+import com.example.shopify.model.Brands.BrandModel
+import com.example.shopify.model.Brands.Image
+import com.example.shopify.model.Brands.SmartCollection
+import com.example.shopify.model.PostOrders.Order
+import com.example.shopify.model.PostOrders.PostOrderModel
+import com.example.shopify.model.RetriveOrder.RetriveOrder
 import com.example.shopify.model.productDetails.Product
 import com.example.shopify.model.productDetails.ProductModel
 import com.example.shopify.network.ShopifyRemoteDataSource
+import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runBlockingTest
+import org.hamcrest.CoreMatchers
 import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.CoreMatchers.notNullValue
+import org.hamcrest.CoreMatchers.nullValue
 import org.hamcrest.MatcherAssert.assertThat
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 
 //@RunWith(RobolectricTestRunner::class)
 class ShopifyRepositoryImpTest {
@@ -25,6 +37,19 @@ class ShopifyRepositoryImpTest {
     lateinit var product:Product
     lateinit var productModel: ProductModel
     lateinit var favDraftOrderResponse:FavDraftOrderResponse
+
+    lateinit var productCategory  : List<Product>
+    lateinit var collectProductsModel : CollectProductsModel
+
+    lateinit var smartCollections : List<SmartCollection>
+    lateinit var brandModel : BrandModel
+
+    lateinit var orders : List<Order>
+    lateinit var retriveOrderModel : RetriveOrderModel
+
+    lateinit var order1 : Order
+    lateinit var retriveOrder : RetriveOrder
+    lateinit var postOrderModel: PostOrderModel
 
 
     @Before
@@ -41,8 +66,25 @@ class ShopifyRepositoryImpTest {
 
          favDraftOrderResponse= FavDraftOrderResponse()
 
+        productCategory = listOf(Product(null,null,null,null,24125,null,
+            listOf(),null,"women",null,null,null,"",null,"product2",null,null,null,false))
+
+        collectProductsModel = CollectProductsModel(productCategory)
 
 
+        // barnds
+        smartCollections = listOf(SmartCollection("11" , "body", true, "handle" , 2425, Image("","",1,"",20), "", "", listOf(), "", "","","" ))
+
+        brandModel = BrandModel(smartCollections)
+
+        // order list
+        orders = listOf( Order(null , null , null , null , "nermeenzaitoon@gmail.com" , null , 24125))
+        retriveOrderModel = RetriveOrderModel(orders)
+
+        // post order
+        order1 = Order(null , null , null , null , "nermeenzaitoon@gmail.com" , null , 24125)
+        retriveOrder = RetriveOrder(order1)
+        postOrderModel = PostOrderModel(order1)
 
     }
 
@@ -93,5 +135,57 @@ class ShopifyRepositoryImpTest {
         }
     }
 
+
+    // get all products of category
+    @Test
+    fun getAllProductsOfCategory_IDAndType_Products()= runBlockingTest{
+        //when
+        val products = fakeShopifyRepository.getProducts(24125 , "Women" ).getOrAwaitValue {  }
+        //then
+        assertEquals(products!!.products[0].id,collectProductsModel.products[0].id)
+    }
+
+
+    // get all brands
+    @Test
+    fun getBrands_Brands() = runBlockingTest {
+
+        val result = fakeShopifyRepository.getBrands().getOrAwaitValue {  }
+
+        assertThat(result, `is`(notNullValue()))
+        assertEquals(result!!.smart_collections[0].id,brandModel.smart_collections[0].id)
+
+    }
+
+
+    // get all products of brand
+    @Test
+    fun getProductsOfBrand_Id_Products()=runBlockingTest{
+        // When
+        val result = fakeShopifyRepository.getCollectionProducts(24125).getOrAwaitValue {  }
+
+        // Then
+        assertEquals(result!!.products[0].id, collectProductsModel.products[0].id)
+
+    }
+
+    // get all orders
+    @Test
+    fun getAllOrderList_Orders() = runBlockingTest {
+        val result = fakeShopifyRepository.getOrderList().getOrAwaitValue {  }
+
+        assertThat(result, notNullValue())
+        assertEquals(result!!.orders[0].id, retriveOrderModel.orders[0].id)
+
+    }
+
+    // post order
+    @Test
+    fun createOrder_Order()= runBlocking{
+        fakeShopifyRepository.createOrder(postOrderModel).collectLatest { result->
+
+            assertThat(retriveOrder,`is`(result))
+        }
+    }
 
 }
