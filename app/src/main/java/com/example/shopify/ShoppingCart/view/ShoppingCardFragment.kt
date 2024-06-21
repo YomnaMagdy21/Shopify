@@ -25,11 +25,13 @@ import com.example.shopify.BottomNavigationBar.Home.view.HomeFragment
 import com.example.shopify.R
 import com.example.shopify.ShoppingCart.model.PriceRule
 import com.example.shopify.ShoppingCart.model.ShoppingCardIClear
-import com.example.shopify.ShoppingCart.model.ShoppingCardRepo
 import com.example.shopify.ShoppingCart.viewModel.PriceRuleViewModelFactory
 import com.example.shopify.ShoppingCart.viewModel.ShoppingCardViewModel
 import com.example.shopify.setting.currency.CurrencyConverter
 import com.example.shopify.login.view.SignInFragment
+import com.example.shopify.model.ShopifyRepository
+import com.example.shopify.model.ShopifyRepositoryImp
+import com.example.shopify.network.ShopifyRemoteDataSourceImp
 import com.example.shopify.utility.SharedPreference
 
 import com.google.android.material.snackbar.Snackbar
@@ -59,7 +61,9 @@ class shoppingCardFragment : Fragment(), ShoppingCardIClear {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val factory = PriceRuleViewModelFactory(ShoppingCardRepo())
+        val shopifyRemoteDataSource = ShopifyRemoteDataSourceImp()
+        val repository = ShopifyRepositoryImp(shopifyRemoteDataSource)
+        val factory = PriceRuleViewModelFactory(repository)
         viewModel = ViewModelProvider(this, factory).get(ShoppingCardViewModel::class.java)
         viewModel.fetchPriceRules()
 

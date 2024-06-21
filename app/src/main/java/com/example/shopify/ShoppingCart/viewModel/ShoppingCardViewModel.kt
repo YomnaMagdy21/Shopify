@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.shopify.model.draftModel.DraftOrder
 import com.example.shopify.model.draftModel.DraftOrderResponse
 import com.example.shopify.ShoppingCart.model.PriceRule
-import com.example.shopify.ShoppingCart.model.ShoppingCardRepo
+import com.example.shopify.model.ShopifyRepository
 import com.example.shopify.model.draftModel.LineItem
 import com.example.shopify.utility.ApiState
 import kotlinx.coroutines.Dispatchers
@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.forEach
 import kotlinx.coroutines.launch
 
-class ShoppingCardViewModel(private val repo: ShoppingCardRepo) : ViewModel() {
+class ShoppingCardViewModel(private val repo: ShopifyRepository) : ViewModel() {
 
     //coupines
     private val _priceRules = MutableStateFlow<List<PriceRule>>(emptyList())
@@ -123,7 +123,7 @@ class ShoppingCardViewModel(private val repo: ShoppingCardRepo) : ViewModel() {
     }
 }
 
-class PriceRuleViewModelFactory(private val repository: ShoppingCardRepo) : ViewModelProvider.Factory {
+class PriceRuleViewModelFactory(private val repository: ShopifyRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ShoppingCardViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")

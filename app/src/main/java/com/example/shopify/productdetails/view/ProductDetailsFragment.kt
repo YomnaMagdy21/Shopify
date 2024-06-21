@@ -37,7 +37,6 @@ import com.example.shopify.network.ShopifyRemoteDataSourceImp
 import com.example.shopify.productdetails.model.getRandomlyShuffledReviews
 import com.example.shopify.productdetails.viewmodel.ProductDetailsViewModel
 import com.example.shopify.productdetails.viewmodel.ProductDetailsViewModelFactory
-import com.example.shopify.ShoppingCart.model.ShoppingCardRepo
 import com.example.shopify.ShoppingCart.viewModel.PriceRuleViewModelFactory
 import com.example.shopify.ShoppingCart.viewModel.ShoppingCardViewModel
 import com.example.shopify.model.productDetails.Product
@@ -114,7 +113,9 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
             productDetailsViewModelFactory
         ).get(ProductDetailsViewModel::class.java)
 
-        val factory = PriceRuleViewModelFactory(ShoppingCardRepo())
+        val shopifyRemoteDataSource = ShopifyRemoteDataSourceImp()
+        val repository = ShopifyRepositoryImp(shopifyRemoteDataSource)
+        val factory = PriceRuleViewModelFactory(repository)
         shoppingCartViewModel =
             ViewModelProvider(this, factory).get(ShoppingCardViewModel::class.java)
 
