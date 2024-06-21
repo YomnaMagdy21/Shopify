@@ -130,15 +130,7 @@ class paymentFragment : Fragment() {
             }
         } ?: run {
             // If there are no arguments, load the default address from SharedPreferences
-            address = userId?.let { loadAddressFromPreferences(it) }?: Address(
-                "Add your Address Please",
-                "",
-                "",
-                "",
-                "",
-                "",
-                ""
-            )
+            address = userId?.let { loadAddressFromPreferences(it) }?: Address("Add your Address Please", "", "", "", "", "", "")
         }
 
         myCurrentAdreesText.text =

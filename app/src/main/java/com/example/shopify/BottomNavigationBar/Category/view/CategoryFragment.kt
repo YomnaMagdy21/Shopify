@@ -49,7 +49,6 @@ import com.example.shopify.model.category.CustomCollection
 import com.example.shopify.model.category.SubCustomCollections
 import com.example.shopify.network.ShopifyRemoteDataSourceImp
 import com.example.shopify.productdetails.view.ProductDetailsFragment
-import com.example.shopify.ShoppingCart.model.ShoppingCardRepo
 import com.example.shopify.ShoppingCart.viewModel.PriceRuleViewModelFactory
 import com.example.shopify.ShoppingCart.viewModel.ShoppingCardViewModel
 import com.example.shopify.model.productDetails.Product
@@ -155,7 +154,9 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
 
 
         //shopping card view model initilization
-        val factory = PriceRuleViewModelFactory(ShoppingCardRepo())
+        val shopifyRemoteDataSource = ShopifyRemoteDataSourceImp()
+        val repository = ShopifyRepositoryImp(shopifyRemoteDataSource)
+        val factory = PriceRuleViewModelFactory(repository)
         shoppingCartViewModel = ViewModelProvider(this, factory).get(ShoppingCardViewModel::class.java)
 
         favoriteViewModelFactory = FavoriteViewModelFactory(

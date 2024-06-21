@@ -8,7 +8,7 @@ import com.example.shopify.network.RetrofitHelper
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class ShoppingCardRepo {
+/*class ShoppingCardRepo {
 
     private val apiService = RetrofitHelper.apiService
     suspend fun getPriceRules(): Flow<List<PriceRule>> = flow {
@@ -61,5 +61,5 @@ class ShoppingCardRepo {
             throw Exception("Failed to update draft order")
         }
     }
-}
+}*/
 

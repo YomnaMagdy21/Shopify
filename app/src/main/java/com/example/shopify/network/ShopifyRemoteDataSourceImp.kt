@@ -191,6 +191,56 @@ class ShopifyRemoteDataSourceImp :ShopifyRemoteDataSource {
         }
     }
 
+    override suspend fun getPriceRules(): Flow<List<PriceRule>> = flow {
+        val response = shopifyService.getPriceRules()
+        if (response.isSuccessful) {
+            emit(response.body()?.price_rules ?: emptyList())
+        } else {
+            throw Exception("Failed to fetch price rules")
+        }
+    }
+
+    override suspend fun createDraftOrder(draftOrder: DraftOrderResponse): Flow<DraftOrderResponse?> = flow {
+        try {
+            val response = shopifyService.postDraftOrders(draftOrder)
+            if (response.isSuccessful) {
+                emit(response.body())
+            } else {
+                Log.e("ShoppingCardRepo", "Failed to create draft order: ${response.errorBody()?.string()}")
+                emit(null)
+            }
+        } catch (e: Exception) {
+            Log.e("ShoppingCardRepo", "Exception creating draft order", e)
+            emit(null)
+        }
+    }
+
+    override suspend fun getDraftOrders(): Flow<List<DraftOrder>> = flow {
+        val response = shopifyService.getDraftOrders()
+        if (response.isSuccessful) {
+            emit(response.body()?.draft_orders ?: emptyList())
+        } else {
+            throw Exception("Failed to get draft orders")
+        }
+    }
+
+    override suspend fun deleteDraftOrder(id: String): Flow<Boolean> = flow {
+        val response = shopifyService.deleteProductFromDraftOrder(id)
+        if (response.isSuccessful) {
+            emit(true)
+        } else {
+            throw Exception("Failed to delete draft order")
+        }
+    }
+
+    override suspend fun updateDraftOrder(id: String, draftOrder: DraftOrderResponse): Flow<DraftOrderResponse?> = flow {
+        val response = shopifyService.updateDraftOrder(id, draftOrder)
+        if (response.isSuccessful) {
+            emit(response.body())
+        } else {
+            throw Exception("Failed to update draft order")
+        }
+    }
 
 
 }

@@ -81,4 +81,13 @@ interface ShopifyRemoteDataSource {
     ): Flow<FavDraftOrderResponse?>
 
     fun getSpecificOrder(id:Long):Flow<RetriveOrder?>
+
+    //cart
+    suspend fun updateDraftOrder(id: String, draftOrder: DraftOrderResponse): Flow<DraftOrderResponse?>
+    suspend fun deleteDraftOrder(id: String): Flow<Boolean>
+    suspend fun getDraftOrders(): Flow<List<DraftOrder>>
+    suspend fun createDraftOrder(draftOrder: DraftOrderResponse): Flow<DraftOrderResponse?>
+    suspend fun getPriceRules(): Flow<List<PriceRule>>
+
+
 }

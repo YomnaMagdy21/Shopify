@@ -165,5 +165,28 @@ class ShopifyRepositoryImp(private var shopifyRemoteDataSource: ShopifyRemoteDat
         return shopifyRemoteDataSource.getSpecificOrder(id)
     }
 
+    override suspend fun updateDraftOrder(
+        id: String,
+        draftOrder: DraftOrderResponse
+    ): Flow<DraftOrderResponse?> {
+       return shopifyRemoteDataSource.updateDraftOrder(id,draftOrder)
+    }
+
+    override suspend fun deleteDraftOrder(id: String): Flow<Boolean> {
+        return shopifyRemoteDataSource.deleteDraftOrder(id)
+    }
+
+    override suspend fun getDraftOrders(): Flow<List<DraftOrder>> {
+        return shopifyRemoteDataSource.getDraftOrders()
+    }
+
+    override suspend fun createDraftOrder(draftOrder: DraftOrderResponse): Flow<DraftOrderResponse?> {
+       return shopifyRemoteDataSource.createDraftOrder(draftOrder)
+    }
+
+    override suspend fun getPriceRules(): Flow<List<PriceRule>> {
+        return shopifyRemoteDataSource.getPriceRules()
+    }
+
 
 }
