@@ -149,30 +149,6 @@ class FakeRemoteDataSource : ShopifyRemoteDataSource {
         return flow { FavDraftOrderResponse() }
     }
 
-
-    override suspend fun updateDraftOrder(
-        id: String,
-        draftOrder: DraftOrderResponse
-    ): Flow<DraftOrderResponse?> {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun deleteDraftOrder(id: String): Flow<Boolean> {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun getDraftOrders(): Flow<List<DraftOrder>> {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun createDraftOrder(draftOrder: DraftOrderResponse): Flow<DraftOrderResponse?> {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun getPriceRules(): Flow<List<PriceRule>> {
-        TODO("Not yet implemented")
-    }
-
     override suspend fun updateDraftOrder(
         id: String,
         draftOrder: DraftOrderResponse

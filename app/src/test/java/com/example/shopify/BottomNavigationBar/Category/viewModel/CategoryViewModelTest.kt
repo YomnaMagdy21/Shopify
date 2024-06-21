@@ -52,7 +52,7 @@ class CategoryViewModelTest{
 
         var result = apiState.data as CollectProductsModel
         while (apiState.data is ApiState.Loading) {
-            delay(100)
+            delay(200)
             result = apiState.data as CollectProductsModel
         }
 
