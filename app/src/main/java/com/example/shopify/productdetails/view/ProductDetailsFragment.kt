@@ -163,8 +163,6 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
         signUpViewModel = ViewModelProvider(this, signUpViewModelFactory).get(SignUpViewModel::class.java)
 
 
-
-
         draftOrder = FavDraftOrderResponse()
 
         return binding.root
@@ -217,43 +215,9 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
             binding.sug.visibility = View.VISIBLE
         }
 
-//
-
-//
-//        val productId = bundle?.getLong("product_ID")
-//        Log.i("TAG", "onViewCreated: productID : $productID")
-//        if (productId != null) {
-//           // setUpSuggestionsRecViewFromProduct()
-//            productDetailsViewModel.getProductInfo(productId)
-//        }
-
-//        val productID = bundle?.getLong("product_id")
-//        productID?.let {
-//            productDetailsViewModel.getProductInfo(it)
-//        }
-//        brandId?.let { viewModel.getProductsOfBrands(it) }
-
-
-        // viewModel.getProductsOfBrands()
-
-//        val sharedPreferences = requireContext().getSharedPreferences("draftPref", Context.MODE_PRIVATE)
-//        val draftOrderId = sharedPreferences.getString("draft_order_id", null)
 
         var email = SharedPreference.getUserEmail(requireContext())
         val draftID = SharedPreference.getDraftOrderId(requireContext(), email)
-
-
-//        if (draftID != 10000000000) {
-//            favoriteViewModel.getFavorites(draftID.toLong())// Use the draftOrderId as needed
-//            Log.d("DraftOrder", "Draft Order ID: $draftID")
-//        } else {
-//
-//            Log.e("DraftOrder", "Draft Order ID not found")
-//        }
-//        } else {
-//
-//            Log.e("DraftOrder", "Draft Order ID not found")
-//        }
 
 
         lifecycleScope.launch {
@@ -658,7 +622,6 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
             }
 
             private fun fetchDraftOrder(draftOrderId: Long, callback: (FavDraftOrder?) -> Unit) {
-                // Assuming you have a method in your ViewModel to get the current DraftOrder
                 favoriteViewModel.getFavorites(draftOrderId)
                 lifecycleScope.launch {
                     favoriteViewModel.fav.collectLatest { result ->
@@ -677,16 +640,6 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
             }
 
             fun deleteFav(id: Long) {
-//        val sharedPreferences = requireContext().getSharedPreferences("draftPref", Context.MODE_PRIVATE)
-//        val draftOrderId = sharedPreferences.getString("draft_order_id", null)?.toLong()
-//
-//        if (draftOrderId != null) {
-
-//        if (isDeleteInProgress) {
-//            return
-//        }
-//
-//        isDeleteInProgress = true
                 var email = SharedPreference.getUserEmail(requireContext())
                 var draftID = SharedPreference.getDraftOrderId(requireContext(), email)
 
@@ -744,14 +697,6 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
             }
 
             fun addFav(product: ProductModel) {
-
-//        if (isFavProgress) {
-//            return
-//        }
-//
-//        isFavProgress = true
-
-                //   binding.fav.setImageResource(R.drawable.favorite)
                 var email = SharedPreference.getUserEmail(requireContext())
                 val isFav =
                     product.product?.variants?.get(0)?.id?.let { it1 ->
@@ -769,11 +714,7 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
                         )
                     }
                     product.product?.variants?.get(0)?.id?.let { it1 -> deleteFav(it1) }
-                    // SharedPreference.saveFav(context, current.variants?.get(0)?.id!!,false)
-                    // sharedPreferences.edit().putBoolean(current.id.toString(), false).apply()
-                    binding.fav.setImageResource(R.drawable.heart_unfilled)
-                    //  current.variants?.get(0)?.id?.let { it1 -> listener.onClickToRemove(it1) }
-                    //  current.id?.let { it1 -> FavoriteFragment().deleteFav(it1) }
+                      binding.fav.setImageResource(R.drawable.heart_unfilled)
                 } else {
                     product.product?.variants?.get(0)?.id?.let { it1 ->
                         SharedPreference.saveFav(
@@ -782,10 +723,7 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
                         )
                     }
 
-                    //  sharedPreferences.edit().putBoolean(current.id.toString(), true).apply()
                     binding.fav.setImageResource(R.drawable.favorite)
-                    // listener.onFavBtnClick(current)
-                    //  var email = SharedPreference.getUserEmail(requireContext())
                     var draftID =
                         SharedPreference.getDraftOrderId(requireContext(), email)
                     if (draftID == 10000000000) {
@@ -814,10 +752,6 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
                                     is ApiState.Success<*> -> {
                                         val wishList =
                                             result.data as? FavDraftOrderResponse
-//                            val sharedPreferences = requireContext().getSharedPreferences("draftPref", Context.MODE_PRIVATE)
-//                            val editor = sharedPreferences.edit()
-//                            editor.putString("draft_order_id", wishList?.draft_order?.id.toString())
-//                            editor.apply()
                                         wishList?.draft_order?.id?.let {
                                             SharedPreference.saveDraftOrderId(
                                                 requireContext(),
@@ -829,11 +763,7 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
                                             "onViewCreated: draft order in  = ${wishList?.draft_order?.id}"
                                         )
                                         if (wishList != null) {
-
-                                            Log.i(
-                                                "TAG",
-                                                "onViewCreated: draft order in  product fragment = ${wishList?.draft_order?.id}"
-                                            )
+                                            Log.i("TAG", "onViewCreated: draft order in  product fragment = ${wishList?.draft_order?.id}")
                                         }
                                     }
 

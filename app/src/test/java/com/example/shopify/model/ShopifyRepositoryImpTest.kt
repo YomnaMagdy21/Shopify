@@ -109,6 +109,16 @@ class ShopifyRepositoryImpTest {
     }
 
     @Test
+    fun getCustomerByID_ID_Customer()= runBlocking{
+
+
+        fakeShopifyRepository.getCustomerById(1234).collectLatest { result->
+
+            assertThat(customerRequest,`is`(result))
+        }
+    }
+
+    @Test
     fun getProductInfo_ID_ProductModel()= runBlocking{
 
 
@@ -130,6 +140,22 @@ class ShopifyRepositoryImpTest {
     @Test
     fun createFavDraftOrders_FavDraftOrder()=runBlocking{
         fakeShopifyRepository.createFavDraftOrders(favDraftOrderResponse).collectLatest { result->
+
+            assertThat(favDraftOrderResponse,`is`(result))
+        }
+    }
+
+    @Test
+    fun updateFavDraftOrder_FavDraftOrder()= runBlocking {
+        fakeShopifyRepository.updateFavDraftOrder(5043762398564,favDraftOrderResponse).collectLatest { result->
+
+            assertThat(favDraftOrderResponse,`is`(result))
+        }
+    }
+
+    @Test
+    fun deleteFavDraftOrder_FavDraftOrder()= runBlocking {
+        fakeShopifyRepository.deleteFavDraftOrder(5043762398564).collectLatest { result->
 
             assertThat(favDraftOrderResponse,`is`(result))
         }
