@@ -45,7 +45,7 @@ class HomeViewModelTest{
     }
 
     @Test
-    fun getBrandsAndCheckNotNull() = runBlockingTest {
+    fun getBrands_BrandsNotNull() = runBlockingTest {
         //when
         homeViewModel.getBrands()
         val apiState = homeViewModel.accessBrandsList.getOrAwaitValue {  } as ApiState.Success<*>
@@ -57,7 +57,7 @@ class HomeViewModelTest{
     }
 
     @Test
-    fun getBrandsAndCheckTheSizeOfListIsEqualOne() = runBlockingTest {
+    fun getBrands_BrandsCheckTheSizeOfListIsEqualOne() = runBlockingTest {
         //when
         homeViewModel.getBrands()
         val apiState = homeViewModel.accessBrandsList.getOrAwaitValue {  } as ApiState.Success<*>
@@ -69,7 +69,7 @@ class HomeViewModelTest{
     }
 
     @Test
-    fun getbrandsAndCheckTheResultAsExpectedOrNo()= runBlockingTest {
+    fun getBrands_brandsCheckFirstItem()= runBlockingTest {
         //When
         homeViewModel.getBrands()   // return fake list od smartCollection
         val apiState = homeViewModel.accessBrandsList.getOrAwaitValue {  } as ApiState.Success<*>

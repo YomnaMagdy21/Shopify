@@ -64,9 +64,6 @@ class ShopifyRepositoryImp(private var shopifyRemoteDataSource: ShopifyRemoteDat
         return shopifyRemoteDataSource.getBrands()
     }
 
-    override suspend fun getAllProducts(): Flow<CollectProductsModel?> {
-        return shopifyRemoteDataSource.getAllProducts()
-    }
     // get all products of chosen brand
     override suspend fun getCollectionProducts(id: Long): Flow<CollectProductsModel?> {
         return shopifyRemoteDataSource.getCollectionProducts(id)}
@@ -159,10 +156,6 @@ class ShopifyRepositoryImp(private var shopifyRemoteDataSource: ShopifyRemoteDat
 
     override suspend fun getOrderList(): Flow<RetriveOrderModel?> {
         return  shopifyRemoteDataSource.getOrderList()
-    }
-
-    override fun getSpecificOrder(id: Long): Flow<RetriveOrder?> {
-        return shopifyRemoteDataSource.getSpecificOrder(id)
     }
 
     override suspend fun updateDraftOrder(
