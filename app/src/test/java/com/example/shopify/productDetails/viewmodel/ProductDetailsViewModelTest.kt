@@ -39,7 +39,7 @@ class ProductDetailsViewModelTest {
     fun setUp(){
         repo= FakeShopifyRepository()
         productDetailsViewModel = ProductDetailsViewModel(repo)
-         product = Product(null,null,null,null,null,null,
+         product = Product(null,null,null,null,1234,null,
             listOf(),null,null,null,null,null,"",null,"",null,null,null,false)
         productModel = ProductModel(product)
 

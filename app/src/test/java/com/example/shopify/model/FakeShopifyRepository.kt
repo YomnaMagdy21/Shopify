@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.flowOf
 
 class FakeShopifyRepository : ShopifyRepository{
 
-    val product = Product(null,null,null,null,null,null,
+    val product = Product(null,null,null,null,1234,null,
         listOf(),null,null,null,null,null,"",null,"",null,null,null,false)
 
     var productInfoData = ProductModel(product)
@@ -31,8 +31,8 @@ class FakeShopifyRepository : ShopifyRepository{
         Customer(null,null,null,null,"","","",null,null,null,null,true,null,null,null,null,null)
 
     var customersResponse = createCustomersResponse(listOf(customer))
-   var customer1 = Customer(null,null,null,null,"","","",null,null,null,null,true,null,null,null,null,null)
-   var customerRequest = createCustomerRequest(customer1)
+ //  var customer1 = Customer(null,null,null,null,"","","",null,null,null,null,true,null,null,null,null,null)
+   var customerRequest = createCustomerRequest(customer)
 
     var fakeRemoteDataSource=FakeRemoteDataSource()
 
@@ -57,7 +57,9 @@ class FakeShopifyRepository : ShopifyRepository{
     }
 
     override fun createNewCustomer(customer: createCustomerRequest): Flow<createCustomerRequest?> {
-       return flow{fakeRemoteDataSource.createNewCustomer(customer)}
+       return flow{
+           emit(customerRequest)
+       }
     }
 
     override suspend fun getAllProducts(): Flow<CollectProductsModel?> {
@@ -66,7 +68,7 @@ class FakeShopifyRepository : ShopifyRepository{
 
     override fun getCustomerByEmail(email: String): Flow<createCustomersResponse?> {
         return flow {
-            fakeRemoteDataSource.getCustomerByEmail(email)
+            emit(customersResponse)
         }
     }
 
@@ -76,7 +78,8 @@ class FakeShopifyRepository : ShopifyRepository{
 
     override fun getProductInfo(product_id: Long): Flow<ProductModel?> {
         return  flow {
-            fakeRemoteDataSource.getProductInfo(product_id)
+            emit(productInfoData)
+
         }
     }
 
@@ -108,13 +111,13 @@ class FakeShopifyRepository : ShopifyRepository{
 
     override fun getFavDraftOrders(id: Long): Flow<FavDraftOrderResponse?> {
         return flow {
-            fakeRemoteDataSource.getFavDraftOrders(id)
+            emit(favDraftOrderResponse)
         }
     }
 
     override fun createFavDraftOrders(draftOrderResponse: FavDraftOrderResponse): Flow<FavDraftOrderResponse?> {
         return flow {
-            fakeRemoteDataSource.createFavDraftOrder(draftOrderResponse)
+            emit(favDraftOrderResponse)
         }
     }
 

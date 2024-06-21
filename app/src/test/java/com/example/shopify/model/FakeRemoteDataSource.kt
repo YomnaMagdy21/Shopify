@@ -19,8 +19,9 @@ class FakeRemoteDataSource : ShopifyRemoteDataSource {
     var customer = Customer(null,null,null,null,"","","",null,null,null,null,true,null,null,null,null,null)
    var customerRequest = createCustomerRequest(customer)
     var customerResponse = createCustomersResponse(listOf(customer))
-   // var product=Product(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,false)
-    var productModel=ProductModel(null)
+    var product= Product(null,null,null,null,1234,null,
+        listOf(),null,null,null,null,null,"",null,"",null,null,null,false)
+    var productModel=ProductModel(product)
 
 
 

@@ -2,6 +2,7 @@ package com.example.shopify.model
 
 import com.example.shopify.BottomNavigationBar.Favorite.model.FavDraftOrder
 import com.example.shopify.BottomNavigationBar.Favorite.model.FavDraftOrderResponse
+import com.example.shopify.model.productDetails.Product
 import com.example.shopify.model.productDetails.ProductModel
 import com.example.shopify.network.ShopifyRemoteDataSource
 import kotlinx.coroutines.flow.collectLatest
@@ -21,6 +22,7 @@ class ShopifyRepositoryImpTest {
     lateinit var customer : Customer
     lateinit var customerRequest: createCustomerRequest
     lateinit var customerResponse : createCustomersResponse
+    lateinit var product:Product
     lateinit var productModel: ProductModel
     lateinit var favDraftOrderResponse:FavDraftOrderResponse
 
@@ -32,7 +34,10 @@ class ShopifyRepositoryImpTest {
         customer = Customer(null,null,null,null,"","","",null,null,null,null,true,null,null,null,null,null)
         customerRequest = createCustomerRequest(customer)
         customerResponse = createCustomersResponse(listOf(customer))
-        productModel=ProductModel(null)
+         product =  Product(null,null,null,null,1234,null,
+             listOf(),null,null,null,null,null,"",null,"",null,null,null,false)
+
+        productModel=ProductModel(product)
 
          favDraftOrderResponse= FavDraftOrderResponse()
 
