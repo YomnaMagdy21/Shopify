@@ -29,6 +29,7 @@ import com.example.shopify.setting.currency.CurrencyRepository
 import com.example.shopify.setting.viewModel.CurrencyViewModel
 import com.example.shopify.setting.viewModel.CurrencyViewModelFactory
 import com.example.shopify.utility.Constants
+import com.example.shopify.utility.SharedPreference
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -95,6 +96,8 @@ class settingFragment : Fragment() {
 //                .replace(R.id.home_fragment, SignInFragment())
 //                .commit()
             signOut()
+            SharedPreference.saveUserEmail(requireContext(), "")
+
         }
 
         binding.cardView2Currnucy.setOnClickListener{

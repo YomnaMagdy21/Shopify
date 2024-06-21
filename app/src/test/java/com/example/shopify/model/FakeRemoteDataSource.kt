@@ -3,11 +3,14 @@ package com.example.shopify.model
 import com.example.shopify.BottomNavigationBar.Favorite.model.FavDraftOrderResponse
 import com.example.shopify.Models.orderList.RetriveOrderModel
 import com.example.shopify.Models.products.CollectProductsModel
+import com.example.shopify.ShoppingCart.model.PriceRule
 import com.example.shopify.model.Brands.BrandModel
 import com.example.shopify.model.PostOrders.PostOrderModel
 import com.example.shopify.model.RetriveOrder.RetriveOrder
 import com.example.shopify.model.addressModel.AddNewAddress
 import com.example.shopify.model.addressModel.AddressesModel
+import com.example.shopify.model.draftModel.DraftOrder
+import com.example.shopify.model.draftModel.DraftOrderResponse
 import com.example.shopify.model.productDetails.Product
 import com.example.shopify.model.productDetails.ProductModel
 import com.example.shopify.network.ShopifyRemoteDataSource
@@ -42,7 +45,7 @@ class FakeRemoteDataSource : ShopifyRemoteDataSource {
     }
 
     override fun getCustomerById(customerId: Long): Flow<createCustomerRequest?> {
-        TODO("Not yet implemented")
+        return flow { emit(customerRequest) }
     }
 
     override fun getProductInfo(product_id: Long): Flow<ProductModel?> {
@@ -114,14 +117,37 @@ class FakeRemoteDataSource : ShopifyRemoteDataSource {
         id: Long,
         draftOrderResponse: FavDraftOrderResponse
     ): Flow<FavDraftOrderResponse?> {
-        TODO("Not yet implemented")
+        return flow { FavDraftOrderResponse() }
     }
 
     override fun deleteFavDraftOrder(id: Long): Flow<FavDraftOrderResponse?> {
-        TODO("Not yet implemented")
+        return flow { FavDraftOrderResponse() }
     }
 
     override fun getSpecificOrder(id: Long): Flow<RetriveOrder?> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun updateDraftOrder(
+        id: String,
+        draftOrder: DraftOrderResponse
+    ): Flow<DraftOrderResponse?> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun deleteDraftOrder(id: String): Flow<Boolean> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getDraftOrders(): Flow<List<DraftOrder>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun createDraftOrder(draftOrder: DraftOrderResponse): Flow<DraftOrderResponse?> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getPriceRules(): Flow<List<PriceRule>> {
         TODO("Not yet implemented")
     }
 }

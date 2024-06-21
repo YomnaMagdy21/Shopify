@@ -84,52 +84,13 @@ class Firebase(private val context: Context) {
             }
         })
     }
-//    fun loginClient(context: Context, email: String, password: String, onComplete: (Boolean, String?) -> Unit) {
-//        firebaseAuth.signInWithEmailAndPassword(email, password)
-//            .addOnCompleteListener { task ->
-//                if (task.isSuccessful) {
-//                    // User logged in successfully
-//                    saveLoginState(true)
-//                    onComplete(true, null)
-//                } else {
-//                    // Handle different types of errors
-//                    val exception = task.exception
-//                    val errorMessage = when (exception) {
-//                        is FirebaseAuthInvalidUserException -> "Email does not exist"
-//                        is FirebaseAuthInvalidCredentialsException -> "Incorrect password"
-//                        else -> exception?.message ?: "Unknown error"
-//                    }
-//                    onComplete(false, errorMessage)
-//                }
-//            }
-//    }
-
-//    fun loginClient(context: Context, email: String, password: String, onComplete: (Boolean, String?) -> Unit) {
-//        firebaseAuth.signInWithEmailAndPassword(email, password)
-//            .addOnCompleteListener { task ->
-//                if (task.isSuccessful) {
-//                    Toast.makeText(context, "User logged in successfully", Toast.LENGTH_LONG).show()
-//                    context.startActivity(Intent(context, BottomNavActivity::class.java))
-//                    saveLoginState(true)
-//                    onComplete(true, null)
-//                } else {
-//                    val exception = task.exception
-//                    val errorMessage = when (exception) {
-//                        is FirebaseAuthInvalidUserException -> "Email does not exist"
-//                        is FirebaseAuthInvalidCredentialsException -> "Incorrect password"
-//                        else -> exception?.message ?: "Unknown error"
-//                    }
-//                    onComplete(false, errorMessage)
-//                }
-//            }
-//    }
 
 
     fun loginClient(context: Context, email: String, password: String, onComplete: (Boolean) -> Unit) {
         firebaseAuth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    Toast.makeText(context, "User logged in successfully", Toast.LENGTH_LONG).show()
+                   // Toast.makeText(context, "User logged in successfully", Toast.LENGTH_LONG).show()
                     context.startActivity(Intent(context, BottomNavActivity::class.java))
                     saveLoginState(true)
                     onComplete(true)
@@ -159,6 +120,20 @@ class Firebase(private val context: Context) {
         firebaseAuth.signOut()
         saveLoginState(false)
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     fun fetchUserData(firebaseUser: FirebaseUser, context: Context?, onComplete: (String?, String?,String?) -> Unit) {
         val userId = firebaseUser.uid
         val userRef = FirebaseDatabase.getInstance().reference.child("Customer").child(userId)
@@ -210,3 +185,66 @@ class Firebase(private val context: Context) {
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//    fun loginClient(context: Context, email: String, password: String, onComplete: (Boolean, String?) -> Unit) {
+//        firebaseAuth.signInWithEmailAndPassword(email, password)
+//            .addOnCompleteListener { task ->
+//                if (task.isSuccessful) {
+//                    // User logged in successfully
+//                    saveLoginState(true)
+//                    onComplete(true, null)
+//                } else {
+//                    // Handle different types of errors
+//                    val exception = task.exception
+//                    val errorMessage = when (exception) {
+//                        is FirebaseAuthInvalidUserException -> "Email does not exist"
+//                        is FirebaseAuthInvalidCredentialsException -> "Incorrect password"
+//                        else -> exception?.message ?: "Unknown error"
+//                    }
+//                    onComplete(false, errorMessage)
+//                }
+//            }
+//    }
+
+//    fun loginClient(context: Context, email: String, password: String, onComplete: (Boolean, String?) -> Unit) {
+//        firebaseAuth.signInWithEmailAndPassword(email, password)
+//            .addOnCompleteListener { task ->
+//                if (task.isSuccessful) {
+//                    Toast.makeText(context, "User logged in successfully", Toast.LENGTH_LONG).show()
+//                    context.startActivity(Intent(context, BottomNavActivity::class.java))
+//                    saveLoginState(true)
+//                    onComplete(true, null)
+//                } else {
+//                    val exception = task.exception
+//                    val errorMessage = when (exception) {
+//                        is FirebaseAuthInvalidUserException -> "Email does not exist"
+//                        is FirebaseAuthInvalidCredentialsException -> "Incorrect password"
+//                        else -> exception?.message ?: "Unknown error"
+//                    }
+//                    onComplete(false, errorMessage)
+//                }
+//            }
+//    }
