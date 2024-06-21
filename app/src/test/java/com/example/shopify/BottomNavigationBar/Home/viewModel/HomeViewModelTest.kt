@@ -8,7 +8,6 @@ import com.example.shopify.model.Brands.Image
 import com.example.shopify.model.Brands.SmartCollection
 import com.example.shopify.model.FakeShopifyRepository
 import com.example.shopify.utility.ApiState
-import junit.framework.TestCase
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.runBlockingTest

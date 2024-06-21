@@ -30,6 +30,11 @@ class FakeShopifyRepository : ShopifyRepository{
 
     var brandModel = BrandModel(smartCollections)
 
+    val productCategory = listOf(Product(null,null,null,null,24125,null,
+        listOf(),null,"women",null,null,null,"",null,"product2",null,null,null,false))
+
+    val collectProductsModel = CollectProductsModel(productCategory)
+
     override suspend fun getBrands(): Flow<BrandModel?> {
             return flowOf(brandModel)
 
@@ -58,14 +63,14 @@ class FakeShopifyRepository : ShopifyRepository{
     }
 
     override suspend fun getCollectionProducts(id: Long): Flow<CollectProductsModel?> {
-        TODO("Not yet implemented")
+        return flowOf(collectProductsModel)
     }
 
     override suspend fun getProducts(
         collectionId: Long?,
         productType: String?
     ): Flow<CollectProductsModel?> {
-        TODO("Not yet implemented")
+        return flowOf(collectProductsModel)
     }
 
     override suspend fun getAddresses(customerId: Long): Flow<AddressesModel?> {
