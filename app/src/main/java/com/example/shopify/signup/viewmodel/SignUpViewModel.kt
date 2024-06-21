@@ -42,24 +42,24 @@ class SignUpViewModel(private val _repo:ShopifyRepository):ViewModel() {
     fun createFavDraftOrders(draftOrder: FavDraftOrderResponse) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                Log.d("SignUpViewModel", "Creating favorite draft order: $draftOrder")
+               // Log.d("SignUpViewModel", "Creating favorite draft order: $draftOrder")
                 _repo.createFavDraftOrders(draftOrder)
                     .catch { err ->
                         _wishList.value = ApiState.Failure(err)
-                        Log.e("SignUpViewModel", "Draft order creation error", err)
+                      //  Log.e("SignUpViewModel", "Draft order creation error", err)
                     }
                     .collect { response ->
                         if (response != null) {
                             _wishList.value = ApiState.Success(response)
-                            Log.d("SignUpViewModel", "Draft order created successfully: $response")
+                          //  Log.d("SignUpViewModel", "Draft order created successfully: $response")
                         } else {
                             _wishList.value = ApiState.Failure(Exception("Draft order response is null"))
-                            Log.e("SignUpViewModel", "Draft order creation failed: response is null")
+                           // Log.e("SignUpViewModel", "Draft order creation failed: response is null")
                         }
                     }
             } catch (e: Exception) {
                 _wishList.value = ApiState.Failure(e)
-                Log.e("SignUpViewModel", "Failed to create draft order", e)
+              //  Log.e("SignUpViewModel", "Failed to create draft order", e)
             }
         }
 

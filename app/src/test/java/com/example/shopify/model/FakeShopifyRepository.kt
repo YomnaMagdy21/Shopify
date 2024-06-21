@@ -27,6 +27,16 @@ class FakeShopifyRepository : ShopifyRepository{
     var favDraftOrder = FavDraftOrder()
     var favDraftOrderResponse=FavDraftOrderResponse(favDraftOrder)
 
+    var customer=
+        Customer(null,null,null,null,"","","",null,null,null,null,true,null,null,null,null,null)
+
+    var customersResponse = createCustomersResponse(listOf(customer))
+   var customer1 = Customer(null,null,null,null,"","","",null,null,null,null,true,null,null,null,null,null)
+   var customerRequest = createCustomerRequest(customer1)
+
+    var fakeRemoteDataSource=FakeRemoteDataSource()
+
+
     var smartCollections : List<SmartCollection> = listOf(SmartCollection("11" , "body", true, "handle" , 2425, Image("","",1,"",20), "", "", listOf(), "", "","","" ))
 
     var brandModel = BrandModel(smartCollections)
@@ -40,13 +50,14 @@ class FakeShopifyRepository : ShopifyRepository{
     var order: List<Order> = listOf( Order(null , null , null , null , "nermeenzaitoon@gmail.com" , null , 24125))
     var retriveOrderModel = RetriveOrderModel(order)
 
+
     override suspend fun getBrands(): Flow<BrandModel?> {
             return flowOf(brandModel)
 
     }
 
     override fun createNewCustomer(customer: createCustomerRequest): Flow<createCustomerRequest?> {
-        TODO("Not yet implemented")
+       return flow{fakeRemoteDataSource.createNewCustomer(customer)}
     }
 
     override suspend fun getAllProducts(): Flow<CollectProductsModel?> {
@@ -54,7 +65,9 @@ class FakeShopifyRepository : ShopifyRepository{
     }
 
     override fun getCustomerByEmail(email: String): Flow<createCustomersResponse?> {
-        TODO("Not yet implemented")
+        return flow {
+            fakeRemoteDataSource.getCustomerByEmail(email)
+        }
     }
 
     override fun getCustomerById(customerId: Long): Flow<createCustomerRequest?> {
@@ -63,7 +76,7 @@ class FakeShopifyRepository : ShopifyRepository{
 
     override fun getProductInfo(product_id: Long): Flow<ProductModel?> {
         return  flow {
-            emit(productInfoData)
+            fakeRemoteDataSource.getProductInfo(product_id)
         }
     }
 
@@ -95,13 +108,13 @@ class FakeShopifyRepository : ShopifyRepository{
 
     override fun getFavDraftOrders(id: Long): Flow<FavDraftOrderResponse?> {
         return flow {
-            emit(favDraftOrderResponse)
+            fakeRemoteDataSource.getFavDraftOrders(id)
         }
     }
 
     override fun createFavDraftOrders(draftOrderResponse: FavDraftOrderResponse): Flow<FavDraftOrderResponse?> {
         return flow {
-            emit(favDraftOrderResponse)
+            fakeRemoteDataSource.createFavDraftOrder(draftOrderResponse)
         }
     }
 

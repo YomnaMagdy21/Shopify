@@ -40,8 +40,8 @@ import retrofit2.http.Body
  
 
 class ShopifyRepositoryImp(private var shopifyRemoteDataSource: ShopifyRemoteDataSource) : ShopifyRepository{
-    var firebaseAuth = FirebaseAuth.getInstance()
-    lateinit var mDatabase: DatabaseReference
+//    var firebaseAuth = FirebaseAuth.getInstance()
+//    lateinit var mDatabase: DatabaseReference
     companion object{
         private var instance:ShopifyRepositoryImp?=null
         fun getInstance(
