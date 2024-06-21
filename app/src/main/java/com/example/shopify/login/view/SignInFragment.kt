@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.shopify.BottomNavigationBar.BottomNavActivity
+import com.example.shopify.MainActivity
 import com.example.shopify.R
 
 import com.example.shopify.databinding.FragmentSignInBinding
@@ -65,6 +66,7 @@ class SignInFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.clientID))
             .requestEmail()
@@ -107,7 +109,7 @@ class SignInFragment : Fragment() {
             SharedPreference.saveGuest(requireContext(),"yes")
             startActivity(Intent(context, BottomNavActivity::class.java))
             SharedPreference.saveUserEmail(requireContext(),"guest")
-            Firebase(requireContext()).saveLoginState(true)
+          //  Firebase(requireContext()).saveLoginState(true)
         }
         var email = binding.emailEditText.text.toString().trim()
         var password = binding.password.text.toString().trim()
@@ -261,10 +263,14 @@ class SignInFragment : Fragment() {
             }
         }
         binding.signup.setOnClickListener {
-            val transaction = (context as AppCompatActivity).supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.fragment_container,SignUpFragment() )
-            transaction.addToBackStack(null)
-            transaction.commit()
+        //    (activity as? MainActivity)?.replaceFragment(SignUpFragment())
+            if (savedInstanceState == null) {
+                val transaction =
+                    (context as AppCompatActivity).supportFragmentManager.beginTransaction()
+                transaction.replace(R.id.fragment_container, SignUpFragment())
+                transaction.addToBackStack(null)
+                transaction.commit()
+            }
         }
 
         binding.visibility.setOnClickListener {
@@ -285,6 +291,14 @@ class SignInFragment : Fragment() {
             binding.progressBar.visibility = View.VISIBLE
             SharedPreference.saveGuest(requireContext(),"no")
         }
+    }
+    fun replaceFragment(fragment: Fragment, addToBackStack: Boolean = true) {
+        val transaction = parentFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+        if (addToBackStack) {
+            transaction.addToBackStack(null)
+        }
+        transaction.commit()
     }
 
     private fun isValidEmail(email: String): Boolean {
