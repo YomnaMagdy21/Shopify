@@ -5,6 +5,8 @@ import com.example.shopify.BottomNavigationBar.Favorite.model.FavDraftOrderRespo
 import com.example.shopify.Models.orderList.RetriveOrderModel
 import com.example.shopify.Models.products.CollectProductsModel
 import com.example.shopify.model.Brands.BrandModel
+import com.example.shopify.model.Brands.Image
+import com.example.shopify.model.Brands.SmartCollection
 import com.example.shopify.model.PostOrders.PostOrderModel
 import com.example.shopify.model.RetriveOrder.RetriveOrder
 import com.example.shopify.model.addressModel.AddNewAddress
@@ -13,6 +15,7 @@ import com.example.shopify.model.productDetails.Product
 import com.example.shopify.model.productDetails.ProductModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 
 class FakeShopifyRepository : ShopifyRepository{
 
@@ -22,8 +25,14 @@ class FakeShopifyRepository : ShopifyRepository{
     var productInfoData = ProductModel(product)
     var favDraftOrder = FavDraftOrder()
     var favDraftOrderResponse=FavDraftOrderResponse(favDraftOrder)
+
+    var smartCollections : List<SmartCollection> = listOf(SmartCollection("11" , "body", true, "handle" , 2425, Image("","",1,"",20), "", "", listOf(), "", "","","" ))
+
+    var brandModel = BrandModel(smartCollections)
+
     override suspend fun getBrands(): Flow<BrandModel?> {
-        TODO("Not yet implemented")
+            return flowOf(brandModel)
+
     }
 
     override fun createNewCustomer(customer: createCustomerRequest): Flow<createCustomerRequest?> {
