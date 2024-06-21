@@ -7,6 +7,7 @@ import com.example.shopify.Models.products.CollectProductsModel
 import com.example.shopify.model.Brands.BrandModel
 import com.example.shopify.model.Brands.Image
 import com.example.shopify.model.Brands.SmartCollection
+import com.example.shopify.model.PostOrders.Order
 import com.example.shopify.model.PostOrders.PostOrderModel
 import com.example.shopify.model.RetriveOrder.RetriveOrder
 import com.example.shopify.model.addressModel.AddNewAddress
@@ -34,6 +35,10 @@ class FakeShopifyRepository : ShopifyRepository{
         listOf(),null,"women",null,null,null,"",null,"product2",null,null,null,false))
 
     val collectProductsModel = CollectProductsModel(productCategory)
+
+
+    var order: List<Order> = listOf( Order(null , null , null , null , "nermeenzaitoon@gmail.com" , null , 24125))
+    var retriveOrderModel = RetriveOrderModel(order)
 
     override suspend fun getBrands(): Flow<BrandModel?> {
             return flowOf(brandModel)
@@ -135,7 +140,7 @@ class FakeShopifyRepository : ShopifyRepository{
     }
 
     override suspend fun getOrderList(): Flow<RetriveOrderModel?> {
-        TODO("Not yet implemented")
+        return flowOf(retriveOrderModel)
     }
 
     override fun getSpecificOrder(id: Long): Flow<RetriveOrder?> {
