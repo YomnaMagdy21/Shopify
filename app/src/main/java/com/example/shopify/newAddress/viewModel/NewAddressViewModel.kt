@@ -28,7 +28,7 @@ class NewAddressViewModel(val repo:ShopifyRepository):ViewModel() {
                 addressesModel?.addresses?.let { addresses ->
                     if (addresses.isNotEmpty()) {
                         _addAddresses.value = ApiState.Success(addresses.first())
-                        Log.i("neww", "addAddresses: Success(data=$addresses)")
+                        //Log.i("neww", "addAddresses: Success(data=$addresses)")
                     } else {
                         _addAddresses.value = ApiState.Failure(Exception("No address returned"))
                         Log.i("neww", "addAddresses: Failure(msg=No address returned)")

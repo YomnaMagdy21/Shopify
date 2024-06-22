@@ -21,6 +21,7 @@ import com.example.shopify.model.draftModel.DraftOrder
 import com.example.shopify.model.draftModel.Draft_orders_list
 import com.example.shopify.model.productDetails.Product
 import com.example.shopify.model.productDetails.ProductModel
+import com.example.shopify.setting.currency.CurrencyConverter
 import com.example.shopify.utility.SharedPreference
 
 class FavoriteAdapter(var context: Context, var listener: onFavoriteClickListener):
@@ -54,7 +55,9 @@ class FavoriteAdapter(var context: Context, var listener: onFavoriteClickListene
                 .placeholder(R.drawable.bag) // Placeholder image while loading
                 .into(holder.binding.productImg)
 
-        holder.binding.tvProductPriceCategoryCard.text = current.price
+        //holder.binding.tvProductPriceCategoryCard.text = current.price
+        val convertedPrice = current.price?.let { CurrencyConverter.convertToUSD(it.toDouble()) }
+        holder.binding.tvProductPriceCategoryCard.text = convertedPrice?.let { CurrencyConverter.formatCurrency(it) }
        // }
 //        if (!current?.sku.isNullOrEmpty()) {
 //            // Check if the SKU is a URL or a resource identifier

@@ -57,7 +57,6 @@ class MyAddressViewModel(var repo:ShopifyRepository) :ViewModel(){
                 repo.editAddress(customerId, addressId, address).collect { editedAddress ->
                     if (editedAddress != null) {
                         _allAddressesList.value = ApiState.Success(editedAddress)
-                        Log.d("editAddress", "Successfully edited address with ID: $addressId")
                     } else {
                         _allAddressesList.value = ApiState.Failure(Exception("Failed to edit address with ID: $addressId"))
                         Log.e("editAddress", "Failed to edit address with ID: $addressId")
