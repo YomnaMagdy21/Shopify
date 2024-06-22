@@ -36,7 +36,7 @@
             <LinearLayout
                 android:id="@+id/ll_properties_product_first"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="45dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -67,18 +67,20 @@
                     android:gravity="center"
                     android:padding="5dp"
                     android:text="350.00 EGP"
-                    android:textColor="@color/dark_gray"
+                    android:textColor="@color/purple"
                     android:textSize="14sp"
+                    android:textStyle="bold"
                     android:weightSum="1.5" />
 
                 <ImageView
+                    android:id="@+id/fav"
                     android:layout_width="30dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1.5"
                     android:gravity="end"
                     android:paddingVertical="2.5dp"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/baseline_star_border_24" />
+                    android:src="@drawable/favorite_border_24" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

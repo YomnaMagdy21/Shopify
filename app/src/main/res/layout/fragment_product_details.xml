@@ -88,7 +88,7 @@
 
 
                 <ImageView
-                    android:id="@+id/imageView4"
+                    android:id="@+id/fav"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:layout_marginTop="16dp"
@@ -138,23 +138,6 @@
 
 
             </androidx.core.widget.NestedScrollView>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="Suggestions"
-                android:textSize="34sp"
-                android:textStyle="bold" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recV"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recV2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
             <TextView
                 android:id="@+id/textView16"
                 android:layout_width="match_parent"
@@ -203,6 +186,24 @@
                 <!--                    app:layout_constraintEnd_toEndOf="parent"-->
                 <!--                    app:layout_constraintTop_toBottomOf="@+id/reviewsContainer" />-->
             </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/sug"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:text="Suggestions"
+                android:textSize="34sp"
+                android:textStyle="bold" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recV2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
 
         </LinearLayout>
 

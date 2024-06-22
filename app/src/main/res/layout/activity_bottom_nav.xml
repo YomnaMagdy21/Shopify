@@ -33,6 +33,15 @@
 
 
     </com.google.android.material.bottomappbar.BottomAppBar>
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottieNoNetwork6"
+        android:layout_width="wrap_content"
+        android:layout_height="150dp"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/no_network" />
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

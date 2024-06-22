@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="favorite">المفضلة</string>
+    <string name="create_your_account">اعمل حساب جديد</string>
+    <string name="email">ايميل</string>
+    <string name="signup">تسجيل دخول</string>
+    <string name="or">او</string>
+    <string name="aleardy_have_an_account">هل لديك حساب بالفعل؟</string>
+    <string name="sign_in">دخول</string>
+    <string name="login">دخول</string>
+    <string name="do_not_have_an_account">ليس لديك حساب؟</string>
+    <string name="home">الرئيسيه</string>
+    <string name="category">التصنيف</string>
+    <string name="brands_title">الماركات</string>
+    <string name="search">بحث</string>
+    <string name="all">الكل</string>
+    <string name="kids">الاطفال</string>
+    <string name="men">الرجال</string>
+    <string name="women">النساء</string>
+    <string name="egp">جنيه</string>
+    <string name="order_list_title">قائمه الطلبات</string>
+    <string name="created_at">تم انشائها فى:</string>
+    <string name="order_item_title">الطلب</string>
+    <string name="name">الاسم: </string>
+    <string name="address">العنوان:</string>
+    <string name="phone_number">رقم الهاتف:</string>
+    <string name="total_price">السعر الكلى:</string>
+    <string name="payment_method">طريقة الدفع</string>
+    <string name="products">المنتجات</string>
+    <string name="username">اسم المستخدم</string>
+    <string name="password">الرقم السري</string>
+    <string name="confirm_password">تاكيد الرقم السري</string>
+    <string name="description">الوصف</string>
+    <string name="sale">اوكازيون</string>
+    <string name="countryName">اسم الدولة</string>
+    <string name="Country">الدولة</string>
+    <string name="Address">العنوان</string>
+    <string name="first_name">الاسم الاول</string>
+    <string name="second_name">الاسم الثانى</string>
+
+    <string name="Building">المبنى</string>
+    <string name="payment">الدفع</string>
+    <string name="cash_on_delivery">الدفع كاش</string>
+    <string name="online_payment">الدفع اونلاين</string>
+    <string name="quantity">الكمية:</string>
+    <string name="price">السعر:</string>
+
+</resources>

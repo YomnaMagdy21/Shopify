@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F7F7F7"
-    tools:context=".payment.paymentFragment" >
+    tools:context=".payment.view.paymentFragment" >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
@@ -64,7 +64,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="56dp"
         android:layout_marginEnd="137dp"
-        android:text="Payment"
+        android:text="@string/payment"
         android:textSize="48sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -103,7 +103,7 @@
                 android:layout_width="199dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:text="Cash On Delivery"
+                android:text="@string/cash_on_delivery"
                 android:textColor="#070707"
                 android:textSize="20sp" />
 
@@ -149,7 +149,7 @@
                 android:layout_width="199dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:text="Online Payment"
+                android:text="@string/online_payment"
                 android:textColor="#070707"
                 android:textSize="20sp" />
 
@@ -201,5 +201,17 @@
         app:layout_constraintBottom_toBottomOf="@+id/textView10"
         app:layout_constraintStart_toStartOf="@+id/guideline5"
         app:layout_constraintTop_toTopOf="@+id/textView10" />
+
+    <TextView
+        android:id="@+id/textViewEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="edit"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/textView10"
+        app:layout_constraintTop_toBottomOf="@+id/textViewCardList" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

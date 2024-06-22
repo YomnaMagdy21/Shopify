@@ -118,6 +118,21 @@
                     app:layout_constraintEnd_toEndOf="@+id/rv_brands_in_home"
                     app:layout_constraintStart_toStartOf="@+id/rv_brands_in_home"
                     android:visibility="gone" />
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/lottie_no_data4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@+id/rv_brands_in_home"
+                    app:layout_constraintEnd_toEndOf="@+id/rv_brands_in_home"
+                    app:layout_constraintStart_toStartOf="@+id/rv_brands_in_home"
+                    app:layout_constraintTop_toTopOf="@+id/rv_brands_in_home"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="true"
+                    app:lottie_rawRes="@raw/animation_1718797747132"
+
+                    />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView

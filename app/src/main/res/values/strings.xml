@@ -52,5 +52,16 @@
     <string name="second_name">Lastname</string>
 
     <string name="clientID">828681279025-l3vqdrrh527h4vhhsb1dk4n40ljo471b.apps.googleusercontent.com</string>
+    <string name="Building">Building</string>
+    <string name="payment">Payment</string>
+    <string name="cash_on_delivery">Cash On Delivery</string>
+    <string name="online_payment">Online Payment</string>
+    <string name="quantity">Quantity:</string>
+    <string name="price">Price:</string>
+    <string name="cart_list">Cart List</string>
+    <string name="my">My</string>
+    <string name="discount">Discount</string>
+    <string name="apply">Apply</string>
+    <string name="checkout">CheckOut</string>
 
 </resources>
