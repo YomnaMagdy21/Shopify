@@ -58,10 +58,6 @@ class ShopifyRemoteDataSourceImp :ShopifyRemoteDataSource {
         }
     }
 
-    override suspend fun getAllProducts(): Flow<CollectProductsModel?> {
-        return flowOf(shopifyService.getAllProducts().body())
-    }
-
     override suspend fun getBrands(): Flow<BrandModel?> {
         return flowOf(shopifyService.getBrands().body())
     }
@@ -139,12 +135,6 @@ class ShopifyRemoteDataSourceImp :ShopifyRemoteDataSource {
         }
     }
 
-    override fun getSpecificOrder(id: Long): Flow<RetriveOrder?> {
-        return flow {
-            emit(shopifyService.getOrder(id).body())
-        }
-    }
-
 
 //    override fun createFavDraftOrder(draftOrderResponse: FavDraftOrderResponse): Flow<FavDraftOrderResponse?> {
 //        return flow {
@@ -175,20 +165,6 @@ class ShopifyRemoteDataSourceImp :ShopifyRemoteDataSource {
 
     override suspend fun getOrderList(): Flow<RetriveOrderModel?> {
         return  flowOf(shopifyService.getAllOrders().body())
-    }
-
-
-    override suspend fun clearAllDraftOrders() {
-        val response = shopifyService.getDraftOrders()
-        if (response.isSuccessful) {
-            val draftOrders = response.body()?.draft_orders ?: emptyList()
-            for (draftOrder in draftOrders) {
-                shopifyService.deleteProductFromDraftOrder(draftOrder.id.toString())
-            }
-        } else {
-            // Handle the error
-            throw Exception("Failed to fetch draft orders")
-        }
     }
 
     override suspend fun getPriceRules(): Flow<List<PriceRule>> = flow {

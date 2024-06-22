@@ -264,56 +264,6 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
     }
 
     
-//    private fun addProductToCart(product: Product) {
-//        val currentUser = FirebaseAuth.getInstance().currentUser
-//        val userEmail = currentUser?.email
-//
-//        Log.d("AddToCart", "Attempting to add product to cart: $product")
-//
-//        if (currentUser != null) {
-//            val variantId = product.variants?.get(0)?.id
-//            if (variantId != null && !categoryViewModel.addedProductIds.contains(variantId)) {
-//                Log.d("AddToCart", "Product not already in cart. Proceeding to add.")
-//                var order = DraftOrder()
-//                order.email = userEmail
-//                var draft_orders = DraftOrderResponse()
-//                order.note = "cart"
-//                var lineItems = LineItem()
-//                lineItems.quantity = 1
-//                lineItems.variant_id = product.variants!![0].id
-//                order.line_items = listOf(lineItems)
-//                var note_attribute = NoteAttribute()
-//                note_attribute.name = "image"
-//                note_attribute.value = product.images!![0].src
-//                order.note_attributes = listOf(note_attribute)
-//                draft_orders = DraftOrderResponse(order)
-//
-//
-//                Log.d("DraftOrder", "Creating Draft Order: $draft_orders")
-//
-//                shoppingCartViewModel.createDraftOrder(draft_orders)
-//
-//                lifecycleScope.launch {
-//                    shoppingCartViewModel.draftOrderResponse.collect { draftOrderResponse ->
-//                        if (draftOrderResponse != null) {
-//                            //add the id
-//                            variantId.let { categoryViewModel.addedProductIds.add(it) }
-//                            Toast.makeText(requireContext(), "Added to cart", Toast.LENGTH_LONG)
-//                                .show()
-//                        } else {
-//                            Toast.makeText(
-//                                requireContext(),
-//                                "Failed to add to cart",
-//                                Toast.LENGTH_LONG
-//                            ).show()
-//                        }
-//                    }
-//                }
-//            }
-//        } else {
-//            Toast.makeText(requireContext(), "User not logged in", Toast.LENGTH_SHORT).show()
-//        }
-//    }
 
     fun setProductList() {
         lifecycleScope.launch {
@@ -372,12 +322,6 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
         val bundle = Bundle()
         bundle.putLong("product_id",id)
         bundle.putLong("category_id",id)
-       /// bundle.putString("type",selectedProductType?.type)
-//        selectedProductType?.type?.let {
-//            SharedPreference.saveCollectionType(requireContext(),id,
-//                it
-//            )
-//        }
 
         val fragmentDetails = ProductDetailsFragment()
         fragmentDetails.arguments = bundle
@@ -393,13 +337,7 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
     }
 
     override fun onFavBtnClick(product: Product) {
-//        selectedProductType?.type?.let {
-//            product.id?.let { it1 ->
-//                SharedPreference.saveCollectionType(requireContext(), it1,
-//                    it
-//                )
-//            }
-//        }
+
         var email = SharedPreference.getUserEmail(requireContext())
         var draftID = SharedPreference.getDraftOrderId(requireContext(), email)
         if (draftID == 10000000000) {
@@ -423,10 +361,6 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
 
                         is ApiState.Success<*> -> {
                             val wishList = result.data as? FavDraftOrderResponse
-//                            val sharedPreferences = requireContext().getSharedPreferences("draftPref", Context.MODE_PRIVATE)
-//                            val editor = sharedPreferences.edit()
-//                            editor.putString("draft_order_id", wishList?.draft_order?.id.toString())
-//                            editor.apply()
                             wishList?.draft_order?.id?.let {
                                 SharedPreference.saveDraftOrderId(
                                     requireContext(),
@@ -454,10 +388,6 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
             }
         }
 
-//                val sharedPreferences = requireContext().getSharedPreferences("draftPref", Context.MODE_PRIVATE)
-//                val draftOrderId = sharedPreferences.getString("draft_order_id", null)?.toLong()
-//
-//                if (draftOrderId != null) {
         else {
             fetchDraftOrder(draftID) { draftOrder ->
                 val productTitle = product.title
@@ -479,21 +409,11 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
                     )
 
 
-                    // Log the new line item creation
                     Log.i("TAG", "New Line Item: $newLineItem")
 
-                    // Check if the item with this variant_id already exists in the draft order
                     val updatedLineItems =
                         draftOrder?.line_items?.toMutableList() ?: mutableListOf()
-//                            val existingItemIndex = updatedLineItems.indexOfFirst { it.variant_id == productVariantId }
-//
-//                            if (existingItemIndex != -1) {
-//                                // Update the existing item's SKU
-//                                updatedLineItems[existingItemIndex] = updatedLineItems[existingItemIndex].copy(sku = productImageSrc)
-//                            } else {
-//                                // Add the new item if it doesn't already exist
-//                                updatedLineItems.add(newLineItem)
-//                            }
+
 
                     val itemExists =
                         updatedLineItems.any { it.variant_id == newLineItem.variant_id }
@@ -520,30 +440,11 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
                             favDraftOrderResponse
                         )
                     }
-                    // Log updated line items before and after update
+
                     Log.i("TAG", "Before update: $updatedLineItems")
 
 
-//                            // Now create a new draft order response with updated line items
-//                            val updatedDraftOrder = FavDraftOrderResponse(
-//                                draft_order = FavDraftOrder(
-//                                    id = draftOrderId,
-//                                    line_items = updatedLineItems
-//                                )
-//                            )
-////                            var items = Items(
-////                                title = productTitle,
-////                                variant_id = updatedLineItems.get(0).variant_id,
-////                                quantity = 1,
-////                                sku = productImageSrc
-////                            )
-//                            Log.i("TAG", "After update: $updatedLineItems")
-//                            Log.i("TAG", "onFavBtnClick: sku ${updatedLineItems.get(0).sku}")
-//                            // Update the draft order using your ViewModel or Shopify API
-//                            favoriteViewModel.updateFavorite(draftOrderId, updatedDraftOrder)
 
-                    // Log the updated draft order response for verification
-                    //    Log.i("TAG", "Fav Draft Order Response: $updatedDraftOrder")
                 } else {
                     Log.e(
                         "TAG",
@@ -563,10 +464,6 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
 
 
     override fun onClickToRemove(id: Long) {
-//        val sharedPreferences = requireContext().getSharedPreferences("draftPref", Context.MODE_PRIVATE)
-//        val draftOrderId = sharedPreferences.getString("draft_order_id", null)?.toLong()
-//
-//        if (draftOrderId != null) {
         var email = SharedPreference.getUserEmail(requireContext())
         var draftID = SharedPreference.getDraftOrderId(requireContext(),email)
 
@@ -656,3 +553,69 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//    private fun addProductToCart(product: Product) {
+//        val currentUser = FirebaseAuth.getInstance().currentUser
+//        val userEmail = currentUser?.email
+//
+//        Log.d("AddToCart", "Attempting to add product to cart: $product")
+//
+//        if (currentUser != null) {
+//            val variantId = product.variants?.get(0)?.id
+//            if (variantId != null && !categoryViewModel.addedProductIds.contains(variantId)) {
+//                Log.d("AddToCart", "Product not already in cart. Proceeding to add.")
+//                var order = DraftOrder()
+//                order.email = userEmail
+//                var draft_orders = DraftOrderResponse()
+//                order.note = "cart"
+//                var lineItems = LineItem()
+//                lineItems.quantity = 1
+//                lineItems.variant_id = product.variants!![0].id
+//                order.line_items = listOf(lineItems)
+//                var note_attribute = NoteAttribute()
+//                note_attribute.name = "image"
+//                note_attribute.value = product.images!![0].src
+//                order.note_attributes = listOf(note_attribute)
+//                draft_orders = DraftOrderResponse(order)
+//
+//
+//                Log.d("DraftOrder", "Creating Draft Order: $draft_orders")
+//
+//                shoppingCartViewModel.createDraftOrder(draft_orders)
+//
+//                lifecycleScope.launch {
+//                    shoppingCartViewModel.draftOrderResponse.collect { draftOrderResponse ->
+//                        if (draftOrderResponse != null) {
+//                            //add the id
+//                            variantId.let { categoryViewModel.addedProductIds.add(it) }
+//                            Toast.makeText(requireContext(), "Added to cart", Toast.LENGTH_LONG)
+//                                .show()
+//                        } else {
+//                            Toast.makeText(
+//                                requireContext(),
+//                                "Failed to add to cart",
+//                                Toast.LENGTH_LONG
+//                            ).show()
+//                        }
+//                    }
+//                }
+//            }
+//        } else {
+//            Toast.makeText(requireContext(), "User not logged in", Toast.LENGTH_SHORT).show()
+//        }
+//    }

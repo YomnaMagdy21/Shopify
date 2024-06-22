@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.shopify.BottomNavigationBar.BottomNavActivity
+import com.example.shopify.MainActivity
 import com.example.shopify.R
 
 import com.example.shopify.databinding.FragmentSignInBinding
@@ -35,8 +36,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.flow.collectLatest
@@ -57,10 +60,13 @@ class SignInFragment : Fragment() {
 
     lateinit var signInViewModel: SignInViewModel
     lateinit var signInViewModelFactory: SignInViewModelFactory
+    var firebaseAuth = FirebaseAuth.getInstance()
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.clientID))
             .requestEmail()
@@ -103,7 +109,7 @@ class SignInFragment : Fragment() {
             SharedPreference.saveGuest(requireContext(),"yes")
             startActivity(Intent(context, BottomNavActivity::class.java))
             SharedPreference.saveUserEmail(requireContext(),"guest")
-            Firebase(requireContext()).saveLoginState(true)
+          //  Firebase(requireContext()).saveLoginState(true)
         }
         var email = binding.emailEditText.text.toString().trim()
         var password = binding.password.text.toString().trim()
@@ -132,48 +138,21 @@ class SignInFragment : Fragment() {
             }
             else {
 
-                SharedPreference.saveUserEmail(requireContext(), email)
+                binding.progressBar.visibility = View.VISIBLE
 
-//
+                Firebase(requireContext()).loginClient(requireContext(), email, password) { isSuccess ->
+                    binding.progressBar.visibility = View.GONE
+                    if (!isSuccess) {
+                        binding.password.error = "Incorrect password"
+                        binding.password.requestFocus()
+                    } else {
+                        Snackbar.make(requireView(), "User logged in successfully", Snackbar.LENGTH_SHORT).show()
+                        Firebase(requireContext()).saveLoginState(true)
+                        SharedPreference.saveUserEmail(requireContext(), email)
+                     //   collectCustomerDetails(email, password)
+                    }
+                }
 
-
-//            val firebaseUser = FirebaseAuth.getInstance().currentUser
-//
-//            if (firebaseUser != null) {
-//                Firebase(requireContext()).fetchUserData(firebaseUser, requireContext()) { firstName, email, password ->
-//                    if (firstName != null && email != null && password != null) {
-//                        var email1 = binding.emailEditText.text.toString().trim()
-//                        var password1 = binding.password.text.toString().trim()
-//                        if(email != email1){
-//                            binding.emailEditText.error = "Incorrect Email "
-//                            binding.emailEditText.requestFocus()
-//                            return@fetchUserData
-//                        }
-//                        if(password1 != password){
-//                            binding.password.error = "Incorrect Password"
-//                            binding.password.requestFocus()
-//                            return@fetchUserData
-//                        }
-                        binding.progressBar.visibility = View.VISIBLE
-                        Firebase(requireContext()).loginClient(requireContext(), email, password) { isSuccess ->
-                            binding.progressBar.visibility = View.GONE
-                            if (!isSuccess) {
-                                binding.password.error = "Incorrect password"
-                                binding.password.requestFocus()
-                            }
-                        }
-//                        // Use the retrieved firstName and email
-//                        Log.d("UserData", "First Name: $firstName, Email: $email")
-//                        // Update UI or perform actions based on retrieved data
-//                    } else {
-//                        // Handle case where data could not be retrieved
-//                        Log.e("UserData", "Error: Unable to fetch user data")
-//                    }
-//                }
-//            }
-
-
-                Firebase(requireContext()).saveLoginState(true)
                 lifecycleScope.launch {
                     signInViewModel.login.collectLatest { result ->
                         when (result) {
@@ -188,58 +167,82 @@ class SignInFragment : Fragment() {
                                 val person = result.data as? createCustomersResponse
                                 signInViewModel.getCustomerByEmail(email)
 
-                                Log.i(TAG, "onViewCreated: first name ${person?.customers?.get(0)?.first_name}")
-                                var firstName = person?.customers?.get(0)?.first_name
-                                if (firstName != null) {
-                                    SharedPreference.saveFirstName(requireContext(),email,firstName)
-                                }
-//                                var userEmail = person?.customers?.get(0)?.email
-//                                Log.i(TAG, "onViewCreated: userEmail ${userEmail}")
-//                                Log.i(
-//                                    TAG,
-//                                    "onViewCreated: userEmail ${person?.customers?.get(0)?.tags}"
-//                                )
-//                                if (userEmail != email) {
-//                                    binding.emailEditText.error = "Invalid Email "
-//                                    binding.emailEditText.requestFocus()
-//                                    return@collectLatest
-//
-//                                } else if (password != person?.customers?.get(0)?.tags) {
-//                                    binding.password.error = "Incorrect password "
-//                                    binding.password.requestFocus()
-//                                    return@collectLatest
-//                                } else {
-//
-//
-//                                    startActivity(Intent(context, BottomNavActivity::class.java))
-//                                    Firebase(requireContext()).saveLoginState(true)
-//                                    SharedPreference.saveUserEmail(requireContext(), userEmail)
-//                                }
-                                if (person != null) {
+                                if(person != null) {
 
-                                    Log.i(
-                                        TAG,
-                                        "Customer ID in login: ${person.customers?.get(0)?.id}"
-                                    )
-                                    var userID = person.customers?.get(0)?.id
-                                    if (userID != null) {
+                                    if (person.customers.isNotEmpty()) {
+                                        var firstName = person.customers.get(0).first_name
+                                        Log.i(
+                                            TAG,
+                                            "onViewCreated: first name ${person?.customers?.get(0)?.first_name}"
+                                        )
 
-                                        val sharedPreferences =
-                                            requireContext().getSharedPreferences(
-                                                "MyPrefs",
-                                                Context.MODE_PRIVATE
+                                        SharedPreference.saveFirstName(
+                                            requireContext(),
+                                            email,
+                                            firstName
+                                        )
+
+                                        var userEmail = person?.customers?.get(0)?.email
+                                        Log.i(TAG, "onViewCreated: userEmail ${userEmail}")
+                                        Log.i(
+                                            TAG,
+                                            "onViewCreated: userEmail ${person?.customers?.get(0)?.tags}"
+                                        )
+                                        if (userEmail != email) {
+                                            binding.emailEditText.error = "Incorrect Email "
+                                            binding.emailEditText.requestFocus()
+                                            return@collectLatest
+
+                                        } else if (password != person?.customers?.get(0)?.tags) {
+                                            binding.password.error = "Incorrect password "
+                                            binding.password.requestFocus()
+                                            return@collectLatest
+                                        } else {
+
+
+                                            startActivity(
+                                                Intent(
+                                                    context,
+                                                    BottomNavActivity::class.java
+                                                )
                                             )
-                                        val editor = sharedPreferences.edit()
-                                        editor.putString("userID", userID.toString())
-                                        editor.apply()
+                                            Firebase(requireContext()).saveLoginState(true)
+                                            SharedPreference.saveUserEmail(
+                                                requireContext(),
+                                                userEmail
+                                            )
+                                            SharedPreference.saveUserEmail(requireContext(), email)
+                                        }
+                                        if (person != null) {
 
-                                        Log.i(TAG, "Saved userID to SharedPreferences: $userID")
-                                    } else {
-                                        Log.i(TAG, "UserID is null")
+                                            Log.i(
+                                                TAG,
+                                                "Customer ID in login: ${person.customers?.get(0)?.id}"
+                                            )
+                                            var userID = person.customers?.get(0)?.id
+                                            if (userID != null) {
+
+                                                val sharedPreferences =
+                                                    requireContext().getSharedPreferences(
+                                                        "MyPrefs",
+                                                        Context.MODE_PRIVATE
+                                                    )
+                                                val editor = sharedPreferences.edit()
+                                                editor.putString("userID", userID.toString())
+                                                editor.apply()
+
+                                                Log.i(
+                                                    TAG,
+                                                    "Saved userID to SharedPreferences: $userID"
+                                                )
+                                            } else {
+                                                Log.i(TAG, "UserID is null")
+                                            }
+
+                                        } else {
+                                            Log.i(TAG, "Received null person")
+                                        }
                                     }
-
-                                } else {
-                                    Log.i(TAG, "Received null person")
                                 }
                             }
 
@@ -260,10 +263,14 @@ class SignInFragment : Fragment() {
             }
         }
         binding.signup.setOnClickListener {
-            val transaction = (context as AppCompatActivity).supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.fragment_container,SignUpFragment() )
-            transaction.addToBackStack(null)
-            transaction.commit()
+        //    (activity as? MainActivity)?.replaceFragment(SignUpFragment())
+            if (savedInstanceState == null) {
+                val transaction =
+                    (context as AppCompatActivity).supportFragmentManager.beginTransaction()
+                transaction.replace(R.id.fragment_container, SignUpFragment())
+                transaction.addToBackStack(null)
+                transaction.commit()
+            }
         }
 
         binding.visibility.setOnClickListener {
@@ -285,6 +292,15 @@ class SignInFragment : Fragment() {
             SharedPreference.saveGuest(requireContext(),"no")
         }
     }
+    fun replaceFragment(fragment: Fragment, addToBackStack: Boolean = true) {
+        val transaction = parentFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+        if (addToBackStack) {
+            transaction.addToBackStack(null)
+        }
+        transaction.commit()
+    }
+
     private fun isValidEmail(email: String): Boolean {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
@@ -392,3 +408,95 @@ class SignInFragment : Fragment() {
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//
+
+
+//            val firebaseUser = FirebaseAuth.getInstance().currentUser
+//
+//            if (firebaseUser != null) {
+//                Firebase(requireContext()).fetchUserData(firebaseUser, requireContext()) { firstName, email, password ->
+//                    if (firstName != null && email != null && password != null) {
+//                        var email1 = binding.emailEditText.text.toString().trim()
+//                        var password1 = binding.password.text.toString().trim()
+//                        if(email != email1){
+//                            binding.emailEditText.error = "Incorrect Email "
+//                            binding.emailEditText.requestFocus()
+//                            return@fetchUserData
+//                        }
+//                        if(password1 != password){
+//                            binding.password.error = "Incorrect Password"
+//                            binding.password.requestFocus()
+//                            return@fetchUserData
+//
+//                        }
+
+
+
+//
+//                        binding.progressBar.visibility = View.VISIBLE
+//                        Firebase(requireContext()).loginClient(requireContext(), email, password) { isSuccess ->
+//                            binding.progressBar.visibility = View.GONE
+//                            if (!isSuccess) {
+//                                binding.password.error = "Incorrect password"
+//                                binding.password.requestFocus()
+//                            }
+//                            else{
+//                                Snackbar.make(requireView(), "User logged in successfully", Snackbar.LENGTH_SHORT).show()
+//                                Firebase(requireContext()).saveLoginState(true)
+//                                SharedPreference.saveUserEmail(requireContext(), email)
+//
+//                            }
+//                        }
+//                        // Use the retrieved firstName and email
+//                        Log.d("UserData", "First Name: $firstName, Email: $email")
+//                        // Update UI or perform actions based on retrieved data
+//                    } else {
+//                        // Handle case where data could not be retrieved
+//                        Log.e("UserData", "Error: Unable to fetch user data")
+//                    }
+//                }
+//            }
+
+//                firebaseAuth.signInWithEmailAndPassword(email, password)
+//                    .addOnCompleteListener { task ->
+//                        if (task.isSuccessful) {
+//                            // Toast.makeText(context, "User logged in successfully", Toast.LENGTH_LONG).show()
+//                            startActivity(Intent(context, BottomNavActivity::class.java))
+//                            Firebase(requireContext()).saveLoginState(true)
+//                            Snackbar.make(requireView(), "User logged in successfully", Snackbar.LENGTH_SHORT).show()
+////                            Firebase(requireContext()).saveLoginState(true)
+//                            SharedPreference.saveUserEmail(requireContext(), email)
+//                         //   collectCustomerDetails(email, password)
+//
+//                        } else {
+//                            val exception = task.exception
+//                            if (exception is FirebaseAuthInvalidUserException) {
+//                                // Handle non-existent email
+//                                binding.emailEditText.error = "Email does not exist "
+//                                binding.emailEditText.requestFocus()
+//                                Toast.makeText(context, "Login Error: Email does not exist", Toast.LENGTH_LONG).show()
+//                            } else {
+//                                // Handle other errors
+//                                binding.password.error = "Incorrect password"
+//                                binding.password.requestFocus()
+//                                Toast.makeText(context, "Login Error: " + exception!!.message, Toast.LENGTH_LONG).show()
+//                            }
+//
+//                        }
+//
+

@@ -5,6 +5,9 @@ import com.example.shopify.Models.orderList.RetriveOrderModel
 import com.example.shopify.Models.products.CollectProductsModel
 import com.example.shopify.ShoppingCart.model.PriceRule
 import com.example.shopify.model.Brands.BrandModel
+import com.example.shopify.model.Brands.Image
+import com.example.shopify.model.Brands.SmartCollection
+import com.example.shopify.model.PostOrders.Order
 import com.example.shopify.model.PostOrders.PostOrderModel
 import com.example.shopify.model.RetriveOrder.RetriveOrder
 import com.example.shopify.model.addressModel.AddNewAddress
@@ -28,30 +31,48 @@ class FakeRemoteDataSource : ShopifyRemoteDataSource {
         listOf(),null,null,null,null,null,"",null,"",null,null,null,false)
     var productModel=ProductModel(product)
 
+
     private val addresses =  mutableListOf(
         Address(address1 = "123 Main St", city = "New York", country = "United States", customer_id = 1L, default = true, first_name = "John", id = 1L, last_name = "Doe", name = "Home", phone = "123-456-7890", province = "NY", zip = "10001"),
         Address(address1 = "456 Elm St", city = "Los Angeles", country = "United States", customer_id = 1L, default = false, first_name = "Jane", id = 2L, last_name = "Smith", name = "Work", phone = "987-654-3210", province = "CA", zip = "90001")
     )
+    // category & products
+    var  products = listOf(Product(null,null,null,null,24125,null,
+        listOf(),null,"women",null,null,null,"",null,"product2",null,null,null,false))
+
+    var collectProductsModel = CollectProductsModel(products)
+
+
+    // barnds
+    var smartCollections : List<SmartCollection> = listOf(SmartCollection("11" , "body", true, "handle" , 2425, Image("","",1,"",20), "", "", listOf(), "", "","","" ))
+
+    var brandModel = BrandModel(smartCollections)
+
+    // order list
+    var orders: List<Order> = listOf( Order(null , null , null , null , "nermeenzaitoon@gmail.com" , null , 24125))
+    var retriveOrderModel = RetriveOrderModel(orders)
+
+    // post order
+    var order1= Order(null , null , null , null , "nermeenzaitoon@gmail.com" , null , 24125)
+    var retriveOrder = RetriveOrder(order1)
+
 
 
     override suspend fun getBrands(): Flow<BrandModel?> {
-        TODO("Not yet implemented")
+        return flowOf(brandModel)
     }
 
     override fun createNewCustomer(customer: createCustomerRequest): Flow<createCustomerRequest?> {
         return flow { emit(customerRequest) }
     }
 
-    override suspend fun getAllProducts(): Flow<CollectProductsModel?> {
-        TODO("Not yet implemented")
-    }
 
     override fun getCustomerByEmail(email: String): Flow<createCustomersResponse?> {
         return flow { emit(customerResponse) }
     }
 
     override fun getCustomerById(customerId: Long): Flow<createCustomerRequest?> {
-        TODO("Not yet implemented")
+        return flow { emit(customerRequest) }
     }
 
     override fun getProductInfo(product_id: Long): Flow<ProductModel?> {
@@ -59,14 +80,15 @@ class FakeRemoteDataSource : ShopifyRemoteDataSource {
     }
 
     override suspend fun getCollectionProducts(id: Long): Flow<CollectProductsModel?> {
-        TODO("Not yet implemented")
+        return flowOf(collectProductsModel)
     }
 
+    // products of category
     override suspend fun getProducts(
         collectionId: Long?,
         productType: String?
     ): Flow<CollectProductsModel?> {
-        TODO("Not yet implemented")
+        return flowOf(collectProductsModel)
     }
 
     override suspend fun getAddresses(customerId: Long): Flow<AddressesModel?> {
@@ -118,29 +140,44 @@ class FakeRemoteDataSource : ShopifyRemoteDataSource {
     }
 
     override suspend fun createOrder(order: PostOrderModel): Flow<RetriveOrder?> {
-        TODO("Not yet implemented")
+        return flowOf(retriveOrder)
     }
 
     override suspend fun getOrderList(): Flow<RetriveOrderModel?> {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun clearAllDraftOrders() {
-        TODO("Not yet implemented")
+        return flowOf(retriveOrderModel)
     }
 
     override fun updateFavDraftOrder(
         id: Long,
         draftOrderResponse: FavDraftOrderResponse
     ): Flow<FavDraftOrderResponse?> {
-        TODO("Not yet implemented")
+        return flow { FavDraftOrderResponse() }
     }
 
     override fun deleteFavDraftOrder(id: Long): Flow<FavDraftOrderResponse?> {
+        return flow { FavDraftOrderResponse() }
+    }
+
+    override suspend fun updateDraftOrder(
+        id: String,
+        draftOrder: DraftOrderResponse
+    ): Flow<DraftOrderResponse?> {
         TODO("Not yet implemented")
     }
 
-    override fun getSpecificOrder(id: Long): Flow<RetriveOrder?> {
+    override suspend fun deleteDraftOrder(id: String): Flow<Boolean> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getDraftOrders(): Flow<List<DraftOrder>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun createDraftOrder(draftOrder: DraftOrderResponse): Flow<DraftOrderResponse?> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getPriceRules(): Flow<List<PriceRule>> {
         TODO("Not yet implemented")
     }
 

@@ -7,14 +7,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import com.airbnb.lottie.LottieAnimationView
 import com.example.shopify.BottomNavigationBar.Favorite.view.FavoriteFragment
 import com.example.shopify.BottomNavigationBar.OrderList.view.OrderListFragment
 import com.example.shopify.MainActivity
 import com.example.shopify.R
+import com.example.shopify.firebase.Firebase
 import com.example.shopify.login.view.SignInFragment
 import com.example.shopify.setting.view.settingFragment
+import com.example.shopify.signup.view.SignUpFragment
 import com.example.shopify.utility.SharedPreference
 
 
@@ -75,9 +78,17 @@ class MeFragment : Fragment() {
             login.visibility = View.VISIBLE
             lottie.visibility =View.VISIBLE
             login.setOnClickListener {
-                parentFragmentManager.beginTransaction()
-                .replace(R.id.home_fragment, SignInFragment())
-                .commit()            }
+                val intent = Intent(requireContext(), MainActivity::class.java)
+           //     intent.putExtra("fragmentToLoad", "signInFragment")
+                startActivity(intent)
+               // (activity as? MainActivity)?.replaceFragment(SignInFragment())
+                Firebase(requireContext()).saveLoginState(false)
+            }
+//                parentFragmentManager.beginTransaction()
+//                .replace(R.id.home_fragment, SignInFragment())
+//                .commit()
+            //
+            //           }
         } else {
             var email = SharedPreference.getUserEmail(requireContext())
             var firstName = SharedPreference.getFirstName(requireContext(), email)

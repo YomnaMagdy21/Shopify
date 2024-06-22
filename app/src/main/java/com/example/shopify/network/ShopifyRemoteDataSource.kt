@@ -37,9 +37,6 @@ interface ShopifyRemoteDataSource {
 
     fun createNewCustomer(customer: createCustomerRequest):Flow<createCustomerRequest?>
 
-    // get all products of category
-    suspend fun getAllProducts(): Flow<CollectProductsModel?>
-
 
     fun getCustomerByEmail(email: String):Flow<createCustomersResponse?>
 
@@ -72,15 +69,10 @@ interface ShopifyRemoteDataSource {
     // get all orders
     suspend fun getOrderList(): Flow<RetriveOrderModel?>
 
-    // clear draft order
-    suspend fun clearAllDraftOrders()
-
       fun updateFavDraftOrder(id:Long,draftOrderResponse: FavDraftOrderResponse): Flow<FavDraftOrderResponse?>
     fun deleteFavDraftOrder(
         id: Long
     ): Flow<FavDraftOrderResponse?>
-
-    fun getSpecificOrder(id:Long):Flow<RetriveOrder?>
 
     //cart
     suspend fun updateDraftOrder(id: String, draftOrder: DraftOrderResponse): Flow<DraftOrderResponse?>
