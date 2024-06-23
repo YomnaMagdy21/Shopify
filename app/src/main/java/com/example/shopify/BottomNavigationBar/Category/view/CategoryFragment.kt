@@ -208,7 +208,7 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
         val draftID = SharedPreference.getDraftOrderId(requireContext(),email)
 
         if (draftID != 10000000000) {
-            favoriteViewModel.getFavorites(draftID.toLong())// Use the draftOrderId as needed
+            favoriteViewModel.getFavorites(draftID.toLong())
             Log.d("DraftOrder", "Draft Order ID: $draftID")
         } else {
 
@@ -394,7 +394,6 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
                 val productVariantId = product.variants?.get(0)?.id
                 val productImageSrc = product.image?.src
 
-                // Log product details for verification
                 Log.i(
                     "TAG",
                     "Product details: title=$productTitle, variantId=$productVariantId, imageSrc=$productImageSrc"
@@ -453,9 +452,6 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
                 }
             }
         }
-//        else {
-//            Log.e("DraftOrder", "Draft Order ID not found")
-//        }
 
 
 
@@ -472,7 +468,6 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
                 val updatedLineItems = draftOrder?.line_items?.toMutableList() ?: mutableListOf()
                 Log.i("TAG", "Initial updatedLineItems: $updatedLineItems")
 
-                // Find the item to remove by matching the id (or other unique identifier)
                 val itemToRemove = updatedLineItems.find { it.variant_id == id }
 
                 if (itemToRemove != null) {
@@ -496,7 +491,7 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
                     SharedPreference.saveDraftOrderId(requireContext(), 10000000000, email)
                 } else {
                     Log.i("TAG", "deleteFav: draft order id is ${draftOrder.id}")
-                    // You can save the actual draftOrder id if needed
+
                     SharedPreference.saveDraftOrderId(requireContext(), draftOrder.id, email)
                 }
             }
@@ -535,7 +530,6 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
 
     }
     private fun fetchDraftOrder(draftOrderId: Long, callback: (FavDraftOrder?) -> Unit) {
-        // Assuming you have a method in your ViewModel to get the current DraftOrder
         favoriteViewModel.getFavorites(draftOrderId)
         lifecycleScope.launch {
             favoriteViewModel.fav.collectLatest { result ->
@@ -569,53 +563,3 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
 
 
 
-//    private fun addProductToCart(product: Product) {
-//        val currentUser = FirebaseAuth.getInstance().currentUser
-//        val userEmail = currentUser?.email
-//
-//        Log.d("AddToCart", "Attempting to add product to cart: $product")
-//
-//        if (currentUser != null) {
-//            val variantId = product.variants?.get(0)?.id
-//            if (variantId != null && !categoryViewModel.addedProductIds.contains(variantId)) {
-//                Log.d("AddToCart", "Product not already in cart. Proceeding to add.")
-//                var order = DraftOrder()
-//                order.email = userEmail
-//                var draft_orders = DraftOrderResponse()
-//                order.note = "cart"
-//                var lineItems = LineItem()
-//                lineItems.quantity = 1
-//                lineItems.variant_id = product.variants!![0].id
-//                order.line_items = listOf(lineItems)
-//                var note_attribute = NoteAttribute()
-//                note_attribute.name = "image"
-//                note_attribute.value = product.images!![0].src
-//                order.note_attributes = listOf(note_attribute)
-//                draft_orders = DraftOrderResponse(order)
-//
-//
-//                Log.d("DraftOrder", "Creating Draft Order: $draft_orders")
-//
-//                shoppingCartViewModel.createDraftOrder(draft_orders)
-//
-//                lifecycleScope.launch {
-//                    shoppingCartViewModel.draftOrderResponse.collect { draftOrderResponse ->
-//                        if (draftOrderResponse != null) {
-//                            //add the id
-//                            variantId.let { categoryViewModel.addedProductIds.add(it) }
-//                            Toast.makeText(requireContext(), "Added to cart", Toast.LENGTH_LONG)
-//                                .show()
-//                        } else {
-//                            Toast.makeText(
-//                                requireContext(),
-//                                "Failed to add to cart",
-//                                Toast.LENGTH_LONG
-//                            ).show()
-//                        }
-//                    }
-//                }
-//            }
-//        } else {
-//            Toast.makeText(requireContext(), "User not logged in", Toast.LENGTH_SHORT).show()
-//        }
-//    }
