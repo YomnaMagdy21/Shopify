@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
@@ -50,6 +51,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.text.DecimalFormat
 
 
 class ProductsFragment : Fragment() ,OnProductClickListener {
@@ -76,6 +78,7 @@ class ProductsFragment : Fragment() ,OnProductClickListener {
     private lateinit var favoriteViewModelFactory: FavoriteViewModelFactory
 
     private lateinit var lottieAnimationView: LottieAnimationView
+    private lateinit var filteredPrice : TextView
 
 
 
@@ -103,7 +106,8 @@ class ProductsFragment : Fragment() ,OnProductClickListener {
         filterSlider = view.findViewById(R.id.filterSlider)
         editTextSearch = view.findViewById(R.id.search_edit_text)
         lottieAnimationView = view.findViewById(R.id.animationView)
-
+        filteredPrice = view.findViewById(R.id.tv_filteredPrice)
+        filteredPrice.text = "Price: 0.00"
         categoryViewModelFactory = CategoryViewModelFactory(
             ShopifyRepositoryImp.getInstance(
                 ShopifyRemoteDataSourceImp.getInstance()
@@ -177,13 +181,16 @@ class ProductsFragment : Fragment() ,OnProductClickListener {
         filterImg.setOnClickListener {
             if(filterSlider.visibility == View.GONE){
                 filterSlider.visibility = View.VISIBLE
+                filteredPrice.visibility = View.VISIBLE
                 filterImg.setImageResource(R.drawable.unfilter)
+                productsOfBrandAdapter.setProductsBrandsList(emptyList())
+
             }
             else{
 
                 // to reset the value of slider after unfilter the filterImg
                 filterSlider.value = filterSlider.valueFrom
-
+                filteredPrice.visibility = View.GONE
                 filterSlider.visibility = View.GONE
                 filterImg.setImageResource(R.drawable.filter)
                 lottieAnimationView.visibility = View.GONE
@@ -196,6 +203,8 @@ class ProductsFragment : Fragment() ,OnProductClickListener {
         // change in slider listener
         filterSlider.addOnChangeListener { slider, value, fromUser ->
             filterProductsByPrice(value)
+            val formattedPrice = DecimalFormat("#.00").format(value)
+            filteredPrice.text = "Price: $formattedPrice"
         }
 
 
