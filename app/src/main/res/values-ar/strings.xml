@@ -45,5 +45,7 @@
     <string name="online_payment">الدفع اونلاين</string>
     <string name="quantity">الكمية:</string>
     <string name="price">السعر:</string>
+    <string name="available_sizes">Available Sizes</string>
+    <string name="available_color">Available Colors</string>
 
 </resources>

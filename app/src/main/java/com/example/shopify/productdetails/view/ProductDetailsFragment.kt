@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -60,7 +61,7 @@ import kotlinx.coroutines.launch
 import kotlin.random.Random
 
 
-class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClickListener {
+class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClickListener, OnProductDetailsListener {
 
     private lateinit var binding: FragmentProductDetailsBinding
     lateinit var productDetailsViewModel: ProductDetailsViewModel
@@ -86,6 +87,7 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
     private var isFavProgress =false
     private var updatedLineItems: MutableList<ItemLine> = mutableListOf()
     lateinit var draftOrder: FavDraftOrderResponse
+    lateinit var sizesAdapter: SizesAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -153,6 +155,7 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
         categoryAdapter = CategoryProductsAdapter(requireContext(), this, listOf())
 
         productsOfBrandAdapter= ProductAdapter(requireContext() ,   listOf(),this)
+        sizesAdapter = SizesAdapter(requireContext(),this)
 
         signUpViewModelFactory = SignUpViewModelFactory(
             ShopifyRepositoryImp.getInstance(
@@ -183,7 +186,7 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
 
 
         setUpRecyclerView()
-
+        setUpSizesRecView()
 
         val bundle = arguments
 
@@ -291,29 +294,47 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
                             }
                         }
 
-//                        binding.fav.setOnClickListener {
-//                            if (data != null) {
-//                                binding.fav.setImageResource(R.drawable.favorite)
-//                                var lineItem = listOf( ItemLine(
-//                                    title = data.product?.title,
-//                                    variant_id = data.product?.variants?.get(0)?.id,
-//                                    quantity = 1
-//                                ))
-//                                var favDraftOrder = FavDraftOrder(
-//                                    line_items = lineItem
-//                                )
-//                                var favDraftOrderResponse = FavDraftOrderResponse(favDraftOrder)
-//                                Log.i("TAG", "onViewCreated: ${favDraftOrder.line_items.get(0).title}")
-//                                if (draftOrderId != null) {
-//                                    favoriteViewModel.updateFavorite(
-//                                        draftOrderId.toLong(),
-//                                        favDraftOrderResponse
-//                                    )
-//                                }
-//
-//                            }
-//                        }
+                        data?.product?.let { product ->
+                            val sizes = product.options
+                                ?.firstOrNull { it.name == "Size" }
+                                ?.values
+                                ?: emptyList()
 
+                            sizesAdapter.submitList(sizes)
+                        }
+                        if (data?.product?.options?.get(1)?.name == "Color"){
+                        //var color = data?.product?.options?.get(0)?.values?.get(0)
+                        // Check if the color resource ID is valid before using it
+                        var color = data?.product?.options?.get(1)?.values?.get(0)
+                            Log.i("TAG", "onViewCreated: color$color")
+                            Log.i("TAG", "onViewCreated: color${data?.product?.options?.get(1)?.name}")
+
+                            if (color != null) {
+                            val colorResId = requireContext().resources.getIdentifier(
+                                color,
+                                "color",
+                                context?.packageName
+                            )
+
+                            if (colorResId != 0) {
+                                binding.color.setCardBackgroundColor(
+                                    ContextCompat.getColor(
+                                        requireContext(),
+                                        colorResId
+                                    )
+                                )
+                            } else {
+                                // Handle the case where the color name is not a valid resource
+                                Log.e("ProductDetailsFragment", "Invalid color resource name: $color")
+                                // Optionally, set a default color
+                                binding.color.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.gray))
+                            }
+                        } else {
+                            // Optionally, set a default color if no color value is found
+                            binding.color.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.gray))
+                        }
+
+                           }
                         binding.title.text = data?.product?.title
                         //convert currency
                         val convertedPrice = data?.product?.variants?.get(0)?.price?.let {
@@ -517,17 +538,16 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
 
                 }
             }
+    fun setUpSizesRecView() {
+        sizesAdapter = SizesAdapter(requireContext(),this)
+        binding.sizeRecView.apply {
+            adapter = sizesAdapter
+            layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
 
-            private fun setupTabDots() {
-                for (i in 0 until binding.tabLayout.tabCount) {
-                    val tab = binding.tabLayout.getTabAt(i)
-                    if (tab != null) {
-                        val tabBinding =
-                            CustomTabBinding.inflate(LayoutInflater.from(requireContext()))
-                        tab.customView = tabBinding.root
-                    }
-                }
-            }
+        }
+    }
+
+
 
             override fun onCategoryClick(id: Long) {
                 val bundle = Bundle()
@@ -840,5 +860,9 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
                 }
             }
 
+    override fun onSizeClick(size: String) {
 
     }
+
+
+}

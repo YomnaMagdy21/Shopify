@@ -177,6 +177,29 @@ class SignUpFragment : Fragment() {
                 binding.secondname.requestFocus()
                 return@setOnClickListener
             }
+            if (isSingleRepeatedCharacter(firstname)){
+                binding.firstname.error = "First name cannot be repeated characters"
+                binding.firstname.requestFocus()
+                return@setOnClickListener
+            }
+            if (isSingleRepeatedCharacter(lastname)){
+                binding.secondname.error = "Last name cannot be repeated characters"
+                binding.secondname.requestFocus()
+                return@setOnClickListener
+            }
+            if ((firstname.length) < 3) {
+            binding.firstname.error = "First name is small"
+            binding.firstname.requestFocus()
+
+                return@setOnClickListener
+        }
+            if ((lastname.length) < 3) {
+
+                binding.secondname.error = "last name is small"
+                binding.secondname.requestFocus()
+                return@setOnClickListener
+            }
+
             if (email.isEmpty()) {
                 binding.email.error = "Email cannot be empty"
                 binding.email.requestFocus()
@@ -302,46 +325,8 @@ class SignUpFragment : Fragment() {
 
                 }
             }
-//            val draftOrder = FavDraftOrderResponse(
-//                draft_order = FavDraftOrder(
-//                    line_items = listOf(
-//                        LineItem(quantity = 1, variant_id = 123456789)
-//                    )
-//                )
-//            )
 
 
-
-//            Log.i(TAG, "Draft Order before sending: $draftOrder")
-//            signUpViewModel.createFavDraftOrders(draftOrder)
-
-//            lifecycleScope.launch {
-//                signUpViewModel.wishList.collectLatest {result ->
-//                    when(result){
-//                        is ApiState.Loading ->{
-//
-//                        }
-//                        is ApiState.Success<*> ->{
-//                            val wishList = result.data as? FavDraftOrderResponse
-//                            val sharedPreferences = requireContext().getSharedPreferences("draftPref", Context.MODE_PRIVATE)
-//                            val editor = sharedPreferences.edit()
-//                            editor.putString("draft_order_id", wishList?.draft_order?.id.toString())
-//                            editor.apply()
-//                            Log.i(TAG, "onViewCreated: draft order in  = ${wishList?.draft_order?.id}")
-//                            if(wishList!=null) {
-//
-//                                Log.i(
-//                                    TAG,
-//                                    "onViewCreated: draft order in sign up = ${wishList?.draft_order?.id}"
-//                                )
-//                            }
-//                        }
-//                        else->{
-//
-//                        }
-//                    }
-//                }
-//            }
 //
        }
 
@@ -350,32 +335,22 @@ class SignUpFragment : Fragment() {
             val signInIntent = mGoogleSignInClient.signInIntent
             startActivityForResult(signInIntent, RC_SIGN_IN)
         }
-      //  createWishListDraftOrder()
-        
-//        lifecycleScope.launch {
-//            signUpViewModel.wishList.collectLatest {result ->
-//                when(result){
-//                    is ApiState.Loading ->{
-//
-//                    }
-//                    is ApiState.Success<*> ->{
-//                        val wishList = result.data as? DraftOrderResponse
-//                        val sharedPreferences = requireContext().getSharedPreferences("draftPref", Context.MODE_PRIVATE)
-//                        val editor = sharedPreferences.edit()
-//                        editor.putString("draft_order_id", wishList?.draft_order?.id.toString())
-//                        editor.apply()
-//                        Log.i(TAG, "onViewCreated: draft order in sign up = ${wishList?.draft_order?.id}")
-//                    }
-//                    else->{
-//
-//                    }
-//                }
-//            }
-//        }
+
 
 
 
     }
+    fun isSingleRepeatedCharacter(input: String): Boolean {
+        if (input.isEmpty()) return false
+        val firstChar = input[0]
+        for (char in input) {
+            if (char != firstChar) {
+                return false
+            }
+        }
+        return true
+    }
+
     private fun isValidEmail(email: String): Boolean {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }

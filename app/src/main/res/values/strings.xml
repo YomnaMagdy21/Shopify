@@ -63,5 +63,7 @@
     <string name="discount">Discount</string>
     <string name="apply">Apply</string>
     <string name="checkout">CheckOut</string>
+    <string name="available_sizes">Available Sizes</string>
+    <string name="available_color">Available Colors</string>
 
 </resources>
