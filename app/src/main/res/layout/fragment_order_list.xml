@@ -73,7 +73,7 @@
         android:layout_height="29dp"
         android:layout_marginTop="16dp"
         android:src="@drawable/chevron_back_sharp_svgrepo_com"
-        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

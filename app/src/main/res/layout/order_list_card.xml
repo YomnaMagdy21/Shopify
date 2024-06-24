@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/card_order_list"
-    android:layout_marginTop="22dp"
+    android:layout_marginVertical="22dp"
     android:layout_marginHorizontal="20dp"
     app:cardCornerRadius="12dp"
     app:cardElevation="10dp"
@@ -49,7 +49,7 @@
                 android:text="2023-05-31"
                 android:textSize="18sp"
                 android:weightSum="1"
-                android:layout_marginStart="50dp"
+                android:layout_marginStart="20dp"
                 android:paddingHorizontal="10dp"
                 android:paddingVertical="10dp"/>
 
@@ -82,7 +82,7 @@
                 android:text="200.00 EGP"
                 android:textSize="18sp"
                 android:weightSum="1"
-                android:layout_marginStart="97dp"
+                android:layout_marginStart="60dp"
                 android:paddingHorizontal="10dp"
                 android:paddingVertical="10dp"/>
 

@@ -11,6 +11,8 @@ tools:context=".ShoppingCart.view.shoppingCardFragment">
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+
+
     <TextView
         android:id="@+id/textView"
         android:layout_width="332dp"
@@ -41,12 +43,29 @@ tools:context=".ShoppingCart.view.shoppingCardFragment">
         app:layout_constraintStart_toStartOf="@+id/guideline4"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_begin="26dp" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/cart_items"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="26dp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewCardList"
@@ -55,26 +74,12 @@ tools:context=".ShoppingCart.view.shoppingCardFragment">
         android:layout_marginTop="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.961"
-        app:layout_constraintStart_toStartOf="@+id/guideline4"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintStart_toStartOf="@+id/guideline5"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
-   <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/lottie_no_data"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:lottie_autoPlay="true"
-        app:lottie_loop="true"
-        app:lottie_rawRes="@raw/animation_1718797747132"
-        app:layout_constraintStart_toStartOf="@+id/recyclerViewCardList"
-        app:layout_constraintEnd_toEndOf="@+id/recyclerViewCardList"
-        app:layout_constraintTop_toTopOf="@+id/recyclerViewCardList"
-        app:layout_constraintBottom_toBottomOf="@+id/recyclerViewCardList"
 
-         />
 
- 
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
@@ -222,6 +227,24 @@ tools:context=".ShoppingCart.view.shoppingCardFragment">
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottie_no_data"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="280dp"
+        android:visibility="gone"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/animation_1718797747132"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+
+        />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

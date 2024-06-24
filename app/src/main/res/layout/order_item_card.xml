@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/card_order_item"
-    android:layout_marginTop="22dp"
+    android:layout_marginVertical="22dp"
     android:layout_marginHorizontal="20dp"
     app:cardCornerRadius="12dp"
     app:cardElevation="10dp"
