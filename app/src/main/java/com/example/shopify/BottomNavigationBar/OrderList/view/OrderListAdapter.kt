@@ -8,6 +8,7 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shopify.R
 import com.example.shopify.model.PostOrders.Order
+import com.example.shopify.setting.currency.CurrencyConverter
 
 class OrderListAdapter(
     private val context: Context,
@@ -32,7 +33,12 @@ class OrderListAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val order = orders[position]
         holder.dateOrderCreatedAt.text = order.created_at
-        holder.priceOrder.text = "${order.total_price} $currency"
+
+       // holder.priceOrder.text = "${order.total_price} $currency"
+        val price = order.total_price?.let { CurrencyConverter.convertToUSD(it.toDouble()) }
+        val priceFormat = price?.let { CurrencyConverter.formatCurrency(it) }
+        holder.priceOrder.text = priceFormat
+
         holder.card.setOnClickListener {
             listener.onOrderClick(order)
 
