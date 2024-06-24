@@ -182,6 +182,7 @@ class ProductsFragment : Fragment() ,OnProductClickListener {
             if(filterSlider.visibility == View.GONE){
                 filterSlider.visibility = View.VISIBLE
                 filteredPrice.visibility = View.VISIBLE
+                lottieAnimationView.visibility = View.VISIBLE
                 filterImg.setImageResource(R.drawable.unfilter)
                 productsOfBrandAdapter.setProductsBrandsList(emptyList())
 

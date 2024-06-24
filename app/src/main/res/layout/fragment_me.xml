@@ -9,16 +9,16 @@
 
     <TextView
         android:id="@+id/textViewCardList"
-        android:layout_width="350dp"
-        android:layout_height="66dp"
-        android:layout_marginStart="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="56dp"
         android:text="Me"
         android:textSize="40sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/guideline6"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline
@@ -30,9 +30,9 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardViewOrders"
-        android:layout_width="355dp"
+        android:layout_width="match_parent"
         android:layout_height="73dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="23dp"
         android:layout_marginTop="80dp"
         android:layout_marginEnd="23dp"
         app:cardCornerRadius="12dp"
@@ -68,9 +68,9 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardViewWishList"
-        android:layout_width="355dp"
+        android:layout_width="match_parent"
         android:layout_height="73dp"
-        android:layout_marginStart="34dp"
+        android:layout_marginStart="23dp"
         android:layout_marginTop="22dp"
         android:layout_marginEnd="23dp"
         app:cardCornerRadius="12dp"
@@ -105,9 +105,9 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardViewSetting"
-        android:layout_width="355dp"
+        android:layout_width="match_parent"
         android:layout_height="73dp"
-        android:layout_marginStart="34dp"
+        android:layout_marginStart="23dp"
         android:layout_marginTop="22dp"
         android:layout_marginEnd="23dp"
         app:cardCornerRadius="12dp"

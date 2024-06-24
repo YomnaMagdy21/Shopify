@@ -63,6 +63,11 @@
     <string name="discount">Discount</string>
     <string name="apply">Apply</string>
     <string name="checkout">CheckOut</string>
+    <string name="log_out">Log Out</string>
+    <string name="about_us">About Us</string>
+    <string name="setting">Setting</string>
+    <string name="currency">Currency</string>
+    <string name="tvaddress">Address</string>
     <string name="available_sizes">Available Sizes</string>
     <string name="available_color">Available Colors</string>
 
