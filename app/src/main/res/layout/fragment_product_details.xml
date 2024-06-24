@@ -109,6 +109,40 @@
                 <!--                    app:layout_constraintTop_toBottomOf="@+id/price" />-->
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <TextView
+                android:id="@+id/availableSizes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="8dp"
+                android:text="@string/available_sizes"
+                android:textSize="28sp"
+                android:textStyle="bold" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/sizeRecView"
+                android:layout_width="match_parent"
+                android:padding="10dp"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/availableColor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="8dp"
+                android:text="@string/available_color"
+                android:textSize="28sp"
+                android:textStyle="bold" />
+            <androidx.cardview.widget.CardView
+                android:id="@+id/color"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                app:cardCornerRadius="100dp"
+                android:layout_margin="15dp"
+                />
+<!--            <androidx.recyclerview.widget.RecyclerView-->
+<!--                android:id="@+id/colorRecView"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="80dp"/>-->
 
 
             <TextView
@@ -117,7 +151,7 @@
                 android:layout_height="wrap_content"
                 android:paddingStart="8dp"
                 android:text="@string/description"
-                android:textSize="34sp"
+                android:textSize="28sp"
                 android:textStyle="bold" />
 
 
@@ -138,6 +172,7 @@
 
 
             </androidx.core.widget.NestedScrollView>
+
             <TextView
                 android:id="@+id/textView16"
                 android:layout_width="match_parent"
@@ -145,7 +180,7 @@
                 android:paddingStart="8dp"
                 android:text="Reviews"
                 android:textColor="#C80808"
-                android:textSize="24sp"
+                android:textSize="28sp"
                 android:textStyle="bold" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -186,13 +221,14 @@
                 <!--                    app:layout_constraintEnd_toEndOf="parent"-->
                 <!--                    app:layout_constraintTop_toBottomOf="@+id/reviewsContainer" />-->
             </androidx.constraintlayout.widget.ConstraintLayout>
+
             <TextView
                 android:id="@+id/sug"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
                 android:text="Suggestions"
-                android:textSize="34sp"
+                android:textSize="28sp"
                 android:textStyle="bold" />
 
             <androidx.recyclerview.widget.RecyclerView
