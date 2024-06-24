@@ -182,37 +182,37 @@ class SignInFragment : Fragment() {
                                             firstName
                                         )
 
-                                        var userEmail = person?.customers?.get(0)?.email
-                                        Log.i(TAG, "onViewCreated: userEmail ${userEmail}")
-                                        Log.i(
-                                            TAG,
-                                            "onViewCreated: userEmail ${person?.customers?.get(0)?.tags}"
-                                        )
-                                        if (userEmail != email) {
-                                            binding.emailEditText.error = "Incorrect Email "
-                                            binding.emailEditText.requestFocus()
-                                            return@collectLatest
-
-                                        } else if (password != person?.customers?.get(0)?.tags) {
-                                            binding.password.error = "Incorrect password "
-                                            binding.password.requestFocus()
-                                            return@collectLatest
-                                        } else {
-
-
-                                            startActivity(
-                                                Intent(
-                                                    context,
-                                                    BottomNavActivity::class.java
-                                                )
-                                            )
-                                            Firebase(requireContext()).saveLoginState(true)
-                                            SharedPreference.saveUserEmail(
-                                                requireContext(),
-                                                userEmail
-                                            )
-                                            SharedPreference.saveUserEmail(requireContext(), email)
-                                        }
+//                                        var userEmail = person?.customers?.get(0)?.email
+//                                        Log.i(TAG, "onViewCreated: userEmail ${userEmail}")
+//                                        Log.i(
+//                                            TAG,
+//                                            "onViewCreated: userEmail ${person?.customers?.get(0)?.tags}"
+//                                        )
+//                                        if (userEmail != email) {
+//                                            binding.emailEditText.error = "Incorrect Email "
+//                                            binding.emailEditText.requestFocus()
+//                                            return@collectLatest
+//
+//                                        } else if (password != person?.customers?.get(0)?.tags) {
+//                                            binding.password.error = "Incorrect password "
+//                                            binding.password.requestFocus()
+//                                            return@collectLatest
+//                                        } else {
+//
+//
+//                                            startActivity(
+//                                                Intent(
+//                                                    context,
+//                                                    BottomNavActivity::class.java
+//                                                )
+//                                            )
+//                                            Firebase(requireContext()).saveLoginState(true)
+//                                            SharedPreference.saveUserEmail(
+//                                                requireContext(),
+//                                                userEmail
+//                                            )
+//                                            SharedPreference.saveUserEmail(requireContext(), email)
+//                                        }
                                         if (person != null) {
 
                                             Log.i(

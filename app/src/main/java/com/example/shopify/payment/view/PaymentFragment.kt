@@ -37,6 +37,7 @@ import com.example.shopify.model.draftModel.DraftOrder
 import com.example.shopify.network.ShopifyRemoteDataSourceImp
 import com.example.shopify.payment.viewModel.PaymentViewModelFactory
 import com.example.shopify.payment.viewModel.PaymentViewModel
+import com.example.shopify.setting.currency.CurrencyConverter
 import com.google.gson.Gson
 import com.example.shopify.utility.Constants
 import com.google.android.material.snackbar.Snackbar
@@ -137,7 +138,10 @@ class paymentFragment : Fragment() {
             "${address.address1}, ${address.address2}, ${address.city}, ${address.company}"
 
         totalPriceText = view.findViewById(R.id.textView3)
-        totalPriceText.text = paymentViewModel.totalPrice.toString()
+
+        val formattedTotalPrice = CurrencyConverter.formatCurrency(paymentViewModel.totalPrice)
+        totalPriceText.text = formattedTotalPrice
+       // totalPriceText.text = paymentViewModel.totalPrice.toString()
 
 
         //navigate to shopping card fragment
@@ -163,7 +167,7 @@ class paymentFragment : Fragment() {
         }
 
         //pay
-        checkBoxOnline.setOnClickListener {
+        /*checkBoxOnline.setOnClickListener {
             if (checkBoxOnline.isChecked) {
                 checkBoxOffline.isChecked = false
                 paymentFlow()
@@ -179,6 +183,40 @@ class paymentFragment : Fragment() {
                 //
             } else {
                 Log.i("flow", "Offline CheckBox is not checked.")
+            }
+        }*/
+        checkBoxOnline.setOnClickListener {
+            if (checkBoxOnline.isChecked) {
+                checkBoxOffline.isChecked = false
+                if (address.address2?.isEmpty() == true) {
+                    checkBoxOnline.isChecked = false
+                    Snackbar.make(view, "Please add a valid address to proceed with online payment.", Snackbar.LENGTH_SHORT).show()
+                } else {
+                    paymentFlow()
+                    paymentMethod = "Visa"
+                }
+            } else {
+                Log.i("flow", "Online CheckBox is not checked.")
+                paymentMethod = ""
+            }
+        }
+
+        checkBoxOffline.setOnClickListener {
+            if (checkBoxOffline.isChecked) {
+                checkBoxOnline.isChecked = false
+                if (address.address2?.isEmpty() == true) {
+                    checkBoxOffline.isChecked = false
+                    Snackbar.make(
+                        view,
+                        "Please add a valid address to proceed with cash payment.",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                } else {
+                    paymentMethod = "Cash"
+                }
+            } else {
+                Log.i("flow", "Offline CheckBox is not checked.")
+                paymentMethod = ""
             }
         }
         creatStripCustomerId()

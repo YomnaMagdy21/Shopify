@@ -39,6 +39,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlin.math.absoluteValue
 
 
 class shoppingCardFragment : Fragment(), ShoppingCardIClear {
@@ -49,6 +50,7 @@ class shoppingCardFragment : Fragment(), ShoppingCardIClear {
     private lateinit var totalPriceTextView: TextView
     private lateinit var discountText: TextView
 
+    private lateinit var subTotal:TextView
 
     private var discountAmount: Double = 0.0
     private var couponApplied = false
@@ -91,6 +93,7 @@ class shoppingCardFragment : Fragment(), ShoppingCardIClear {
         discountText = view.findViewById(R.id.textView7)
         constraintLay = view.findViewById(R.id.cart_items)
 
+        subTotal = view.findViewById(R.id.subTotalValue)
         lottieAnimationView = view.findViewById(R.id.lottie_no_data)
 
 
@@ -286,11 +289,10 @@ class shoppingCardFragment : Fragment(), ShoppingCardIClear {
     }
 
     private fun applyDiscount(totalPrice: Double, priceRule: PriceRule) {
-        val discountPercentage = priceRule.value.toDouble() / 100
-        discountAmount = totalPrice * discountPercentage
-        val convertedDiscountAmount = CurrencyConverter.convertToUSD(discountAmount)
-        discountText.text = "${"%.2f".format(convertedDiscountAmount)}"
-        Log.i("discount", "applyDiscount: " + discountAmount)
+        val discountPercentage = priceRule.value.toDouble().absoluteValue
+        discountAmount = totalPrice * (discountPercentage / 100)
+        discountText.text = "${"%.0f".format(discountPercentage)}%"
+        Log.i("discount", "applyDiscount: $discountAmount")
     }
 
     private fun calculateTotalWithoutDiscount(items: List<DraftOrder>): Double {
@@ -300,10 +302,17 @@ class shoppingCardFragment : Fragment(), ShoppingCardIClear {
     private fun calculateTotalPrice(items: List<DraftOrder>): Double {
         var totalPrice = calculateTotalWithoutDiscount(items)
         if (couponApplied) {
-            totalPrice += discountAmount
+            totalPrice -= discountAmount
         }
+
+        if (totalPrice < 0) totalPrice = 0.0
+
         val convertedTotalPrice = CurrencyConverter.convertToUSD(totalPrice)
         totalPriceTextView.text = CurrencyConverter.formatCurrency(convertedTotalPrice)
+
+        val subtotal = calculateTotalWithoutDiscount(items)
+        val subTotalConvert = CurrencyConverter.convertToUSD(subtotal)
+        subTotal.text = CurrencyConverter.formatCurrency(subTotalConvert)
 
         return convertedTotalPrice
 

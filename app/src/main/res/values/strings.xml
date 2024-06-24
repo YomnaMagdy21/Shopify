@@ -68,5 +68,7 @@
     <string name="setting">Setting</string>
     <string name="currency">Currency</string>
     <string name="tvaddress">Address</string>
+    <string name="available_sizes">Available Sizes</string>
+    <string name="available_color">Available Colors</string>
 
 </resources>

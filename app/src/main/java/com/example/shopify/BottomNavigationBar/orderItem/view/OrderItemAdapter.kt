@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide
 import com.example.shopify.R
 import com.example.shopify.model.PostOrders.LineItem
 import com.example.shopify.model.PostOrders.NoteAttribute
+import com.example.shopify.setting.currency.CurrencyConverter
 
 class OrderItemAdapter (private val context: Context, private var lineItems: List<LineItem>/*,private val noteAttributes: List<NoteAttribute>*/
 ) : RecyclerView.Adapter<OrderItemAdapter.ViewHolder>() {
@@ -29,7 +30,12 @@ class OrderItemAdapter (private val context: Context, private var lineItems: Lis
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val lineItem = lineItems[position]
         holder.nameProduct.text = lineItem.name
-        holder.priceProduct.text = lineItem.price + " EGP"
+
+        //holder.priceProduct.text = lineItem.price + " EGP"
+        val price = lineItem.price?.let { CurrencyConverter.convertToUSD(it.toDouble()) }
+        val priceFormat = price?.let { CurrencyConverter.formatCurrency(it) }
+        holder.priceProduct.text = priceFormat
+
         holder.quantityProduct.text = lineItem.quantity.toString()
 
 
