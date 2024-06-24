@@ -70,5 +70,7 @@
     <string name="tvaddress">Address</string>
     <string name="available_sizes">Available Sizes</string>
     <string name="available_color">Available Colors</string>
+    <string name="coupon">Coupon</string>
+    <string name="subtotal">SubTotal</string>
 
 </resources>
