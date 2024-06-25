@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    <string name="app_name">تسوق بسهولة</string>
     <string name="favorite">المفضلة</string>
     <string name="create_your_account">اعمل حساب جديد</string>
     <string name="email">البريد الإلكتروني</string>

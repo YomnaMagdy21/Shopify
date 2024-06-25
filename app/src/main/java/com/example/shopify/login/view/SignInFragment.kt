@@ -313,8 +313,7 @@ class SignInFragment : Fragment() {
                 val account = task.getResult(ApiException::class.java)
                 if (account != null && account.idToken != null) {
                     handleSignInResult(account.idToken!!)
-                    Toast.makeText(context, "login with google successfully", Toast.LENGTH_SHORT)
-                        .show()
+                    Snackbar.make(requireView(), "login with google successfully", Snackbar.LENGTH_SHORT).show()
                 } else {
                     Log.e(TAG,
                         "Google sign-in failed: ID token is null"
@@ -352,7 +351,7 @@ class SignInFragment : Fragment() {
                                         proceedToNextPage(user)
                                     } else {
                                         Log.e(TAG, "Failed to send verification email.", emailTask.exception)
-                                        Toast.makeText(context, "Failed to send verification email.", Toast.LENGTH_LONG).show()
+                                        Snackbar.make(requireView(), "Failed to send verification email.", Snackbar.LENGTH_SHORT).show()
                                     }
                                 }
                             }
@@ -370,7 +369,7 @@ class SignInFragment : Fragment() {
         Firebase(requireContext()).checkIfUserExists(user.uid) { userExists ->
             if (userExists) {
                 startActivity(Intent(context, BottomNavActivity::class.java))
-                Toast.makeText(context, "Welcome back!", Toast.LENGTH_LONG).show()
+                Snackbar.make(requireView(), "Welcome back!", Snackbar.LENGTH_SHORT).show()
             } else {
                 val customer = Customer(
                     0, user.email, null, null, "", "", "", "", 0, null, null,
@@ -392,7 +391,7 @@ class SignInFragment : Fragment() {
                                 Log.i(TAG, "Customer ID: ${person?.customer?.id}")
 
                                 startActivity(Intent(context, BottomNavActivity::class.java))
-                                Toast.makeText(context, "User logged in with Google successfully.", Toast.LENGTH_LONG).show()
+                                Snackbar.make(requireView(), "User logged in with Google successfully.", Snackbar.LENGTH_SHORT).show()
                             }
                             else -> {
                                 // Handle other API states if needed
