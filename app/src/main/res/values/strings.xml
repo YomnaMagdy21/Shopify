@@ -63,8 +63,14 @@
     <string name="discount">Discount</string>
     <string name="apply">Apply</string>
     <string name="checkout">CheckOut</string>
+    <string name="log_out">Log Out</string>
+    <string name="about_us">About Us</string>
+    <string name="setting">Setting</string>
+    <string name="currency">Currency</string>
+    <string name="tvaddress">Address</string>
     <string name="available_sizes">Available Sizes</string>
     <string name="available_color">Available Colors</string>
+  
     <string name="you_are_guest">You are guest</string>
     <string name="cancel">Cancel</string>
     <string name="delete_fav">Remove product</string>
@@ -77,7 +83,7 @@
     <string name="Press_on_Photo">Press on Photo!</string>
     <string name="price_150">Price: 150</string>
     <string name="subtotal">SubTotal</string>
-    <string name="curruncy">Curruncy</string>
+    <string name="curruncy">Currency</string>
     <string name="about_us">About Us</string>
     <string name="logout">Log Out</string>
     <string name="phone">Phone</string>
@@ -105,8 +111,11 @@
     <string name="yomna">3. Yomna Magdy</string>
     <string name="language">Language</string>
     <string name="choose_currency">Choose Currency</string>
-    <string name="choose_language">Chosse Language</string>
+    <string name="choose_language">Choose Language</string>
     <string name="english">English</string>
     <string name="arabic">Arabic</string>
+
+    <string name="coupon">Coupon</string>
+
 
 </resources>

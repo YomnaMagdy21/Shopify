@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -48,7 +49,9 @@ class shoppingCardFragment : Fragment(), ShoppingCardIClear {
     private lateinit var products: MutableList<DraftOrder>
     private lateinit var totalPriceTextView: TextView
     private lateinit var discountText: TextView
+
     private lateinit var subTotal:TextView
+
     private var discountAmount: Double = 0.0
     private var couponApplied = false
 
@@ -56,6 +59,7 @@ class shoppingCardFragment : Fragment(), ShoppingCardIClear {
     private var items: List<Item> = emptyList()
 
     private lateinit var lottieAnimationView: LottieAnimationView
+    private lateinit var constraintLay: ConstraintLayout
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,9 +91,9 @@ class shoppingCardFragment : Fragment(), ShoppingCardIClear {
         recyclerView.adapter = adapter
         totalPriceTextView = view.findViewById(R.id.textView3)
         discountText = view.findViewById(R.id.textView7)
+        constraintLay = view.findViewById(R.id.cart_items)
+
         subTotal = view.findViewById(R.id.subTotalValue)
-
-
         lottieAnimationView = view.findViewById(R.id.lottie_no_data)
 
 
@@ -333,9 +337,10 @@ class shoppingCardFragment : Fragment(), ShoppingCardIClear {
     private fun checkRecyclerViewEmptyState() {
         if (products.isEmpty()) {
             lottieAnimationView.visibility = View.VISIBLE
+            constraintLay.visibility = View.GONE
         } else {
             lottieAnimationView.visibility = View.GONE
-            recyclerView.visibility = View.VISIBLE
+            constraintLay.visibility = View.VISIBLE
         }
     }
     override fun onResume() {

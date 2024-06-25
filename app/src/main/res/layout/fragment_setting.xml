@@ -31,9 +31,9 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView1Adress"
-        android:layout_width="355dp"
+        android:layout_width="match_parent"
         android:layout_height="73dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="23dp"
         android:layout_marginTop="80dp"
         android:layout_marginEnd="23dp"
         app:cardCornerRadius="12dp"
@@ -61,7 +61,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
+
                 android:text="@string/Address"
+
                 android:textColor="#090909"
                 android:textSize="20sp" />
         </LinearLayout>
@@ -69,9 +71,9 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView2Currnucy"
-        android:layout_width="355dp"
+        android:layout_width="match_parent"
         android:layout_height="73dp"
-        android:layout_marginStart="34dp"
+        android:layout_marginStart="23dp"
         android:layout_marginTop="22dp"
         android:layout_marginEnd="23dp"
         app:cardCornerRadius="12dp"
@@ -98,7 +100,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
+
                 android:text="@string/curruncy"
+
                 android:textColor="#0C0C0C"
                 android:textSize="20sp" />
         </LinearLayout>
@@ -106,9 +110,9 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView3About"
-        android:layout_width="355dp"
+        android:layout_width="match_parent"
         android:layout_height="73dp"
-        android:layout_marginStart="34dp"
+        android:layout_marginStart="23dp"
         android:layout_marginTop="22dp"
         android:layout_marginEnd="23dp"
         app:cardCornerRadius="12dp"
@@ -136,6 +140,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:text="@string/about_us"
+
                 android:textColor="#0E0E0E"
                 android:textSize="20sp" />
         </LinearLayout>
@@ -180,11 +185,14 @@
 
     <Button
         android:id="@+id/logOutButton"
-        android:layout_width="204dp"
+        android:layout_width="wrap_content"
         android:layout_height="49dp"
-        android:layout_marginBottom="74dp"
+        android:layout_marginBottom="85dp"
+        android:paddingHorizontal="70dp"
         android:backgroundTint="#000000"
+
         android:text="@string/logout"
+
         android:textSize="20sp"
         app:cornerRadius="12dp"
         app:layout_constraintBottom_toBottomOf="parent"

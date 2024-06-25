@@ -93,6 +93,7 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
     private var updatedLineItems: MutableList<ItemLine> = mutableListOf()
     lateinit var draftOrder: FavDraftOrderResponse
     lateinit var sizesAdapter: SizesAdapter
+    private var selectedSize: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -553,11 +554,10 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
                     .commit()
             }
 
+
             private fun addProductToCart(product: ProductModel) {
                 val currentUser = FirebaseAuth.getInstance().currentUser
                 val userEmail = currentUser?.email
-
-                Log.d("AddToCart", "Attempting to add product to cart: $product")
 
                 if (currentUser != null) {
                     val variantId = product.product?.variants?.get(0)?.id
@@ -566,6 +566,15 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
                             Snackbar.make(
                                 requireView(),
                                 "Product already in cart",
+                                Snackbar.LENGTH_SHORT
+                            ).show()
+                            return
+                        }
+
+                        if (selectedSize == null) {
+                            Snackbar.make(
+                                requireView(),
+                                "Please select a size",
                                 Snackbar.LENGTH_SHORT
                             ).show()
                             return
@@ -613,7 +622,7 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
             }
 
 
-            override fun goToDetails(id: Long) {
+    override fun goToDetails(id: Long) {
                 val bundle = Bundle()
                 bundle.putLong("product_id", id)
                 brandId?.let { bundle.putLong("brand_id", it) }
@@ -853,7 +862,7 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
             }
 
     override fun onSizeClick(size: String) {
-
+        selectedSize = size
     }
 
     fun showAlertDialog() {

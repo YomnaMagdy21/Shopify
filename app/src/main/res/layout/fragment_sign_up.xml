@@ -4,9 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     android:background="@color/backgroundColor1"
     android:layoutDirection="locale"
     android:textDirection="locale"
+    android:background="@drawable/background"
     tools:context=".signup.view.SignUpFragment">
 
     <TextView
@@ -16,6 +18,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="32dp"
         android:text="@string/create_your_account"
+        android:textColor="#FBFBFB"
         android:textSize="32sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -117,14 +120,14 @@
 
     <Button
         android:id="@+id/signup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_width="156dp"
+        android:layout_height="41dp"
+        android:layout_marginTop="40dp"
         android:width="200dp"
         android:backgroundTint="#000000"
         android:text="@string/signup"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/confirm" />
 
@@ -134,6 +137,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
         android:text="@string/or"
+        android:textColor="#FBF9F9"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -158,7 +162,7 @@
         android:layout_marginStart="80dp"
         android:layout_marginTop="32dp"
         android:text="@string/aleardy_have_an_account"
-        android:textColor="#C6BDBD"
+        android:textColor="#DCD3D3"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/google" />
@@ -170,6 +174,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
         android:text="@string/sign_in"
+        android:textColor="#CCC4C4"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/google"
         app:layout_constraintHorizontal_bias="0.35"
