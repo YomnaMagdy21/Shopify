@@ -226,7 +226,7 @@ class SignUpFragment : Fragment() {
                 return@setOnClickListener
             }
             if (password.length < 8) {
-                binding.password.error = "Password cannot be less than 6 characters"
+                binding.password.error = "Password cannot be less than 8 characters"
                 binding.password.requestFocus()
                 return@setOnClickListener
             }
