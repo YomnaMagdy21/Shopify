@@ -11,6 +11,7 @@
         android:id="@+id/recView"
         android:layout_width="match_parent"
         android:layout_height="600dp"
+        android:layout_marginTop="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -24,27 +25,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/recView"
-        app:layout_constraintEnd_toEndOf="@+id/recView"
-        app:layout_constraintStart_toStartOf="@+id/recView"
-        app:layout_constraintTop_toTopOf="@+id/recView" />
-
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <TextView
+        android:id="@+id/tv_filteredPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/tv_filteredPrice"
-        android:text="Price: 150"
+        android:layout_marginStart="10dp"
+        android:paddingVertical="10dp"
+        android:text="@string/price_150"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:paddingVertical="10dp"
         android:visibility="gone"
-        android:layout_marginStart="10dp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/filterSlider"
         app:layout_constraintEnd_toStartOf="@+id/filterSlider"
-        app:layout_constraintTop_toTopOf="@+id/filterSlider"
-        app:layout_constraintBottom_toBottomOf="@+id/filterSlider"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/filterSlider" />
 
     <com.google.android.material.slider.Slider
         android:id="@+id/filterSlider"

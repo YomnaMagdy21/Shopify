@@ -138,11 +138,11 @@
 
             <TextView
                 android:id="@+id/textView6"
-                android:layout_width="282dp"
+                android:layout_width="wrap_content"
                 android:layout_height="21dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="5dp"
-                android:text="Sale up to 50% "
+                android:text="@string/sale_up_to_50"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/adv_in_home"
@@ -156,7 +156,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="3dp"
-                android:text="Press on Photo!"
+                android:text="@string/Press_on_Photo"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/const_brands_in_home"

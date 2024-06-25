@@ -6,6 +6,8 @@ import android.os.Bundle
 import com.example.shopify.BottomNavigationBar.BottomNavActivity
 import com.example.shopify.firebase.Firebase
 import com.example.shopify.login.view.SignInFragment
+import com.example.shopify.utility.SharedPreference
+import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,5 +25,14 @@ class MainActivity : AppCompatActivity() {
                     .commit()
             }
         }
+        var language= SharedPreference.getLanguage(this)
+        updateAppContext(language)
+    }
+    private fun updateAppContext(language: String) {
+        val locale = Locale(language)
+        Locale.setDefault(locale)
+        val config = resources.configuration
+        config.setLocale(locale)
+        resources.updateConfiguration(config, resources.displayMetrics)
     }
 }

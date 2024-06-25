@@ -165,16 +165,17 @@
             android:weightSum="3"
 
             >
+
             <TextView
                 android:id="@+id/tv_phone_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Phone"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="10dp"
+                android:text="@string/phone"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:weightSum="1"
-                android:paddingHorizontal="10dp"
-                android:paddingVertical="10dp"/>
+                android:weightSum="1" />
 
             <TextView
                 android:id="@+id/tv_Phonee_value"

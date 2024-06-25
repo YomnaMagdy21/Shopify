@@ -2,13 +2,17 @@ package com.example.shopify.products.view
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.provider.ContactsContract.CommonDataKinds.Im
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -22,6 +26,7 @@ import com.example.shopify.BottomNavigationBar.Favorite.viewmodel.FavoriteViewMo
 import com.example.shopify.R
 import com.example.shopify.databinding.FavItemBinding
 import com.example.shopify.databinding.ProductItemBinding
+import com.example.shopify.login.view.SignInFragment
 import com.example.shopify.model.productDetails.Product
  
 import com.example.shopify.utility.SharedPreference
@@ -114,14 +119,7 @@ class ProductAdapter(var context: Context, var productsOfBrand: List<Product>, v
                 var guest = SharedPreference.getGuest(context)
                 //  var email = SharedPreference.getUserEmail(context)
                 if (guest == "yes") {
-                    val builder = AlertDialog.Builder(context)
-                    builder.setTitle("Warning")
-                    builder.setMessage("You are guest, you can't add to favorite")
-                    builder.setPositiveButton("ok") { dialog, which ->
-
-                    }
-
-                    builder.show()
+                    showAlertDialog()
                 } else {
 
                     val isFav =
@@ -179,6 +177,33 @@ class ProductAdapter(var context: Context, var productsOfBrand: List<Product>, v
         val card: CardView = itemView.findViewById(R.id.products_of_brand_card)
 
         val fav : ImageView = itemView.findViewById(R.id.iv_add_to_fav)
+    }
+    fun showAlertDialog() {
+        val inflater = LayoutInflater.from(context)
+        val dialogView = inflater.inflate(R.layout.guest_alert, null)
+        dialogView.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        val alertDialog = AlertDialog.Builder(context)
+            .setView(dialogView)
+            .setCancelable(false)
+            .create()
+
+        val loginButton: Button = dialogView.findViewById(R.id.login)
+        val cancelButton: Button = dialogView.findViewById(R.id.cancel)
+
+        loginButton.setOnClickListener {
+            val transaction = (context as AppCompatActivity).supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.home_fragment, SignInFragment())
+            transaction.addToBackStack(null)
+            transaction.commit()
+            alertDialog.dismiss()
+        }
+
+        cancelButton.setOnClickListener {
+            alertDialog.dismiss()
+        }
+
+        alertDialog.show()
     }
 
 

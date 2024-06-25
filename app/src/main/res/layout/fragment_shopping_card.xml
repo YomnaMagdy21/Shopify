@@ -246,6 +246,18 @@ tools:context=".ShoppingCart.view.shoppingCardFragment">
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="18dp"
+        android:text="@string/subtotal"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/const_coupon"
+        app:layout_constraintStart_toStartOf="@+id/guideline4"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerViewCardList" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
     <com.airbnb.lottie.LottieAnimationView

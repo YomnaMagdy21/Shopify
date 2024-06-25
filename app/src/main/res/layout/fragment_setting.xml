@@ -58,10 +58,12 @@
 
             <TextView
                 android:id="@+id/cardText"
-                android:layout_width="199dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:text="@string/tvaddress"
+
+                android:text="@string/Address"
+
                 android:textColor="#090909"
                 android:textSize="20sp" />
         </LinearLayout>
@@ -95,10 +97,12 @@
 
             <TextView
                 android:id="@+id/cardText2"
-                android:layout_width="199dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:text="@string/currency"
+
+                android:text="@string/curruncy"
+
                 android:textColor="#0C0C0C"
                 android:textSize="20sp" />
         </LinearLayout>
@@ -132,10 +136,48 @@
 
             <TextView
                 android:id="@+id/cardText3"
-                android:layout_width="199dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:text="@string/about_us"
+
+                android:textColor="#0E0E0E"
+                android:textSize="20sp" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardViewLanguage"
+        android:layout_width="355dp"
+        android:layout_height="73dp"
+        android:layout_marginStart="34dp"
+        android:layout_marginTop="22dp"
+        android:layout_marginEnd="23dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView3About">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+            <ImageView
+                android:id="@+id/langIcon"
+                android:layout_width="45dp"
+                android:layout_height="35dp"
+                android:src="@drawable/language" />
+
+            <TextView
+                android:id="@+id/cardText33"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@string/language"
                 android:textColor="#0E0E0E"
                 android:textSize="20sp" />
         </LinearLayout>
@@ -148,7 +190,9 @@
         android:layout_marginBottom="85dp"
         android:paddingHorizontal="70dp"
         android:backgroundTint="#000000"
-        android:text="@string/log_out"
+
+        android:text="@string/logout"
+
         android:textSize="20sp"
         app:cornerRadius="12dp"
         app:layout_constraintBottom_toBottomOf="parent"

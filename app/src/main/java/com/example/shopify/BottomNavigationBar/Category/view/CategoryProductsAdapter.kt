@@ -1,17 +1,24 @@
 package com.example.shopify.BottomNavigationBar.Category.view
 
+import android.app.Dialog
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.shopify.R
+import com.example.shopify.databinding.GuestAlertBinding
+import com.example.shopify.login.view.SignInFragment
 import com.example.shopify.model.productDetails.Product
 
 import com.example.shopify.utility.SharedPreference
@@ -23,6 +30,9 @@ class CategoryProductsAdapter(private val context: Context,
                               var listener: OnCategoryClickListener,
                               private var myProducts: List<Product>
                               /*private val onAddToCartClick: (Product) -> Unit*/) : RecyclerView.Adapter<CategoryProductsAdapter.ViewHolder>() {
+
+
+         lateinit var binding: GuestAlertBinding
     fun updateData(myNewProducts: List<Product>){
         this.myProducts = myNewProducts
         notifyDataSetChanged()
@@ -35,6 +45,7 @@ class CategoryProductsAdapter(private val context: Context,
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val view = inflater.inflate(R.layout.category_products_card, parent, false)
+        binding = GuestAlertBinding.inflate(inflater)
         return ViewHolder(view)
     }
 
@@ -75,14 +86,15 @@ class CategoryProductsAdapter(private val context: Context,
             var guest = SharedPreference.getGuest(context)
           //  var email = SharedPreference.getUserEmail(context)
             if(guest == "yes"){
-                val builder = AlertDialog.Builder(context)
-                builder.setTitle("Warning")
-                builder.setMessage("You are guest, you can't add to favorite")
-                builder.setPositiveButton("ok") { dialog, which ->
-
-                }
-
-                builder.show()
+                showAlertDialog()
+//                val builder = AlertDialog.Builder(context)
+//                builder.setTitle("Warning")
+//                builder.setMessage("You are guest, you can't add to favorite")
+//                builder.setPositiveButton("ok") { dialog, which ->
+//
+//                }
+//
+//                builder.show()
             }else {
                 val isFav =
                     product.variants?.get(0)?.id?.let { it1 ->
@@ -128,4 +140,51 @@ class CategoryProductsAdapter(private val context: Context,
         val card: CardView = itemView.findViewById(R.id.products_card_category)
         val fav : ImageView = itemView.findViewById(R.id.fav)
     }
+
+    fun showAlertDialog() {
+//        val dialog= Dialog(context)
+//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+//        dialog.setCancelable(false)
+//        binding = GuestAlertBinding.inflate(LayoutInflater.from(context))
+//        dialog.setContentView(binding.root)
+//        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+//        binding.login.setOnClickListener {
+//            val transaction = (context as AppCompatActivity).supportFragmentManager.beginTransaction()
+//            transaction.replace(R.id.home_fragment, SignInFragment())
+//            transaction.addToBackStack(null)
+//            transaction.commit()
+//            dialog.dismiss()
+//        }
+//        binding.cancel.setOnClickListener {
+//            dialog.dismiss()
+//        }
+//        dialog.show()
+
+        val inflater = LayoutInflater.from(context)
+        val dialogView = inflater.inflate(R.layout.guest_alert, null)
+        dialogView.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        val alertDialog = AlertDialog.Builder(context)
+            .setView(dialogView)
+            .setCancelable(false)
+            .create()
+
+        val loginButton: Button = dialogView.findViewById(R.id.login)
+        val cancelButton: Button = dialogView.findViewById(R.id.cancel)
+
+        loginButton.setOnClickListener {
+            val transaction = (context as AppCompatActivity).supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.home_fragment, SignInFragment())
+            transaction.addToBackStack(null)
+            transaction.commit()
+            alertDialog.dismiss()
+        }
+
+        cancelButton.setOnClickListener {
+            alertDialog.dismiss()
+        }
+
+        alertDialog.show()
+    }
+
 }

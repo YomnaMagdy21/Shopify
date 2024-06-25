@@ -4,6 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
+    android:background="@color/backgroundColor1"
+    android:layoutDirection="locale"
+    android:textDirection="locale"
     android:background="@drawable/background"
     tools:context=".signup.view.SignUpFragment">
 
@@ -73,9 +77,11 @@
         android:ems="10"
         android:hint="@string/password"
         android:inputType="textPassword"
+        android:layoutDirection="locale"
         android:paddingStart="16dp"
-        app:layout_constraintEnd_toEndOf="@+id/email"
-        app:layout_constraintStart_toStartOf="@+id/email"
+        android:textDirection="locale"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/email" />
 
     <ImageView
