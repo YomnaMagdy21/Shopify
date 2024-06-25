@@ -148,12 +148,12 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardViewLanguage"
-        android:layout_width="355dp"
+        android:layout_width="match_parent"
         android:layout_height="73dp"
-        android:layout_marginStart="34dp"
         android:layout_marginTop="22dp"
         android:layout_marginEnd="23dp"
         app:cardCornerRadius="12dp"
+        android:layout_marginStart="23dp"
         app:cardElevation="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

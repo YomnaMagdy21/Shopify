@@ -17,7 +17,7 @@
     <string name="all">الكل</string>
     <string name="kids">الاطفال</string>
     <string name="men">الرجال</string>
-    <string name="women">النساء</string>
+    <string name="women">السيدات</string>
     <string name="egp">جنيه</string>
     <string name="order_list_title">قائمه الطلبات</string>
     <string name="created_at">تم انشائها فى:</string>
@@ -53,7 +53,7 @@
     <string name="no">لا</string>
     <string name="yes">نعم</string>
     <string name="cart_list">قائمة التسوق</string>
-    <string name="my">My</string>
+<!--    <string name="my">My</string>-->
     <string name="discount">تخفيض</string>
     <string name="apply">طبق</string>
     <string name="checkout">الدفع</string>
@@ -99,5 +99,6 @@
     <string name="english">لغة انجليزية</string>
     <string name="arabic">لغة عربية</string>
     <string name="me">صفحتى</string>
+    <string name="coupon">كوبون</string>
 
 </resources>

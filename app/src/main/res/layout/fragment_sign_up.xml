@@ -8,9 +8,9 @@
     android:background="@color/backgroundColor1"
     android:layoutDirection="locale"
     android:textDirection="locale"
-    android:background="@drawable/background"
-    tools:context=".signup.view.SignUpFragment">
 
+    tools:context=".signup.view.SignUpFragment">
+<!--    android:background="@drawable/background"-->
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
@@ -18,7 +18,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="32dp"
         android:text="@string/create_your_account"
-        android:textColor="#FBFBFB"
+        android:textColor="@color/black"
         android:textSize="32sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -137,7 +137,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
         android:text="@string/or"
-        android:textColor="#FBF9F9"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -174,7 +173,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
         android:text="@string/sign_in"
-        android:textColor="#CCC4C4"
+
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/google"
         app:layout_constraintHorizontal_bias="0.35"
