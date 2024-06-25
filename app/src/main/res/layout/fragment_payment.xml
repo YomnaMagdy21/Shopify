@@ -60,7 +60,7 @@
     <TextView
         android:id="@+id/textViewCardList"
         android:layout_width="249dp"
-        android:layout_height="66dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="56dp"
         android:layout_marginEnd="137dp"
         android:text="@string/payment"

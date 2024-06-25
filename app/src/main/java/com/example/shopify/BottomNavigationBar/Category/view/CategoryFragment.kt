@@ -59,6 +59,7 @@ import com.example.shopify.utility.ApiState
 import com.example.shopify.utility.SharedPreference
 
 import com.google.android.material.snackbar.Snackbar
+import com.mikhaellopez.circularimageview.CircularImageView
 
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -71,10 +72,10 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
     private lateinit var tvKids: TextView
     private lateinit var tvSale: TextView
 
-    private lateinit var ivTShirts: ImageView
-    private lateinit var ivShoes: ImageView
-    private lateinit var ivAccessories: ImageView
-    private lateinit var ivBlock: ImageView
+    private lateinit var ivTShirts: CircularImageView
+    private lateinit var ivShoes: CircularImageView
+    private lateinit var ivAccessories: CircularImageView
+    private lateinit var ivBlock: CircularImageView
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: CategoryProductsAdapter
@@ -311,9 +312,10 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
     private fun selectImageView(selectedImageView: ImageView) {
         val imageViews = listOf(ivTShirts, ivShoes, ivAccessories , ivBlock)
         imageViews.forEach { imageView ->
+            imageView.setPadding(0, 0, 0, 0)
             imageView.setBackgroundResource(R.drawable.rounded_unselected_image_view_filter)
         }
-
+        selectedImageView.setPadding(4, 4, 4, 4)
         selectedImageView.setBackgroundResource(R.drawable.rounded_selected_image_view_filter)
     }
 

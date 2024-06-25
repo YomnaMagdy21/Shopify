@@ -133,5 +133,9 @@ dependencies {
 
     testImplementation ("org.robolectric:robolectric:4.7.3")
 
+    implementation ("com.mikhaellopez:circularimageview:4.3.1")
+
+
+
 
 }
