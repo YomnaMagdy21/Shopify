@@ -2,6 +2,7 @@ package com.example.shopify.signup.view
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.text.InputType
 import android.util.Log
@@ -90,6 +91,8 @@ class SignUpFragment : Fragment() {
         mGoogleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
 //        val signInIntent = googleSignInClient.signInIntent
 //        ActivityCompat.startActivityForResult(signInIntent, RC_SIGN_IN)
+
+
     }
 
     override fun onCreateView(
@@ -114,6 +117,12 @@ class SignUpFragment : Fragment() {
 
         signInViewModel = ViewModelProvider(this, signInViewModelFactory).get(SignInViewModel::class.java)
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            binding.password.layoutDirection = View.LAYOUT_DIRECTION_LOCALE
+            binding.password.layoutDirection = View.LAYOUT_DIRECTION_LOCALE
+//            emailEditText.textDirection = View.TEXT_DIRECTION_LOCALE
+//            passwordEditText.textDirection = View.TEXT_DIRECTION_LOCALE
+        }
 
         return binding.root
     }

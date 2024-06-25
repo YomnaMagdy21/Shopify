@@ -9,35 +9,55 @@
         android:id="@+id/dialogTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="About Us"
+        android:layout_gravity="center"
+        android:text="@string/about_us"
         android:textSize="20sp"
-        android:textStyle="bold"
-        android:layout_gravity="center"/>
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/dialogMessage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="This application is our graduation project. Try using this application and if you find any problems, please contact us to solve them and improve our application."
+        android:text="@string/aboutus_desc"
         android:textSize="16sp" />
 
     <TextView
         android:id="@+id/teamNamesTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_marginTop="16dp"
-        android:text="Team Members:"
+        android:text="@string/team_member"
         android:textSize="18sp"
-        android:textStyle="bold"
-        android:layout_gravity="center"/>
+        android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/teamNames"
+        android:id="@+id/teamName1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="8dp"
-        android:text="1. Sarah Ahmed\n2. Nermen Hemda\n3. Yomna Magdy"
+        android:text="@string/sara"
         android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/teamName2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp"
+        android:text="@string/nermeen"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/teamName3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp"
+        android:text="@string/yomna"
+        android:textSize="16sp" />
+
 </LinearLayout>
+<!--    1. Sarah Ahmed\n2. Nermen Hemda\n3. Yomna Magdy-->

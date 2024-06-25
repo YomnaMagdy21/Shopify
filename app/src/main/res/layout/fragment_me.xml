@@ -57,10 +57,10 @@
 
             <TextView
                 android:id="@+id/cardText"
-                android:layout_width="199dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:text="Orders"
+                android:text="@string/orders"
                 android:textColor="#090909"
                 android:textSize="20sp" />
         </LinearLayout>
@@ -94,10 +94,10 @@
 
             <TextView
                 android:id="@+id/cardText2"
-                android:layout_width="199dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:text="WishList"
+                android:text="@string/wishlist"
                 android:textColor="#0B0A0A"
                 android:textSize="20sp" />
         </LinearLayout>
@@ -131,10 +131,10 @@
 
             <TextView
                 android:id="@+id/cardTextsetting"
-                android:layout_width="199dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:text="Setting"
+                android:text="@string/setting"
                 android:textColor="#0B0A0A"
                 android:textSize="20sp" />
         </LinearLayout>
@@ -150,7 +150,7 @@
         android:visibility="gone"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
-        app:lottie_rawRes="@raw/animation_1718798060411" />
+        app:lottie_rawRes="@raw/animation_1719276627694" />
     <Button
         android:id="@+id/button"
         android:layout_width="150dp"

@@ -3,12 +3,15 @@ package com.example.shopify.BottomNavigationBar.Favorite.view
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -218,19 +221,29 @@ class FavoriteFragment : Fragment() ,onFavoriteClickListener{
     }
 
     override fun removeFavorite(id: Long) {
+        val inflater = LayoutInflater.from(context)
+        val dialogView = inflater.inflate(R.layout.remove_fav, null)
+        dialogView.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
+        val alertDialog = AlertDialog.Builder(requireContext())
+            .setView(dialogView)
+            .setCancelable(false)
+            .create()
 
+        val yes: Button = dialogView.findViewById(R.id.yes)
+        val no: Button = dialogView.findViewById(R.id.no)
 
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("Remove Item")
-        builder.setMessage("Are you sure you want to remove this item?")
-        builder.setPositiveButton("Yes") { dialog, which ->
+        yes.setOnClickListener {
             deleteFav(id)
+            alertDialog.dismiss()
         }
-        builder.setNegativeButton("No") { dialog, which ->
-            dialog.dismiss()
+
+        no.setOnClickListener {
+            alertDialog.dismiss()
         }
-        builder.show()
+
+        alertDialog.show()
+
     }
 
     override fun goToProductDetails(id: Long) {
@@ -317,5 +330,6 @@ class FavoriteFragment : Fragment() ,onFavoriteClickListener{
             }
         }
     }
+
 
 }

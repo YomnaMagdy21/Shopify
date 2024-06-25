@@ -88,6 +88,15 @@ object SharedPreference {
     }
 
 
+    fun saveLanguage(context: Context, lang: String) {
+        val prefs = context.getSharedPreferences("favPref", Context.MODE_PRIVATE)
+        prefs.edit().putString("KEY_LANGUAGE", lang).apply()
+    }
+
+    fun getLanguage(context: Context): String {
+        val prefs = context.getSharedPreferences("favPref", Context.MODE_PRIVATE)
+        return prefs.getString("KEY_LANGUAGE", "") ?: ""
+    }
 
 
     fun clearPreferences(context: Context) {

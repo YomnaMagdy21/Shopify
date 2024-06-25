@@ -9,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.cardview.widget.CardView
+import androidx.core.app.ActivityCompat
+import androidx.core.app.ActivityCompat.recreate
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.shopify.MainActivity
@@ -35,6 +37,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 class settingFragment : Fragment() {
 
@@ -106,6 +109,10 @@ class settingFragment : Fragment() {
 
         binding.cardView3About.setOnClickListener{
             showAboutUsDialog()
+        }
+
+        binding.cardViewLanguage.setOnClickListener {
+            showLanguage()
         }
 
     }
@@ -187,6 +194,39 @@ class settingFragment : Fragment() {
 
                 }
         }
+    }
+
+    fun showLanguage(){
+        val dialogView = LayoutInflater.from(context).inflate(R.layout.language_dialog, null)
+        val dialogBuilder = AlertDialog.Builder(requireContext())
+            .setView(dialogView)
+            .create()
+
+        val option1Button = dialogView.findViewById<Button>(R.id.english)
+        val option2Button = dialogView.findViewById<Button>(R.id.arabic)
+
+        option1Button.setOnClickListener {
+            SharedPreference.saveLanguage(requireContext(),"en")
+            updateAppContext("en")
+            dialogBuilder.dismiss()
+        }
+
+        option2Button.setOnClickListener {
+            SharedPreference.saveLanguage(requireContext(),"ar")
+            updateAppContext("ar")
+            dialogBuilder.dismiss()
+        }
+        dialogBuilder.show()
+
+    }
+
+    private fun updateAppContext(language: String) {
+        val locale = Locale(language)
+        Locale.setDefault(locale)
+        val config = resources.configuration
+        config.setLocale(locale)
+        resources.updateConfiguration(config, resources.displayMetrics)
+        recreate(requireActivity())
     }
 
 

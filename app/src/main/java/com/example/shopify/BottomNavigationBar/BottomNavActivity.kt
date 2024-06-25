@@ -22,8 +22,10 @@ import com.example.shopify.R
 
 import com.example.shopify.databinding.ActivityBottomNavBinding
 import com.example.shopify.ShoppingCart.view.shoppingCardFragment
+import com.example.shopify.utility.SharedPreference
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 
 class BottomNavActivity : AppCompatActivity() {
@@ -54,6 +56,8 @@ class BottomNavActivity : AppCompatActivity() {
             true
         }
         checkNetworkAndAppearData()
+       var language= SharedPreference.getLanguage(this)
+        updateAppContext(language)
 
     }
 
@@ -113,5 +117,13 @@ class BottomNavActivity : AppCompatActivity() {
         currentFragment?.let { fragmentTransaction.remove(it) }
         currentFragment = null
         fragmentTransaction.commit()
+    }
+    private fun updateAppContext(language: String) {
+        val locale = Locale(language)
+        Locale.setDefault(locale)
+        val config = resources.configuration
+        config.setLocale(locale)
+        resources.updateConfiguration(config, resources.displayMetrics)
+
     }
 }

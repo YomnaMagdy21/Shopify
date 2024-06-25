@@ -10,18 +10,13 @@
 
     <TextView
         android:id="@+id/home_frag_title"
-        android:layout_width="322dp"
-        android:layout_height="69dp"
-        android:layout_marginStart="28dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="128dp"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="137dp"
-        android:layout_marginBottom="30dp"
         android:text="@string/category_title"
         android:textSize="48sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -92,7 +87,7 @@
                 android:gravity="center"
                 android:paddingHorizontal="8dp"
                 android:paddingVertical="10dp"
-                android:text="Sale"
+                android:text="@string/sale"
                 android:textColor="@color/black"
                 android:weightSum="1" />
 

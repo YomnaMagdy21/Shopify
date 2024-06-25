@@ -1,13 +1,17 @@
 package com.example.shopify.productdetails.view
 
 import android.app.AlertDialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -40,6 +44,7 @@ import com.example.shopify.productdetails.viewmodel.ProductDetailsViewModel
 import com.example.shopify.productdetails.viewmodel.ProductDetailsViewModelFactory
 import com.example.shopify.ShoppingCart.viewModel.PriceRuleViewModelFactory
 import com.example.shopify.ShoppingCart.viewModel.ShoppingCardViewModel
+import com.example.shopify.login.view.SignInFragment
 import com.example.shopify.model.productDetails.Product
 import com.example.shopify.products.view.OnProductClickListener
 import com.example.shopify.products.view.ProductAdapter
@@ -244,14 +249,7 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
                             var guest = SharedPreference.getGuest(requireContext())
                             //  var email = SharedPreference.getUserEmail(context)
                             if (guest == "yes") {
-                                val builder = AlertDialog.Builder(context)
-                                builder.setTitle("Warning")
-                                builder.setMessage("You are guest, you can't add to cart")
-                                builder.setPositiveButton("ok") { dialog, which ->
-
-                                }
-
-                                builder.show()
+                              showAlertDialog()
                             } else {
                                 Log.i("hi", "onViewCreated: hiiiiiiiiiiiiiiiiii")
                                 if (data != null) {
@@ -278,14 +276,8 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
                             var guest = SharedPreference.getGuest(requireContext())
                             //  var email = SharedPreference.getUserEmail(context)
                             if (guest == "yes") {
-                                val builder = AlertDialog.Builder(context)
-                                builder.setTitle("Warning")
-                                builder.setMessage("You are guest, you can't add to favorite")
-                                builder.setPositiveButton("ok") { dialog, which ->
 
-                                }
-
-                                builder.show()
+                                showAlertDialog()
                             } else {
                                 if (data != null) {
                                     addFav(data)
@@ -862,6 +854,34 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
 
     override fun onSizeClick(size: String) {
 
+    }
+
+    fun showAlertDialog() {
+        val inflater = LayoutInflater.from(context)
+        val dialogView = inflater.inflate(R.layout.guest_alert, null)
+        dialogView.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        val alertDialog = androidx.appcompat.app.AlertDialog.Builder(requireContext())
+            .setView(dialogView)
+            .setCancelable(false)
+            .create()
+
+        val loginButton: Button = dialogView.findViewById(R.id.login)
+        val cancelButton: Button = dialogView.findViewById(R.id.cancel)
+
+        loginButton.setOnClickListener {
+            val transaction = (context as AppCompatActivity).supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.home_fragment, SignInFragment())
+            transaction.addToBackStack(null)
+            transaction.commit()
+            alertDialog.dismiss()
+        }
+
+        cancelButton.setOnClickListener {
+            alertDialog.dismiss()
+        }
+
+        alertDialog.show()
     }
 
 

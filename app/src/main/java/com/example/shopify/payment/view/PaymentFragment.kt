@@ -3,6 +3,8 @@ package com.example.shopify.payment.view
 import android.app.AlertDialog
 import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -337,15 +339,35 @@ class paymentFragment : Fragment() {
 
 
     private fun orderCreatedPopup() {
-        AlertDialog.Builder(requireContext())
-            .setTitle("Order Created")
-            .setMessage("Your order has been successfully created.")
-            .setPositiveButton("OK") { _, _ ->
-                val shoppingCardFragment =
-                    parentFragmentManager.findFragmentById(R.id.frame_layout) as? ShoppingCardIClear
-                shoppingCardFragment?.clearShoppingCart()
-            }
-            .show()
+//        AlertDialog.Builder(requireContext())
+//            .setTitle("Order Created")
+//            .setMessage("Your order has been successfully created.")
+//            .setPositiveButton("OK") { _, _ ->
+//                val shoppingCardFragment =
+//                    parentFragmentManager.findFragmentById(R.id.frame_layout) as? ShoppingCardIClear
+//                shoppingCardFragment?.clearShoppingCart()
+//            }
+//            .show()
+        val inflater = LayoutInflater.from(context)
+        val dialogView = inflater.inflate(R.layout.order_alert, null)
+        dialogView.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        val alertDialog = androidx.appcompat.app.AlertDialog.Builder(requireContext())
+            .setView(dialogView)
+            .setCancelable(false)
+            .create()
+
+        val ok: Button = dialogView.findViewById(R.id.ok)
+
+
+        ok.setOnClickListener {
+            val shoppingCardFragment =
+                parentFragmentManager.findFragmentById(R.id.frame_layout) as? ShoppingCardIClear
+            shoppingCardFragment?.clearShoppingCart()
+            alertDialog.dismiss()
+        }
+
+        alertDialog.show()
     }
 
     private fun navigateToHomeFragment() {
