@@ -2,6 +2,7 @@ package com.example.shopify.ShoppingCart.view
 
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -173,26 +174,55 @@ class shoppingCardFragment : Fragment(), ShoppingCardIClear {
         var guest = SharedPreference.getGuest(requireContext())
 
         if(guest == "yes"){
-            val builder = AlertDialog.Builder(requireContext())
-            builder.setTitle("Warning")
-            builder.setMessage("You are guest, you can login to use cart")
-            builder.setNegativeButton("Cancel") { dialog, which ->
+            val inflater = LayoutInflater.from(context)
+            val dialogView = inflater.inflate(R.layout.guest_alert, null)
+            dialogView.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
+            val alertDialog = AlertDialog.Builder(requireContext())
+                .setView(dialogView)
+                .setCancelable(false)
+                .create()
+
+            val loginButton: Button = dialogView.findViewById(R.id.login)
+            val cancelButton: Button = dialogView.findViewById(R.id.cancel)
+
+            loginButton.setOnClickListener {
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.home_fragment, SignInFragment())
+                    .commit()
+                alertDialog.dismiss()
+            }
+
+            cancelButton.setOnClickListener {
                 val newFragment = HomeFragment()
                 parentFragmentManager.beginTransaction()
                     .replace(R.id.frame_layout, newFragment)
                     .addToBackStack(null)
                     .commit()
-
-            }
-            builder.setPositiveButton("Login") { dialog, which ->
-
-                parentFragmentManager.beginTransaction()
-                    .replace(R.id.home_fragment, SignInFragment())
-                    .commit()
+                alertDialog.dismiss()
             }
 
-            builder.show()
+            alertDialog.show()
+//            val builder = AlertDialog.Builder(requireContext())
+//            builder.setTitle("Warning")
+//            builder.setMessage("You are guest, you can login to use cart")
+//            builder.setNegativeButton("Cancel") { dialog, which ->
+//
+//                val newFragment = HomeFragment()
+//                parentFragmentManager.beginTransaction()
+//                    .replace(R.id.frame_layout, newFragment)
+//                    .addToBackStack(null)
+//                    .commit()
+//
+//            }
+//            builder.setPositiveButton("Login") { dialog, which ->
+//
+//                parentFragmentManager.beginTransaction()
+//                    .replace(R.id.home_fragment, SignInFragment())
+//                    .commit()
+//            }
+//
+//            builder.show()
         }
 
     }

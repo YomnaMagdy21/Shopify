@@ -26,6 +26,7 @@ import com.example.shopify.MyAddress.viewModel.MyAddressViewModel
 import com.example.shopify.newAddress.view.newAddress
 import com.example.shopify.setting.view.settingFragment
 import com.example.shopify.utility.ApiState
+import com.example.shopify.utility.SharedPreference
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.collectLatest
@@ -142,6 +143,27 @@ class myAddressFragment : Fragment() {
                 .replace(R.id.frame_layout, newFragment)
                 .addToBackStack(null)
                 .commit()
+        }
+
+        val rightBack = view.findViewById<ImageView>(R.id.rightImage)
+        rightBack.visibility = View.GONE
+
+        var language = SharedPreference.getLanguage(requireContext())
+        if(language == "ar"){
+            back.visibility = View.GONE
+            rightBack.visibility = View.VISIBLE
+            rightBack.setOnClickListener {
+                val source = arguments?.getString("source")
+                val newFragment = when (source) {
+                    "payment" -> paymentFragment()
+                    else -> settingFragment()
+                }
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.frame_layout, newFragment)
+                    .addToBackStack(null)
+                    .commit()
+            }
+
         }
 
         if (userId != null) {

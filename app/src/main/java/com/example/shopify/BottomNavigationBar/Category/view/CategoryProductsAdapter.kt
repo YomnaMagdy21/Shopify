@@ -105,16 +105,38 @@ class CategoryProductsAdapter(private val context: Context,
                         )
                     }
                 if (isFav == true) {
-                    product.variants?.get(0)?.id?.let { it1 ->
-                        SharedPreference.saveFav(
-                            context,
-                            it1, email, false
-                        )
+                    val inflater = LayoutInflater.from(context)
+                    val dialogView = inflater.inflate(R.layout.remove_fav, null)
+                    dialogView.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+                    val alertDialog = AlertDialog.Builder(context)
+                        .setView(dialogView)
+                        .setCancelable(false)
+                        .create()
+
+                    val yes: Button = dialogView.findViewById(R.id.yes)
+                    val no: Button = dialogView.findViewById(R.id.no)
+
+                    yes.setOnClickListener {
+                        product.variants?.get(0)?.id?.let { it1 ->
+                            SharedPreference.saveFav(
+                                context,
+                                it1, email, false
+                            )
+                        }
+                        // SharedPreference.saveFav(context, current.variants?.get(0)?.id!!,false)
+                        // sharedPreferences.edit().putBoolean(current.id.toString(), false).apply()
+                        holder.fav.setImageResource(R.drawable.favorite_border_24)
+                        product.variants?.get(0)?.id?.let { it1 -> listener.onClickToRemove(it1) }
+                        alertDialog.dismiss()
                     }
-                    // SharedPreference.saveFav(context, current.variants?.get(0)?.id!!,false)
-                    // sharedPreferences.edit().putBoolean(current.id.toString(), false).apply()
-                    holder.fav.setImageResource(R.drawable.favorite_border_24)
-                    product.variants?.get(0)?.id?.let { it1 -> listener.onClickToRemove(it1) }
+
+                    no.setOnClickListener {
+                        alertDialog.dismiss()
+                    }
+
+                    alertDialog.show()
+
                     //  current.id?.let { it1 -> FavoriteFragment().deleteFav(it1) }
                 } else {
                     product.variants?.get(0)?.id?.let { it1 ->

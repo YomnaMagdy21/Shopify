@@ -83,7 +83,7 @@
     <string name="view_more">عرض المزيد</string>
     <string name="add_to_cart">أضف إلى السلة</string>
     <string name="guest">ضيف</string>
-    <string name="alert_guest_msg">لا تستطيع استخدام التطبيق, الرجاء تسجيل الدخول</string>
+    <string name="alert_guest_msg">لا تستطيع استخدام الميزة, الرجاء تسجيل الدخول</string>
     <string name="order_created">تم تسجيل الطلب</string>
     <string name="order_created_msg">طلبك اتسجل بنجاح</string>
     <string name="ok">نعم</string>

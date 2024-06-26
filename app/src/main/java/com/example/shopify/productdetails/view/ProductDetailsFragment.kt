@@ -189,7 +189,17 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
         binding.backImage.setOnClickListener {
             parentFragmentManager.popBackStack()
         }
+        binding.rightImage.visibility = View.GONE
 
+
+        var lang = SharedPreference.getLanguage(requireContext())
+        if (lang == "ar"){
+            binding.backImage.visibility = View.GONE
+            binding.rightImage.visibility = View.VISIBLE
+            binding.rightImage.setOnClickListener {
+                parentFragmentManager.popBackStack()
+            }
+        }
 
         setUpRecyclerView()
         setUpSizesRecView()
@@ -728,14 +738,36 @@ class ProductDetailsFragment : Fragment() ,OnCategoryClickListener,OnProductClic
                         )
                     }
                 if (isFav == true) {
-                    product.product?.variants?.get(0)?.id?.let { it1 ->
-                        SharedPreference.saveFav(
-                            requireContext(),
-                            it1, email, false
-                        )
+                    val inflater = LayoutInflater.from(context)
+                    val dialogView = inflater.inflate(R.layout.remove_fav, null)
+                    dialogView.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+                    val alertDialog = androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                        .setView(dialogView)
+                        .setCancelable(false)
+                        .create()
+
+                    val yes: Button = dialogView.findViewById(R.id.yes)
+                    val no: Button = dialogView.findViewById(R.id.no)
+
+                    yes.setOnClickListener {
+                        product.product?.variants?.get(0)?.id?.let { it1 ->
+                            SharedPreference.saveFav(
+                                requireContext(),
+                                it1, email, false
+                            )
+                        }
+                        product.product?.variants?.get(0)?.id?.let { it1 -> deleteFav(it1) }
+                        binding.fav.setImageResource(R.drawable.heart_unfilled)
+                        alertDialog.dismiss()
                     }
-                    product.product?.variants?.get(0)?.id?.let { it1 -> deleteFav(it1) }
-                      binding.fav.setImageResource(R.drawable.heart_unfilled)
+
+                    no.setOnClickListener {
+                        alertDialog.dismiss()
+                    }
+
+                    alertDialog.show()
+
                 } else {
                     product.product?.variants?.get(0)?.id?.let { it1 ->
                         SharedPreference.saveFav(

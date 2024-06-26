@@ -15,6 +15,7 @@ import com.example.shopify.BottomNavigationBar.orderItem.viewModel.OrderItemView
 import com.example.shopify.R
 import com.example.shopify.model.PostOrders.NoteAttribute
 import com.example.shopify.model.PostOrders.Order
+import com.example.shopify.utility.SharedPreference
 
 
 class OrderItemFragment : Fragment() {
@@ -58,6 +59,17 @@ class OrderItemFragment : Fragment() {
             parentFragmentManager.popBackStack()
         }
 
+        val rightBack = view.findViewById<ImageView>(R.id.rightImage)
+        rightBack.visibility = View.GONE
+
+        var language = SharedPreference.getLanguage(requireContext())
+        if(language == "ar"){
+            backImage.visibility = View.GONE
+            rightBack.visibility = View.VISIBLE
+            rightBack.setOnClickListener {
+                parentFragmentManager.popBackStack()
+            }
+        }
 
         println("Order Items :-------------------")
         println("user name : ${orderItemViewModel.customerName}")

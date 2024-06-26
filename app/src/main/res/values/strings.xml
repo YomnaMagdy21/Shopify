@@ -99,7 +99,7 @@
     <string name="view_more">View More</string>
     <string name="add_to_cart">Add to Cart</string>
     <string name="guest"><![CDATA[Guest ->]]></string>
-    <string name="alert_guest_msg">you don\'t able to use our app, if you want to use it, please login</string>
+    <string name="alert_guest_msg">you don\'t able to use this feature, if you want to use it, please login</string>
     <string name="order_created">Order Created</string>
     <string name="order_created_msg">Your order has been successfully created.</string>
     <string name="ok">OK</string>

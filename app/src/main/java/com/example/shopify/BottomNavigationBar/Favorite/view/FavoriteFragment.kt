@@ -126,27 +126,61 @@ class FavoriteFragment : Fragment() ,onFavoriteClickListener{
 
             var guest = SharedPreference.getGuest(requireContext())
             if(guest == "yes"){
-                binding.progressBar.visibility = View.GONE
-                val builder = AlertDialog.Builder(requireContext())
-                builder.setTitle("Warning")
-                builder.setMessage("You are guest, you can login to use favorite")
-                builder.setNegativeButton("Cancel") { dialog, which ->
+                val inflater = LayoutInflater.from(context)
+                val dialogView = inflater.inflate(R.layout.guest_alert, null)
+                dialogView.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
+                val alertDialog = AlertDialog.Builder(requireContext())
+                    .setView(dialogView)
+                    .setCancelable(false)
+                    .create()
+
+                val loginButton: Button = dialogView.findViewById(R.id.login)
+                val cancelButton: Button = dialogView.findViewById(R.id.cancel)
+
+                loginButton.setOnClickListener {
+                    parentFragmentManager.beginTransaction()
+                        .replace(R.id.home_fragment, SignInFragment())
+                        .commit()
+                    alertDialog.dismiss()
+//                    val transaction = (context as AppCompatActivity).supportFragmentManager.beginTransaction()
+//                    transaction.replace(R.id.home_fragment, SignInFragment())
+//                    transaction.addToBackStack(null)
+//                    transaction.commit()
+//                    alertDialog.dismiss()
+                }
+
+                cancelButton.setOnClickListener {
                     val newFragment = HomeFragment()
                     parentFragmentManager.beginTransaction()
                         .replace(R.id.frame_layout, newFragment)
                         .addToBackStack(null)
                         .commit()
-
-                }
-                builder.setPositiveButton("Login") { dialog, which ->
-
-                    parentFragmentManager.beginTransaction()
-                        .replace(R.id.home_fragment, SignInFragment())
-                        .commit()
+                    alertDialog.dismiss()
                 }
 
-                builder.show()
+                alertDialog.show()
+//                binding.progressBar.visibility = View.GONE
+//                val builder = AlertDialog.Builder(requireContext())
+//                builder.setTitle("Warning")
+//                builder.setMessage("You are guest, you can login to use favorite")
+//                builder.setNegativeButton("Cancel") { dialog, which ->
+//
+//                    val newFragment = HomeFragment()
+//                    parentFragmentManager.beginTransaction()
+//                        .replace(R.id.frame_layout, newFragment)
+//                        .addToBackStack(null)
+//                        .commit()
+//
+//                }
+//                builder.setPositiveButton("Login") { dialog, which ->
+//
+//                    parentFragmentManager.beginTransaction()
+//                        .replace(R.id.home_fragment, SignInFragment())
+//                        .commit()
+//                }
+//
+//                builder.show()
             }
             else {
                 binding.animationView.visibility = View.VISIBLE
