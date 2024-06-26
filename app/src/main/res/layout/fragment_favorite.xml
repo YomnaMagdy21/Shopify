@@ -10,20 +10,19 @@
     tools:context=".BottomNavigationBar.Favorite.view.FavoriteFragment">
 
     <androidx.recyclerview.widget.RecyclerView
-
         android:id="@+id/recView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
+        android:layout_marginTop="20dp"
         android:layout_marginBottom="95dp"
-        android:layout_marginHorizontal="18dp"
-        android:layout_marginTop="50dp"
-
+        android:layout_marginHorizontal="14dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        app:layout_constraintTop_toBottomOf="@+id/textView4"
+        app:layout_constraintVertical_bias="0.0" />
+
     <ProgressBar
         android:id="@+id/progressBar"
         style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Large"
@@ -48,18 +47,6 @@
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
         app:lottie_rawRes="@raw/animation_1718797747132" />
-<!--    <com.airbnb.lottie.LottieAnimationView-->
-<!--        android:id="@+id/animationViewGuest"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        android:visibility="gone"-->
-<!--        app:lottie_autoPlay="true"-->
-<!--        app:lottie_loop="true"-->
-<!--        app:lottie_rawRes="@raw/animation_1718798060411" />-->
 
     <TextView
         android:id="@+id/textView4"

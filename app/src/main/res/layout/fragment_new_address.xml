@@ -9,12 +9,12 @@
 
     <TextView
         android:id="@+id/textViewCardList"
-        android:layout_width="334dp"
-        android:layout_height="68dp"
-        android:layout_marginTop="52dp"
-        android:layout_marginEnd="36dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="26dp"
         android:text="@string/new_address"
-        android:textSize="48sp"
+        android:textSize="35sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
@@ -29,9 +29,9 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardViewBuilding"
-        android:layout_width="355dp"
+        android:layout_width="match_parent"
         android:layout_height="73dp"
-        android:layout_marginStart="3dp"
+        android:layout_marginStart="23dp"
         android:layout_marginTop="30dp"
         android:layout_marginEnd="23dp"
         app:cardCornerRadius="12dp"
@@ -56,9 +56,10 @@
             <EditText
                 android:id="@+id/editTextBuilding"
                 android:layout_width="271dp"
-                android:layout_height="56dp"
+                android:layout_height="53dp"
                 android:layout_marginStart="16dp"
                 android:layout_weight="1"
+                android:textSize="14sp"
                 android:ems="10"
                 android:hint="@string/Building"
                 android:textColor="#0B0A0A" />
@@ -67,9 +68,9 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardViewCity"
-        android:layout_width="355dp"
+        android:layout_width="match_parent"
         android:layout_height="73dp"
-        android:layout_marginStart="3dp"
+        android:layout_marginStart="23dp"
         android:layout_marginTop="22dp"
         android:layout_marginEnd="23dp"
         app:cardCornerRadius="12dp"
@@ -94,9 +95,10 @@
             <EditText
                 android:id="@+id/editTextCity"
                 android:layout_width="267dp"
-                android:layout_height="57dp"
+                android:layout_height="53dp"
                 android:layout_marginStart="16dp"
                 android:layout_weight="1"
+                android:textSize="14sp"
                 android:ems="10"
                 android:hint="@string/city"
                 android:inputType="text"
@@ -107,9 +109,9 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardViewCountry"
-        android:layout_width="355dp"
+        android:layout_width="match_parent"
         android:layout_height="73dp"
-        android:layout_marginStart="3dp"
+        android:layout_marginStart="23dp"
         android:layout_marginTop="22dp"
         android:layout_marginEnd="23dp"
         app:cardCornerRadius="12dp"
@@ -134,9 +136,10 @@
             <EditText
                 android:id="@+id/editTextCountry"
                 android:layout_width="273dp"
-                android:layout_height="match_parent"
+                android:layout_height="53dp"
                 android:layout_marginStart="16dp"
                 android:layout_weight="1"
+                android:textSize="14sp"
                 android:ems="10"
                 android:hint="@string/Country"
                 android:inputType="text"
@@ -148,9 +151,9 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardViewPhone"
-        android:layout_width="355dp"
+        android:layout_width="match_parent"
         android:layout_height="73dp"
-        android:layout_marginStart="3dp"
+        android:layout_marginStart="23dp"
         android:layout_marginTop="22dp"
         android:layout_marginEnd="23dp"
         app:cardCornerRadius="12dp"
@@ -175,9 +178,10 @@
             <EditText
                 android:id="@+id/editTextPhone"
                 android:layout_width="273dp"
-                android:layout_height="57dp"
+                android:layout_height="53dp"
                 android:layout_marginStart="16dp"
                 android:layout_weight="1"
+                android:textSize="14sp"
                 android:ems="10"
                 android:hint="@string/phone_number"
                 android:inputType="text"
@@ -190,7 +194,7 @@
         android:id="@+id/confirmButton"
         android:layout_width="204dp"
         android:layout_height="49dp"
-        android:layout_marginBottom="74dp"
+        android:layout_marginBottom="85dp"
         android:backgroundTint="#000000"
         android:text="@string/confirm"
         android:textSize="20sp"
@@ -204,6 +208,7 @@
         android:layout_width="46dp"
         android:layout_height="29dp"
         android:layout_marginTop="10dp"
+        android:layout_marginStart="20dp"
         android:src="@drawable/chevron_back_sharp_svgrepo_com"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
         app:layout_constraintTop_toTopOf="parent" />
@@ -211,13 +216,14 @@
     <TextView
         android:id="@+id/textView9"
         android:layout_width="wrap_content"
-        android:layout_height="35dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="22dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="16dp"
         android:text="@string/choose_on_the_map"
-        android:textSize="20sp"
+        android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        android:padding="10dp"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardViewPhone" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

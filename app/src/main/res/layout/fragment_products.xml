@@ -10,14 +10,16 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recView"
         android:layout_width="match_parent"
-        android:layout_height="600dp"
-        android:layout_marginTop="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="90dp"
+        android:layout_marginHorizontal="14dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/search_edit_text"
-        app:layout_constraintVertical_bias="0.571" />
+        app:layout_constraintVertical_bias="0.088" />
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -49,8 +51,9 @@
     <com.google.android.material.slider.Slider
         android:id="@+id/filterSlider"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:layout_marginEnd="5dp"
+        android:layout_marginVertical="12dp"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/recView"
         android:valueFrom="0"
@@ -81,9 +84,9 @@
         android:id="@+id/textView9"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="20dp"
         android:text="@string/products"
-        android:textSize="24sp"
+        android:textSize="35sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
