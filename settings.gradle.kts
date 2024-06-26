@@ -13,6 +13,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Shopify"
+rootProject.name = "ShopEase"
 include(":app")
  

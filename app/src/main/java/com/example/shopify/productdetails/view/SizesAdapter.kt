@@ -23,7 +23,7 @@ import com.example.shopify.utility.SharedPreference
 class SizesAdapter(var context: Context, var listener: OnProductDetailsListener) :
     ListAdapter<String, SizesAdapter.DayViewHolder>(DayDiffUtil()) {
 
-    private var selectedItem = 0
+    private var selectedItem = RecyclerView.NO_POSITION
 
 
     class DayViewHolder(var binding: SizeItemBinding) : RecyclerView.ViewHolder(binding.root)

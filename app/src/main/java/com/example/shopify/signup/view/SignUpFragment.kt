@@ -226,7 +226,7 @@ class SignUpFragment : Fragment() {
                 return@setOnClickListener
             }
             if (password.length < 8) {
-                binding.password.error = "Password cannot be less than 6 characters"
+                binding.password.error = "Password cannot be less than 8 characters"
                 binding.password.requestFocus()
                 return@setOnClickListener
             }
@@ -253,8 +253,7 @@ class SignUpFragment : Fragment() {
                     user.sendEmailVerification().addOnCompleteListener { emailTask ->
                         if (emailTask.isSuccessful) {
                             Log.i(TAG, "Verification email sent to ${user.email}")
-                            Toast.makeText(context, "Verification email sent. Please check your email.", Toast.LENGTH_LONG).show()
-
+                            Snackbar.make(requireView(), "Verification email sent. Please check your email.", Snackbar.LENGTH_SHORT).show()
 
                             val customer = Customer(
                                 0, user.email, null, null, firstname, lastname, password, password_confirmation, 0, null, null,
@@ -310,7 +309,7 @@ class SignUpFragment : Fragment() {
 
                                             parentFragmentManager.beginTransaction().replace(R.id.fragment_container,SignInFragment()).commit()
                                         //    startActivity(Intent(context, BottomNavActivity::class.java))
-                                            Toast.makeText(context, "User registered successfully", Toast.LENGTH_LONG).show()
+                                            Snackbar.make(requireView(), "User registered successfully", Snackbar.LENGTH_SHORT).show()
                                         }
                                         else -> {
 
@@ -322,14 +321,14 @@ class SignUpFragment : Fragment() {
 
                         } else {
                             Log.e(TAG, "Failed to send verification email.", emailTask.exception)
-                            Toast.makeText(context, "Failed to send verification email.", Toast.LENGTH_LONG).show()
+                            Snackbar.make(requireView(), "Failed to send verification email.", Snackbar.LENGTH_SHORT).show()
                             binding.progressBar.visibility = View.GONE
 
                         }
                     }
                 } else {
                     Log.e(TAG, "Account creation failed: $error")
-                    Toast.makeText(context, "Account creation failed: $error", Toast.LENGTH_LONG).show()
+                    Snackbar.make(requireView(), "Account creation failed:", Snackbar.LENGTH_SHORT).show()
                     binding.progressBar.visibility = View.GONE
 
                 }
@@ -396,9 +395,7 @@ class SignUpFragment : Fragment() {
                 if (account != null && account.idToken != null) {
                     handleSignInResult(account.idToken!!)
                     binding.progressBar.visibility = View.VISIBLE
-
-                    Toast.makeText(context, "login with google successfully", Toast.LENGTH_SHORT)
-                        .show()
+                    Snackbar.make(requireView(), "login with google successfully", Snackbar.LENGTH_SHORT).show()
                 } else {
                     Log.e(TAG,
                         "Google sign-in failed: ID token is null"
@@ -433,7 +430,7 @@ class SignUpFragment : Fragment() {
                                         proceedToNextPage(user)
                                     } else {
                                         Log.e(TAG, "Failed to send verification email.", emailTask.exception)
-                                        Toast.makeText(context, "Failed to send verification email.", Toast.LENGTH_LONG).show()
+                                        Snackbar.make(requireView(), "Failed to send verification email.", Snackbar.LENGTH_SHORT).show()
                                     }
                                     binding.progressBar.visibility = View.GONE
 
@@ -455,7 +452,7 @@ class SignUpFragment : Fragment() {
         Firebase(requireContext()).checkIfUserExists(user.uid) { userExists ->
             if (userExists) {
                 startActivity(Intent(context, BottomNavActivity::class.java))
-                Toast.makeText(context, "Welcome back!", Toast.LENGTH_LONG).show()
+                Snackbar.make(requireView(), "Welcome back!", Snackbar.LENGTH_SHORT).show()
             } else {
                 val customer = Customer(
                     0, user.email, null, null, "", "", "", "", 0, null, null,
@@ -476,7 +473,7 @@ class SignUpFragment : Fragment() {
                                 val person = result.data as? createCustomerRequest
                                 Log.i(TAG, "Customer ID: ${person?.customer?.id}")
                                 startActivity(Intent(context, BottomNavActivity::class.java))
-                                Toast.makeText(context, "User logged in with Google successfully.", Toast.LENGTH_LONG).show()
+                                Snackbar.make(requireView(), "User logged in with Google successfully", Snackbar.LENGTH_SHORT).show()
                             }
                             else -> {
                                 // Handle other API states if needed
