@@ -26,6 +26,7 @@ import com.example.shopify.network.ShopifyRemoteDataSourceImp
 import com.example.shopify.newAddress.viewModel.NewAddressFactory
 import com.example.shopify.newAddress.viewModel.NewAddressViewModel
 import com.example.shopify.utility.ApiState
+import com.example.shopify.utility.SharedPreference
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import kotlin.math.log
@@ -131,7 +132,20 @@ class newAddress : Fragment() {
                 .addToBackStack(null)
                 .commit()
         }
-
+        val rightBack = view.findViewById<ImageView>(R.id.rightImage)
+        rightBack.visibility = View.GONE
+        var language = SharedPreference.getLanguage(requireContext())
+        if(language == "ar") {
+            back.visibility = View.GONE
+            rightBack.visibility = View.VISIBLE
+            rightBack.setOnClickListener {
+                val newFragment = myAddressFragment()
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.frame_layout, newFragment)
+                    .addToBackStack(null)
+                    .commit()
+            }
+        }
         //navigate to map fragment
         val mapFragmentText = view.findViewById<TextView>(R.id.textView9)
         mapFragmentText.setOnClickListener{

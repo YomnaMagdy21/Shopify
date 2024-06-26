@@ -74,7 +74,7 @@ class MeFragment : Fragment() {
             settingIcon.visibility = View.GONE
             orderListFragment.visibility = View.GONE
             wishListFragment.visibility = View.GONE
-            name.text = "Guest"
+            name.text = ""
             login.visibility = View.VISIBLE
             lottie.visibility =View.VISIBLE
             login.setOnClickListener {

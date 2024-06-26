@@ -64,7 +64,17 @@ class OrderListFragment : Fragment(), OnOrderClickListener {
         backImage.setOnClickListener {
             parentFragmentManager.popBackStack()
         }
+        val rightBack = view.findViewById<ImageView>(R.id.rightImage)
+        rightBack.visibility = View.GONE
 
+        var language = SharedPreference.getLanguage(requireContext())
+        if(language == "ar"){
+            backImage.visibility = View.GONE
+            rightBack.visibility = View.VISIBLE
+            rightBack.setOnClickListener {
+                parentFragmentManager.popBackStack()
+            }
+        }
 
 
         viewLifecycleOwner.lifecycleScope.launch {
