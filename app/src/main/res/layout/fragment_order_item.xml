@@ -37,16 +37,18 @@
 
             <TextView
                 android:id="@+id/tv_order_item"
+                android:text="@string/order_item_title"
                 android:layout_width="322dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="56dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="30dp"
                 android:layout_marginEnd="137dp"
-                android:text="@string/order_item_title"
-                android:textSize="48sp"
+                android:layout_marginStart="28dp"
+                android:textSize="34sp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/guideline4"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
 
