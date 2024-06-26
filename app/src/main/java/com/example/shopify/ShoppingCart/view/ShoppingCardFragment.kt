@@ -59,7 +59,7 @@ class shoppingCardFragment : Fragment(), ShoppingCardIClear {
     private lateinit var recyclerView: RecyclerView
     private var items: List<Item> = emptyList()
 
-    private lateinit var lottieAnimationView: LottieAnimationView
+    //private lateinit var lottieAnimationView: LottieAnimationView
     private lateinit var constraintLay: ConstraintLayout
 
 
@@ -95,7 +95,7 @@ class shoppingCardFragment : Fragment(), ShoppingCardIClear {
         constraintLay = view.findViewById(R.id.cart_items)
 
         subTotal = view.findViewById(R.id.subTotalValue)
-        lottieAnimationView = view.findViewById(R.id.lottie_no_data)
+        //lottieAnimationView = view.findViewById(R.id.lottie_no_data)
 
 
 
@@ -125,10 +125,10 @@ class shoppingCardFragment : Fragment(), ShoppingCardIClear {
                     }
                     adapter.updateItems(items)
                     calculateTotalPrice(draftOrders)
-                    checkRecyclerViewEmptyState()
+                    //checkRecyclerViewEmptyState()
                 }
                 else{
-                    checkRecyclerViewEmptyState()
+                    //checkRecyclerViewEmptyState()
  
                 }
 
@@ -269,7 +269,7 @@ class shoppingCardFragment : Fragment(), ShoppingCardIClear {
                         if (response != null) {
                             calculateTotalPrice(products)
                             Log.i("ShoppingCardFragment", "Draft order updated: $response")
-                            checkRecyclerViewEmptyState()
+                            //checkRecyclerViewEmptyState()
                         } else {
                             Log.e("ShoppingCardFragment", "Failed to update draft order")
                         }
@@ -294,7 +294,7 @@ class shoppingCardFragment : Fragment(), ShoppingCardIClear {
                             products.remove(draftOrder)
                             calculateTotalPrice(products)
                             Log.i("ShoppingCardFragment", "Draft order deleted: $response")
-                            checkRecyclerViewEmptyState()
+                           // checkRecyclerViewEmptyState()
                         } else {
                             Log.e("ShoppingCardFragment", "Failed to delete draft order")
                         }
@@ -308,7 +308,7 @@ class shoppingCardFragment : Fragment(), ShoppingCardIClear {
                         if (response != null) {
                             calculateTotalPrice(products)
                             Log.i("ShoppingCardFragment", "Draft order updated: $response")
-                            checkRecyclerViewEmptyState()
+                          //  checkRecyclerViewEmptyState()
                         } else {
                             Log.e("ShoppingCardFragment", "Failed to update draft order")
                         }
@@ -356,7 +356,7 @@ class shoppingCardFragment : Fragment(), ShoppingCardIClear {
                     products.clear()
                     adapter.updateItems(emptyList())
                     totalPriceTextView.text = "0.00"
-                    checkRecyclerViewEmptyState()
+                  //  checkRecyclerViewEmptyState()
                     Log.i("shoppingCardFragment", "Shopping Cart is cleared")
                 } else {
                     Log.i("shoppingCardFragment", "Failed to clear shopping cart")
@@ -364,19 +364,19 @@ class shoppingCardFragment : Fragment(), ShoppingCardIClear {
             }
         }
     }
-    private fun checkRecyclerViewEmptyState() {
-        if (products.isEmpty()) {
-            lottieAnimationView.visibility = View.VISIBLE
-            constraintLay.visibility = View.GONE
-        } else {
-            lottieAnimationView.visibility = View.GONE
-            constraintLay.visibility = View.VISIBLE
-        }
-    }
-    override fun onResume() {
-        super.onResume()
-        checkRecyclerViewEmptyState()
-    }
+//    private fun checkRecyclerViewEmptyState() {
+//        if (products.isEmpty()) {
+//            lottieAnimationView.visibility = View.VISIBLE
+//            constraintLay.visibility = View.GONE
+//        } else {
+//            lottieAnimationView.visibility = View.GONE
+//            constraintLay.visibility = View.VISIBLE
+//        }
+//    }
+//    override fun onResume() {
+//        super.onResume()
+//        checkRecyclerViewEmptyState()
+//    }
 
 
 }
