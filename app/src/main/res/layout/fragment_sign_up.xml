@@ -13,14 +13,17 @@
 <!--    android:background="@drawable/background"-->
     <TextView
         android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="32dp"
         android:text="@string/create_your_account"
-        android:textColor="@color/black"
+        android:layout_width="322dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginEnd="137dp"
+        android:layout_marginStart="28dp"
         android:textSize="34sp"
         android:textStyle="bold"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
