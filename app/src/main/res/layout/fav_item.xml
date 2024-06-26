@@ -47,7 +47,7 @@
             <LinearLayout
                 android:id="@+id/ll_properties_product_first"
                 android:layout_width="match_parent"
-                android:layout_height="85dp"
+                android:layout_height="75dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -59,7 +59,7 @@
                     android:paddingHorizontal="5dp"
                     android:textStyle="bold"
                     android:text="VANS APPAREL AND ACCESSORIES | CLASSIC SUPER NO SHOW SOCK3 PACK WHITE"
-                    android:textSize="12sp"/>
+                    android:textSize="10sp"/>
 
             </LinearLayout>
 
@@ -80,7 +80,7 @@
                     android:text="350.00 EGP"
                     android:paddingVertical="5dp"
                     android:textColor="@color/purple"
-                    android:textSize="12sp"
+                    android:textSize="10sp"
                     android:textStyle="bold" />
 
 
