@@ -168,25 +168,7 @@ class paymentFragment : Fragment() {
                 .commit()
         }
 
-        //pay
-        /*checkBoxOnline.setOnClickListener {
-            if (checkBoxOnline.isChecked) {
-                checkBoxOffline.isChecked = false
-                paymentFlow()
-                paymentMethod = "Visa"
-            } else {
-                Log.i("flow", "Online CheckBox is not checked.")
-            }
-        }
-        checkBoxOffline.setOnClickListener {
-            if (checkBoxOffline.isChecked) {
-                checkBoxOnline.isChecked = false
-                paymentMethod = "Cash"
-                //
-            } else {
-                Log.i("flow", "Offline CheckBox is not checked.")
-            }
-        }*/
+        checkBoxOnline.isEnabled =false
         checkBoxOnline.setOnClickListener {
             if (checkBoxOnline.isChecked) {
                 checkBoxOffline.isChecked = false
@@ -467,6 +449,7 @@ class paymentFragment : Fragment() {
                     val jsonObject = JSONObject(response)
                     clientSecret = jsonObject.getString("client_secret")
                     Log.i("keyys", "getClientSecret: $clientSecret")
+                    checkBoxOnline.isEnabled = true
                 }catch (e : JSONException){
                     e.printStackTrace()
                 }

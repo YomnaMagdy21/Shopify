@@ -95,15 +95,15 @@ class newAddress : Fragment() {
         val userId = sharedPreferences.getString("userID", null)
 
         //add new address
-        addButton.setOnClickListener{
+        // Add new address
+        addButton.setOnClickListener {
             val address1 = building.text.toString()
             val city = city.text.toString()
             val country = country.text.toString()
             val phone = phone.text.toString()
 
             if (validateInputs(address1, city, country, phone)) {
-                val address =
-                    Address(address1, city, country, phone, customer_id = userId?.toLong())
+                val address = Address(address1, city, country, phone, customer_id = userId?.toLong())
 
                 if (userId != null) {
                     if (addressToEdit != null) {
@@ -116,10 +116,12 @@ class newAddress : Fragment() {
                         }
                     }
                 }
+
+                Snackbar.make(requireView(), "Address added successfully", Snackbar.LENGTH_SHORT).show()
+                navigateBack()
             }
-            Snackbar.make(requireView(), "Address added successfully", Snackbar.LENGTH_SHORT).show()
-            navigateBack()
         }
+
 
         observeViewModel()
 

@@ -60,9 +60,9 @@ class HomeFragment : Fragment() , OnBrandClickListener {
 
 
    private val images = listOf(
-       R.drawable.five to "CQS68F8QWT59",
-       R.drawable.twentyfive to "J6Z2HPJ6MZ5A",
-       R.drawable.ten to "B6NQRHJJY9NA"
+       R.drawable.five to "5RCAMKX3N9PK",
+       R.drawable.twentyfive to "TWVXF5BZGCK3",
+       R.drawable.ten to "1JHCBWJGHAWQ"
    )
 
 

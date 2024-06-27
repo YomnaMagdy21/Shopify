@@ -170,18 +170,23 @@ class SignInFragment : Fragment() {
                                 if(person != null) {
 
                                     if (person.customers.isNotEmpty()) {
+
                                         var firstName = person.customers.get(0).first_name
                                         Log.i(
                                             TAG,
                                             "onViewCreated: first name ${person?.customers?.get(0)?.first_name}"
                                         )
+                                        var email1 = person.customers.get(0).email
+                                        Log.i(TAG, "onViewCreated: email1$email1")
+                                        if (!firstName.isEmpty()) {
 
-                                        SharedPreference.saveFirstName(
-                                            requireContext(),
-                                            email,
-                                            firstName
-                                        )
+                                            SharedPreference.saveFirstName(
+                                                requireContext(),
+                                                email,
+                                                firstName
+                                            )
 
+                                        }
 //                                        var userEmail = person?.customers?.get(0)?.email
 //                                        Log.i(TAG, "onViewCreated: userEmail ${userEmail}")
 //                                        Log.i(
