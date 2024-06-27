@@ -19,6 +19,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
+import com.example.shopify.BottomNavigationBar.Category.viewModel.CategoryViewModel
+import com.example.shopify.BottomNavigationBar.Category.viewModel.CategoryViewModelFactory
+import com.example.shopify.BottomNavigationBar.Favorite.viewmodel.FavoriteViewModel
+import com.example.shopify.BottomNavigationBar.Favorite.viewmodel.FavoriteViewModelFactory
 import com.example.shopify.model.draftModel.DraftOrder
 import com.example.shopify.model.draftModel.DraftOrderResponse
 import com.example.shopify.payment.view.paymentFragment
@@ -46,6 +50,8 @@ import kotlin.math.absoluteValue
 class shoppingCardFragment : Fragment(), ShoppingCardIClear {
 
     private lateinit var viewModel: ShoppingCardViewModel
+    private lateinit var categoryViewModel : CategoryViewModel
+    private lateinit var categoryViewModelFactory : CategoryViewModelFactory
     private lateinit var adapter: ShoppingCardAdapter
     private lateinit var products: MutableList<DraftOrder>
     private lateinit var totalPriceTextView: TextView
@@ -71,6 +77,16 @@ class shoppingCardFragment : Fragment(), ShoppingCardIClear {
         val factory = PriceRuleViewModelFactory(repository)
         viewModel = ViewModelProvider(this, factory).get(ShoppingCardViewModel::class.java)
         viewModel.fetchPriceRules()
+
+        categoryViewModelFactory = CategoryViewModelFactory(
+            ShopifyRepositoryImp.getInstance(
+                ShopifyRemoteDataSourceImp.getInstance()
+            )
+        )
+        categoryViewModel = ViewModelProvider(
+            requireActivity(),
+            categoryViewModelFactory
+        ).get(CategoryViewModel::class.java)
 
     }
 
