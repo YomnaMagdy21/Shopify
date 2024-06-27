@@ -204,13 +204,14 @@ class newAddress : Fragment() {
     }
 
    private fun navigateBack(){
-        val newFragment = myAddressFragment()
+       val newFragment = myAddressFragment()
         parentFragmentManager.beginTransaction()
             .replace(R.id.frame_layout, newFragment)
             .addToBackStack(null)
             .commit()
+       //parentFragmentManager.popBackStack()
 
-    }
+   }
 
     private fun populateFields(address: Address) {
         building.setText(address.address1)

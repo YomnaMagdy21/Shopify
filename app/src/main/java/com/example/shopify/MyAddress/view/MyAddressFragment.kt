@@ -38,6 +38,7 @@ class myAddressFragment : Fragment() {
     private lateinit var myAddressAdapter: MyAddressAdapter
     private lateinit var viewModel: MyAddressViewModel
     private lateinit var lottieAnimationView: LottieAnimationView
+    private lateinit var userId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,7 +68,7 @@ class myAddressFragment : Fragment() {
         //get user id and pass it
         val sharedPreferences =
             requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-        val userId = sharedPreferences.getString("userID", null)
+        userId = sharedPreferences.getString("userID", null).toString()
         Log.i("userid", "onViewCreated: " + userId)
 
 
@@ -236,6 +237,11 @@ class myAddressFragment : Fragment() {
             .replace(R.id.frame_layout, paymentFragment)
             .addToBackStack(null)
             .commit()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.getAllAddresses(userId.toLong())
     }
 
 }
