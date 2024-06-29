@@ -270,6 +270,7 @@ class paymentFragment : Fragment() {
                 state = customer.state,
                 note = customer.note as String?
             ),
+            send_receipt = true
         )
 
         // Print note_attributes
@@ -307,6 +308,7 @@ class paymentFragment : Fragment() {
         shoppingCardFragment?.clearShoppingCart()
         orderCreatedPopup()
         navigateToHomeFragment()
+        Log.i("clear", "clearShoppingCart: iiiiiiiiiiiiiiiiiiiiii")
         println("1111111111111111111111111111111111111Shopping cart is cleared.-------------------------------------------")
 
     }

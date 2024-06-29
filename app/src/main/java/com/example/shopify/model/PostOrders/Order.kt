@@ -92,7 +92,8 @@ data class Order(
     val fulfillments: List<Any>? = null,
     val payment_terms: String? = null,
     val refunds: List<Any>? = null,
-    val shipping_lines: List<Any>? = null
+    val shipping_lines: List<Any>? = null,
+    val send_receipt: Boolean? = null
 ) : Serializable
 
 
