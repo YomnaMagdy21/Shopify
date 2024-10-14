@@ -91,8 +91,8 @@ class MeFragment : Fragment() {
             //           }
         } else {
             var email = SharedPreference.getUserEmail(requireContext())
-            var firstName = SharedPreference.getFirstName(requireContext(), email)
-            name.text ="Welcome, $firstName"
+           // var firstName = SharedPreference.getFirstName(requireContext(), email)
+            name.text ="Welcome "
         }
     }
 }

@@ -45,7 +45,7 @@
         android:id="@+id/secondname"
         android:layout_width="160dp"
         android:layout_height="39dp"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="45dp"
         android:background="@drawable/edit_text"
         android:ems="10"
         android:hint="@string/second_name"

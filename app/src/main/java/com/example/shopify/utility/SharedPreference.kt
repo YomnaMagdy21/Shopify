@@ -77,15 +77,15 @@ object SharedPreference {
         return prefs.getString("Guest", "") ?: ""
     }
 
-    fun saveFirstName(context: Context, email: String, name: String) {
-        val prefs = context.getSharedPreferences("favPref", Context.MODE_PRIVATE)
-        prefs.edit().putString(email + "_name", name).apply()
-    }
-
-    fun getFirstName(context: Context, email: String): String {
-        val prefs = context.getSharedPreferences("favPref", Context.MODE_PRIVATE)
-        return prefs.getString(email + "_name", "") ?: ""
-    }
+//    fun saveFirstName(context: Context, email: String, name: String) {
+//        val prefs = context.getSharedPreferences("favPref", Context.MODE_PRIVATE)
+//        prefs.edit().putString(email + "_name", name).apply()
+//    }
+//
+//    fun getFirstName(context: Context, email: String): String {
+//        val prefs = context.getSharedPreferences("favPref", Context.MODE_PRIVATE)
+//        return prefs.getString(email + "_name", "") ?: ""
+//    }
 
 
     fun saveLanguage(context: Context, lang: String) {
