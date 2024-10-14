@@ -15,6 +15,7 @@ data class Customer(
     val verified_email: Boolean,
     val currency: String?,
     val phone: String?,
+    val tags: String?,
     val addresses: List<Address>?,
     val defaultAddress: Address?
 )

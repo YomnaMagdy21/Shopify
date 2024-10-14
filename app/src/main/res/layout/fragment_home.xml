@@ -21,13 +21,13 @@
             <TextView
                 android:id="@+id/home_frag_title"
                 android:layout_width="322dp"
-                android:layout_height="69dp"
+                android:layout_height="wrap_content"
                 android:text="@string/home_title"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="30dp"
                 android:layout_marginBottom="30dp"
                 android:layout_marginEnd="137dp"
                 android:layout_marginStart="28dp"
-                android:textSize="48sp"
+                android:textSize="34sp"
                 android:textStyle="bold"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -68,7 +68,8 @@
                 <androidx.viewpager2.widget.ViewPager2
                     android:id="@+id/viewPager"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    />
 
             </androidx.cardview.widget.CardView>
 
@@ -100,9 +101,9 @@
                     android:id="@+id/rv_brands_in_home"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="75dp"
+                    android:layout_marginHorizontal="10dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -118,15 +119,30 @@
                     app:layout_constraintEnd_toEndOf="@+id/rv_brands_in_home"
                     app:layout_constraintStart_toStartOf="@+id/rv_brands_in_home"
                     android:visibility="gone" />
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/lottie_no_data4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@+id/rv_brands_in_home"
+                    app:layout_constraintEnd_toEndOf="@+id/rv_brands_in_home"
+                    app:layout_constraintStart_toStartOf="@+id/rv_brands_in_home"
+                    app:layout_constraintTop_toTopOf="@+id/rv_brands_in_home"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="true"
+                    app:lottie_rawRes="@raw/animation_1718797747132"
+
+                    />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
                 android:id="@+id/textView6"
-                android:layout_width="282dp"
+                android:layout_width="wrap_content"
                 android:layout_height="21dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="5dp"
-                android:text="Sale up to 50% "
+                android:text="@string/sale_up_to_50"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/adv_in_home"
@@ -140,7 +156,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="3dp"
-                android:text="Press on Photo!"
+                android:text="@string/Press_on_Photo"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/const_brands_in_home"

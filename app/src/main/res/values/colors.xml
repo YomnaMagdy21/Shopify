@@ -13,6 +13,16 @@
     <color name="colorFilledStar">#FFEB3B</color>
     <color name="colorEmptyStar">#B0BEC5</color>
     <color name="colorHalfFilled">#FFFF72</color>
+    <color name="purple">#621F87</color>
+
+    <color name="burgandy">#A01641</color>
+    <color name="light_brown">#C4A484</color>
+    <color name="beige">#F5F5DC</color>
+    <color name="red">#FF0000</color>
+    <color name="yellow">#FFFF00</color>
+    <color name="gray">#D3D3D3</color>
+
+
 
 
 

@@ -1,19 +1,20 @@
 package com.example.shopify.network
 
-import com.example.shopify.Models.products.CollectProductsModel
 
+import com.example.shopify.BottomNavigationBar.Favorite.model.FavDraftOrderResponse
+import com.example.shopify.Models.orderList.RetriveOrderModel
+import com.example.shopify.Models.products.CollectProductsModel
 import com.example.shopify.model.Brands.BrandModel
 import com.example.shopify.model.addressModel.Address
 import com.example.shopify.model.addressModel.AddressesModel
-
 import com.example.shopify.model.createCustomerRequest
 import com.example.shopify.model.draftModel.DraftOrderResponse
 import com.example.shopify.model.draftModel.Draft_orders_list
 import com.example.shopify.model.createCustomersResponse
 import com.example.shopify.model.productDetails.ProductModel
-
-
 import com.example.shopify.ShoppingCart.model.PriceRulesResponse
+import com.example.shopify.model.PostOrders.PostOrderModel
+import com.example.shopify.model.RetriveOrder.RetriveOrder
 import com.example.shopify.model.addressModel.AddNewAddress
 import com.example.shopify.utility.Constants
 import retrofit2.Response
@@ -59,8 +60,6 @@ interface ShopifyService {
     @Headers("X-Shopify-Access-Token: ${Constants.adminApiAccessToken}")
     @PUT("admin/api/2024-04/draft_orders/{id}.json")
     suspend fun updateDraftOrder(@Path("id") id: String, @Body order: DraftOrderResponse): Response<DraftOrderResponse>
-
-
 
     //Get Brands
     @Headers("X-Shopify-Access-Token: ${Constants.adminApiAccessToken}")
@@ -115,6 +114,50 @@ interface ShopifyService {
     @DELETE("admin/api/2024-04/customers/{customerId}/addresses/{addressId}.json")
     suspend fun removeCustomerAddresse(@Path(value = "customerId") customerId:Long ,@Path(value = "addressId") addressId:Long )
 
+    @Headers("X-Shopify-Access-Token: ${Constants.adminApiAccessToken}")
+    @GET("admin/api/2024-04/draft_orders/{draft_order_id}.json")
+    suspend fun getFavDraftOrders(@Path(value = "draft_order_id")draftOrderId:Long): Response<FavDraftOrderResponse>
 
+    @Headers("X-Shopify-Access-Token: ${Constants.adminApiAccessToken}")
+    @POST("admin/api/2024-04/draft_orders.json")
+   suspend fun createFavDraftOrders(@Body order: FavDraftOrderResponse): Response<FavDraftOrderResponse>
+
+    @Headers("X-Shopify-Access-Token: ${Constants.adminApiAccessToken}")
+    @PUT("admin/api/2024-04/draft_orders/{draft_order_id}.json")
+    suspend fun updateFavDraftOrder(@Path(value = "draft_order_id") draftId:Long, @Body order: FavDraftOrderResponse): Response<FavDraftOrderResponse>
+
+    @Headers("X-Shopify-Access-Token: ${Constants.adminApiAccessToken}")
+    @DELETE("admin/api/2024-04/draft_orders/{draft_order_id}.json")
+    suspend fun deleteFavDraftOrder(@Path(value = "draft_order_id") draftId:Long): Response<FavDraftOrderResponse>
+
+
+
+    //change defult address for the customer
+    @Headers("X-Shopify-Access-Token: ${Constants.adminApiAccessToken}")
+    @PUT("admin/api/2024-04/customers/{customerId}/addresses/{addressId}/default.json")
+    suspend fun makeAddressDefault(@Path(value="customerId") customerId:Long, @Path(value="addressId") addressId:Long) :Response<AddressesModel>
+
+    //edit address
+    @Headers("X-Shopify-Access-Token: ${Constants.adminApiAccessToken}")
+    @PUT("admin/api/2024-04/customers/{customerId}/addresses/{addressId}.json")
+    suspend fun editAddress(@Path(value="customerId") customerId:Long, @Path(value="addressId") addressId:Long,@Body addresse: AddNewAddress) :Response<AddressesModel>
+
+
+    // post order
+    @Headers("X-Shopify-Access-Token: ${Constants.adminApiAccessToken}")
+    @POST("admin/api/2024-04/orders.json")
+    suspend fun createOrder(@Body order: PostOrderModel) : Response<RetriveOrder>
+
+
+    // get all orders
+    @Headers("X-Shopify-Access-Token: ${Constants.adminApiAccessToken}")
+    @GET("admin/api/2024-04/orders.json")
+    suspend fun getAllOrders() : Response<RetriveOrderModel>
+
+
+    // get specific order by id
+    @Headers("X-Shopify-Access-Token: ${Constants.adminApiAccessToken}")
+    @GET("admin/api/2024-04/orders/{order_id}.json")
+    suspend fun getOrder(@Path("order_id") orderId: Long): Response<RetriveOrder>
 
 }

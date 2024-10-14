@@ -4,18 +4,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/backgroundColor1"
-    tools:context=".signup.view.SignUpFragment">
 
+    android:background="@color/backgroundColor1"
+    android:layoutDirection="locale"
+    android:textDirection="locale"
+
+    tools:context=".signup.view.SignUpFragment">
+<!--    android:background="@drawable/background"-->
     <TextView
         android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="32dp"
         android:text="@string/create_your_account"
-        android:textSize="32sp"
+        android:layout_width="322dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginEnd="137dp"
+        android:layout_marginStart="28dp"
+        android:textSize="34sp"
         android:textStyle="bold"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -24,21 +32,20 @@
         android:id="@+id/firstname"
         android:layout_width="160dp"
         android:layout_height="39dp"
-        android:layout_marginStart="32dp"
         android:layout_marginTop="28dp"
         android:background="@drawable/edit_text"
         android:ems="10"
         android:hint="@string/first_name"
         android:inputType="text"
         android:paddingStart="16dp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/email"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <EditText
         android:id="@+id/secondname"
         android:layout_width="160dp"
         android:layout_height="39dp"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="45dp"
         android:background="@drawable/edit_text"
         android:ems="10"
         android:hint="@string/second_name"
@@ -51,9 +58,10 @@
 
     <EditText
         android:id="@+id/email"
-        android:layout_width="350dp"
+        android:layout_width="match_parent"
         android:layout_height="41dp"
         android:layout_marginTop="32dp"
+        android:layout_marginHorizontal="18dp"
         android:background="@drawable/edit_text"
         android:ems="10"
         android:hint="@string/email"
@@ -65,16 +73,19 @@
 
     <EditText
         android:id="@+id/password"
-        android:layout_width="350dp"
+        android:layout_width="match_parent"
         android:layout_height="41dp"
         android:layout_marginTop="32dp"
+        android:layout_marginHorizontal="18dp"
         android:background="@drawable/edit_text"
         android:ems="10"
         android:hint="@string/password"
         android:inputType="textPassword"
+        android:layoutDirection="locale"
         android:paddingStart="16dp"
-        app:layout_constraintEnd_toEndOf="@+id/email"
-        app:layout_constraintStart_toStartOf="@+id/email"
+        android:textDirection="locale"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/email" />
 
     <ImageView
@@ -89,9 +100,10 @@
 
     <EditText
         android:id="@+id/confirm"
-        android:layout_width="350dp"
+        android:layout_width="match_parent"
         android:layout_height="41dp"
         android:layout_marginTop="32dp"
+        android:layout_marginHorizontal="18dp"
         android:background="@drawable/edit_text"
         android:ems="10"
         android:hint="@string/confirm_password"
@@ -113,14 +125,14 @@
 
     <Button
         android:id="@+id/signup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_width="156dp"
+        android:layout_height="41dp"
+        android:layout_marginTop="40dp"
         android:width="200dp"
         android:backgroundTint="#000000"
         android:text="@string/signup"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/confirm" />
 
@@ -128,7 +140,7 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="16dp"
         android:text="@string/or"
         android:textSize="24sp"
         android:textStyle="bold"
@@ -140,8 +152,8 @@
     <ImageView
         android:id="@+id/google"
         android:layout_width="133dp"
-        android:layout_height="88dp"
-        android:layout_marginTop="32dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="16dp"
         android:src="@drawable/google"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -152,9 +164,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="80dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:text="@string/aleardy_have_an_account"
-        android:textColor="#C6BDBD"
+        android:textColor="#DCD3D3"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/google" />
@@ -163,14 +175,13 @@
         android:id="@+id/login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginStart="8dp"
+
         android:text="@string/sign_in"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/google"
-        app:layout_constraintHorizontal_bias="0.35"
-        app:layout_constraintStart_toEndOf="@+id/google"
-        app:layout_constraintTop_toBottomOf="@+id/google" />
+        app:layout_constraintBottom_toBottomOf="@+id/textView3"
+        app:layout_constraintStart_toEndOf="@+id/textView3"
+        app:layout_constraintTop_toTopOf="@+id/textView3" />
 
     <ProgressBar
         android:id="@+id/progressBar"

@@ -13,6 +13,7 @@ object RetrofitHelper {
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
+         //  .addCallAdapterFactory(CoroutineCallAdapterFactory())
     }
 
     val apiService: ShopifyService by lazy {

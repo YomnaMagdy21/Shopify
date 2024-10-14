@@ -10,17 +10,19 @@
 
     <TextView
         android:id="@+id/textViewCardList"
+        android:text="@string/my_address"
         android:layout_width="322dp"
-        android:layout_height="69dp"
-        android:layout_marginTop="56dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="30dp"
         android:layout_marginEnd="137dp"
-        android:text="My Address"
-        android:textSize="48sp"
+        android:layout_marginStart="28dp"
+        android:textSize="34sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
@@ -32,9 +34,9 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/RVAddresses"
         android:layout_width="match_parent"
-        android:layout_height="476dp"
+        android:layout_height="456dp"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="4dp"
+        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@+id/AddAddressButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -45,23 +47,51 @@
         android:id="@+id/AddAddressButton"
         android:layout_width="204dp"
         android:layout_height="49dp"
-        android:layout_marginBottom="74dp"
+        android:layout_marginBottom="85dp"
         android:backgroundTint="#000000"
-        android:text="New Address"
+        android:text="@string/new_address"
         android:textSize="20sp"
         app:cornerRadius="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <ImageView
-        android:id="@+id/backImage"
-        android:layout_width="46dp"
-        android:layout_height="29dp"
-        android:layout_marginTop="16dp"
-        android:src="@drawable/chevron_back_sharp_svgrepo_com"
-        app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toTopOf="parent" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/backImage"
+            android:layout_width="46dp"
+            android:layout_height="29dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="300dp"
+            android:src="@drawable/chevron_back_sharp_svgrepo_com"
+            app:layout_constraintStart_toStartOf="@+id/guideline2"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/rightImage"
+            android:layout_width="30dp"
+            android:layout_height="22dp"
+            android:layout_marginTop="17dp"
+            android:src="@drawable/arrow_right16"
+            android:visibility="gone" />
+    </LinearLayout>
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animationView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/animation_1718797747132" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

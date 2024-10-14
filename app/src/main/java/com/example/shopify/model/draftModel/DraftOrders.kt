@@ -5,7 +5,7 @@ import java.io.Serializable
 
 data class DraftOrderResponse(
     var draft_order: DraftOrder?=null
-)
+) : Serializable
 
 data class DraftOrder(
     val admin_graphql_api_id: String?=null,
@@ -36,7 +36,7 @@ data class DraftOrder(
     val total_price: String?=null,
     val total_tax: String?=null,
     val updated_at: String?=null
-)
+) : Serializable
 
 data class Customer(
     val accepts_marketing: Boolean?=null,
@@ -64,7 +64,7 @@ data class Customer(
     val total_spent: String?=null,
     val updated_at: String?=null,
     val verified_email: Boolean?=null
-)
+) : Serializable
 
 data class DefaultAddress(
     val address1: String?=null,
@@ -84,7 +84,7 @@ data class DefaultAddress(
     val province: String?=null,
     val province_code: Any?=null,
     val zip: String?=null
-)
+) : Serializable
 
 data class LineItem(
     val admin_graphql_api_id: String?=null,
@@ -113,14 +113,14 @@ data class LineItem(
 data class NoteAttribute(
     var name: String?=null,
     var value: String?=null
-)
+) : Serializable
 
 data class SmsMarketingConsent(
     val consent_collected_from: String?=null,
     val consent_updated_at: Any?=null,
     val opt_in_level: String?=null,
     val state: String?=null
-)
+) : Serializable
 data class TaxLine(
     val price: String?=null,
     val rate: Double?=null,
@@ -131,7 +131,7 @@ data class TaxLineX(
     val price: String?=null,
     val rate: Double?=null,
     val title: String?=null
-)
+) : Serializable
 
 data class Total_price(
     var subtotal:String?=null,

@@ -86,7 +86,7 @@
 
 
                     <TextView
-                        android:id="@+id/country_value"
+                        android:id="@+id/add_country_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -119,7 +119,7 @@
 
 
                     <TextView
-                        android:id="@+id/city_value"
+                        android:id="@+id/add_city_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -149,7 +149,7 @@
 
 
                     <TextView
-                        android:id="@+id/client_address_value"
+                        android:id="@+id/add_client_address_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -181,7 +181,7 @@
 
 
                     <TextView
-                        android:id="@+id/client_phone_value"
+                        android:id="@+id/add_client_phone_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"

@@ -1,5 +1,9 @@
 package com.example.shopify.BottomNavigationBar.Home.view
 
+import android.app.AlertDialog
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -19,15 +23,20 @@ import com.example.shopify.R
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import com.airbnb.lottie.LottieAnimationView
 import com.example.shopify.BottomNavigationBar.Home.viewModel.HomeViewModel
 import com.example.shopify.BottomNavigationBar.Home.viewModel.HomeViewModelFactory
-import com.example.shopify.databinding.FragmentHomeBinding
+import com.example.shopify.CheckNetwork.InternetStatus
+import com.example.shopify.CheckNetwork.NetworkConectivityObserver
+import com.example.shopify.CheckNetwork.NetworkObservation
 import com.example.shopify.model.ShopifyRepositoryImp
 import com.example.shopify.model.Brands.BrandModel
 import com.example.shopify.model.Brands.SmartCollection
 import com.example.shopify.network.ShopifyRemoteDataSourceImp
 import com.example.shopify.products.view.ProductsFragment
 import com.example.shopify.utility.ApiState
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 
@@ -47,12 +56,13 @@ class HomeFragment : Fragment() , OnBrandClickListener {
     lateinit var smartCollections: List<SmartCollection>
     private lateinit var progressBar: ProgressBar
     private lateinit var etSearch: EditText
+    private lateinit var lottieAnimationView: LottieAnimationView
 
 
    private val images = listOf(
-       R.drawable.ads2 to "CQS68F8QWT59",
-       R.drawable.ads3 to "J6Z2HPJ6MZ5A",
-       R.drawable.ads4 to "B6NQRHJJY9NA"
+       R.drawable.five to "5RCAMKX3N9PK",
+       R.drawable.twentyfive to "TWVXF5BZGCK3",
+       R.drawable.ten to "1JHCBWJGHAWQ"
    )
 
 
@@ -66,6 +76,7 @@ class HomeFragment : Fragment() , OnBrandClickListener {
         brandsRecyclerView = view.findViewById(R.id.rv_brands_in_home)
         progressBar = view.findViewById(R.id.progressBar)
         etSearch = view.findViewById(R.id.search_edit_text)
+        lottieAnimationView = view.findViewById(R.id.lottie_no_data4)
 
 
         smartCollections = listOf()
@@ -87,6 +98,7 @@ class HomeFragment : Fragment() , OnBrandClickListener {
         setBrandData()
         homeViewModel.getBrands()
         setupSearch()
+
     }
 
 
@@ -187,5 +199,13 @@ class HomeFragment : Fragment() , OnBrandClickListener {
             it.title.contains(query, ignoreCase = true)
         }
         brandsAdapter.setBrandsList(filteredList)
+
+        if(filteredList.isEmpty()){
+            lottieAnimationView.visibility = View.VISIBLE
+            brandsRecyclerView.visibility = View.GONE
+        }else{
+            lottieAnimationView.visibility = View.GONE
+            brandsRecyclerView.visibility = View.VISIBLE
+        }
     }
 }

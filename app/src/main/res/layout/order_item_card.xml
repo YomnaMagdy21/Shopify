@@ -3,30 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/card_order_item"
-    android:layout_marginTop="22dp"
+    android:layout_marginVertical="22dp"
     android:layout_marginHorizontal="20dp"
     app:cardCornerRadius="12dp"
     app:cardElevation="10dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
-
-
-
-    <LinearLayout
-        android:id="@+id/ll_order_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:weightSum="2"
-        android:padding="16dp">
-
-
-        <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:id="@+id/iv_order_item"
-            android:src="@drawable/ic_launcher_foreground"/>
 
         <!-- Created At -->
 
@@ -35,6 +18,8 @@
             android:layout_height="match_parent"
             android:id="@+id/ll_order_created_at_row"
             android:orientation="vertical"
+            android:layout_marginStart="10dp"
+            android:padding="15dp"
             android:weightSum="2"
             >
 
@@ -42,24 +27,61 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Product Name"
-                android:textSize="20sp"
+                android:textSize="16sp"
                 android:padding="10dp"
                 android:id="@+id/tv_product_name_value"
                 />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/price"
+            android:padding="6dp"
+            android:textSize="18sp"
+            android:id="@+id/tv_product_price_name"
+            />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="250.00 EGP"
-                android:padding="10dp"
-                android:textSize="20sp"
+                android:padding="6dp"
+                android:textSize="16sp"
                 android:id="@+id/tv_product_price_value"
                 />
+    </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/quantity"
+                android:padding="6dp"
+                android:textSize="18sp"
+                android:id="@+id/tv_product_quantity_name"
+                />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="6"
+                    android:padding="6dp"
+                    android:textSize="16sp"
+                    android:id="@+id/tv_product_quantity_value"
+                    />
+
+        </LinearLayout>
         </LinearLayout>
 
 
-    </LinearLayout>
 
 </androidx.cardview.widget.CardView>

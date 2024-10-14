@@ -9,6 +9,7 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.shopify.R
+import com.example.shopify.setting.currency.CurrencyConverter
 
 class ShoppingCardAdapter(private var items: List<Item>,
                           private val onAddProduct: (Item) -> Unit,
@@ -33,10 +34,12 @@ class ShoppingCardAdapter(private var items: List<Item>,
     override fun onBindViewHolder(holder: ShoppingCardViewHolder, position: Int) {
         val item = items[position]
         holder.titleTextView.text = item.title
-        holder.priceTextView.text = item.price
+        //holder.priceTextView.text = item.price
         holder.numberOfItemsTextView.text = item.numberOfItems.toString()
-        //holder.imageView.setImageResource(item.imageResId)
         Glide.with(holder.itemView.context).load(item.imageUrl).into(holder.imageView)
+
+        val convertedPrice = CurrencyConverter.convertToUSD(item.price.toDouble())
+        holder.priceTextView.text = CurrencyConverter.formatCurrency(convertedPrice)
 
         holder.plusTextView.setOnClickListener {
             onAddProduct(item)

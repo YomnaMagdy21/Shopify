@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">ShopEase</string>
     <string name="create_your_account">Create Your Account</string>
     <string name="email">Email</string>
     <string name="signup">SIGN UP</string>
@@ -16,4 +17,50 @@
     <string name="sale">Sale</string>
     <string name="first_name">Firstname</string>
     <string name="second_name">Secondname</string>
+    <string name="available_sizes">Available Sizes</string>
+    <string name="available_color">Available Colors</string>
+    <string name="you_are_guest">You are guest</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete_fav">Remove product</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
+    <string name="orders">Orders</string>
+    <string name="wishlist">Wishlist</string>
+    <string name="setting">Setting</string>
+    <string name="home">Home</string>
+    <string name="sale_up_to_50">"Sale up to 50% "</string>
+    <string name="Press_on_Photo">Press on Photo!</string>
+    <string name="price_150">Price: 150</string>
+    <string name="subtotal">SubTotal</string>
+    <string name="curruncy">Curruncy</string>
+    <string name="about_us">About Us</string>
+    <string name="logout">Log Out</string>
+    <string name="phone">Phone</string>
+    <string name="confirm">Confirm</string>
+    <string name="my_address">My Address</string>
+    <string name="new_address">New Address</string>
+    <string name="city">City</string>
+    <string name="choose_on_the_map">choose on the map?</string>
+    <string name="edit">edit</string>
+    <string name="place_order">Place Order</string>
+    <string name="reviews">Reviews</string>
+    <string name="suggestions">Suggestions</string>
+    <string name="view_more">View More</string>
+    <string name="add_to_cart">Add to Cart</string>
+    <string name="guest"><![CDATA[Guest ->]]></string>
+    <string name="alert_guest_msg">you don\'t able to use our app, if you want to use it, please login</string>
+    <string name="order_created">Order Created</string>
+    <string name="order_created_msg">Your order has been successfully created.</string>
+    <string name="ok">OK</string>
+    <string name="remove_fav_msg">Are you sure you want to remove this item?</string>
+    <string name="team_member">Team Members:</string>
+    <string name="aboutus_desc">This application is our graduation project. Try using this application and if you find any problems, please contact us to solve them and improve our application.</string>
+    <string name="sara">1. Sarah Ahmed</string>
+    <string name="nermeen">2. Nermen Hemda</string>
+    <string name="yomna">3. Yomna Magdy</string>
+    <string name="language">Language</string>
+    <string name="choose_currency">Choose Currency</string>
+    <string name="choose_language">Chosse Language</string>
+    <string name="english">English</string>
+    <string name="arabic">Arabic</string>
 </resources>

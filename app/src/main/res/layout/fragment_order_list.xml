@@ -5,21 +5,23 @@
     android:layout_height="match_parent"
     android:background="@color/backgroundColor1"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".BottomNavigationBar.OrderList.OrderListFragment">
+    tools:context=".BottomNavigationBar.OrderList.view.OrderListFragment">
 
     <TextView
         android:id="@+id/tv_order_list"
-        android:layout_width="322dp"
-        android:layout_height="69dp"
-        android:layout_marginTop="56dp"
-        android:layout_marginEnd="137dp"
         android:text="@string/order_list_title"
-        android:textSize="48sp"
+        android:layout_width="322dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginEnd="137dp"
+        android:layout_marginStart="28dp"
+        android:textSize="34sp"
         android:textStyle="bold"
-       app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/guideline3"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"  />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline3"
@@ -33,19 +35,62 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:layout_marginBottom="95dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
         app:layout_constraintTop_toBottomOf="@+id/tv_order_list"
         app:layout_constraintVertical_bias="0.088" />
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottie_no_data2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/animation_1718797747132"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        />
+
+    <ProgressBar
+        android:id="@+id/progressBar3"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="gone" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
     <ImageView
         android:id="@+id/iv_backRow"
         android:layout_width="46dp"
         android:layout_height="29dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="300dp"
         android:src="@drawable/chevron_back_sharp_svgrepo_com"
-        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/rightImage"
+        android:layout_width="30dp"
+        android:layout_height="22dp"
+        android:layout_marginTop="17dp"
+        android:src="@drawable/arrow_right16"
+        android:visibility="gone" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

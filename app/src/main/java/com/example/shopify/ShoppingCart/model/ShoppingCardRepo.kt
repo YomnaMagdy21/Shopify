@@ -5,64 +5,61 @@ import com.example.shopify.ShoppingCart.model.PriceRule
 import com.example.shopify.model.draftModel.DraftOrder
 import com.example.shopify.model.draftModel.DraftOrderResponse
 import com.example.shopify.network.RetrofitHelper
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
-class ShoppingCardRepo {
-    suspend fun getPriceRules(): List<PriceRule> {
-        val response = RetrofitHelper.apiService.getPriceRules()
+/*class ShoppingCardRepo {
+
+    private val apiService = RetrofitHelper.apiService
+    suspend fun getPriceRules(): Flow<List<PriceRule>> = flow {
+        val response = apiService.getPriceRules()
         if (response.isSuccessful) {
-            return response.body()?.price_rules ?: emptyList()
+            emit(response.body()?.price_rules ?: emptyList())
         } else {
             throw Exception("Failed to fetch price rules")
         }
     }
 
-    suspend fun createDraftOrder(draftOrder: DraftOrderResponse): DraftOrderResponse? {
-        return try {
-            val response = RetrofitHelper.apiService.postDraftOrders(draftOrder)
+    suspend fun createDraftOrder(draftOrder: DraftOrderResponse): Flow<DraftOrderResponse?> = flow {
+        try {
+            val response = apiService.postDraftOrders(draftOrder)
             if (response.isSuccessful) {
-                response.body()
+                emit(response.body())
             } else {
-                Log.e(
-                    "ShoppingCardRepo",
-                    "Failed to create draft order: ${response.errorBody()?.string()}"
-                )
-                null
+                Log.e("ShoppingCardRepo", "Failed to create draft order: ${response.errorBody()?.string()}")
+                emit(null)
             }
         } catch (e: Exception) {
             Log.e("ShoppingCardRepo", "Exception creating draft order", e)
-            null
+            emit(null)
         }
     }
 
-    suspend fun getDraftOrders(): List<DraftOrder>? {
-        val response = RetrofitHelper.apiService.getDraftOrders()
+    suspend fun getDraftOrders(): Flow<List<DraftOrder>> = flow {
+        val response = apiService.getDraftOrders()
         if (response.isSuccessful) {
-            return response.body()?.draft_orders
+            emit(response.body()?.draft_orders ?: emptyList())
         } else {
-            throw Exception("failed to get draft orders")
+            throw Exception("Failed to get draft orders")
         }
     }
 
-    // Delete draft order
-    suspend fun deleteDraftOrder(id: String): Boolean {
-        val response = RetrofitHelper.apiService.deleteProductFromDraftOrder(id)
+    suspend fun deleteDraftOrder(id: String): Flow<Boolean> = flow {
+        val response = apiService.deleteProductFromDraftOrder(id)
         if (response.isSuccessful) {
-            return response.isSuccessful
-            Log.i("del", "deleteDraftOrder: "+response.isSuccessful)
+            emit(true)
         } else {
-            throw Exception("failed to delete")
+            throw Exception("Failed to delete draft order")
         }
     }
 
-    // Update draft order
-    suspend fun updateDraftOrder(id: String, draftOrder: DraftOrderResponse): DraftOrderResponse? {
-        val response = RetrofitHelper.apiService.updateDraftOrder(id, draftOrder)
+    suspend fun updateDraftOrder(id: String, draftOrder: DraftOrderResponse): Flow<DraftOrderResponse?> = flow {
+        val response = apiService.updateDraftOrder(id, draftOrder)
         if (response.isSuccessful) {
-           return response.body()
-            Log.i("del", "updateDraftOrder: "+response.body())
+            emit(response.body())
         } else {
-            throw Exception("failed to update")
+            throw Exception("Failed to update draft order")
         }
     }
-}
+}*/
 

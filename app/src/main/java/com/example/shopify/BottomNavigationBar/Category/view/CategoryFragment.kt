@@ -1,6 +1,13 @@
 package com.example.shopify.BottomNavigationBar.Category.view
 
 
+import android.content.Context
+
+import android.app.AlertDialog
+
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
+
 import com.example.shopify.R
 import android.os.Bundle
 import android.text.Editable
@@ -19,8 +26,20 @@ import androidx.lifecycle.lifecycleScope
 
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.lottie.LottieAnimationView
 import com.example.shopify.BottomNavigationBar.Category.viewModel.CategoryViewModel
 import com.example.shopify.BottomNavigationBar.Category.viewModel.CategoryViewModelFactory
+
+import com.example.shopify.BottomNavigationBar.Favorite.model.FavDraftOrder
+import com.example.shopify.BottomNavigationBar.Favorite.model.FavDraftOrderResponse
+import com.example.shopify.BottomNavigationBar.Favorite.model.ItemLine
+import com.example.shopify.BottomNavigationBar.Favorite.viewmodel.FavoriteViewModel
+import com.example.shopify.BottomNavigationBar.Favorite.viewmodel.FavoriteViewModelFactory
+
+import com.example.shopify.CheckNetwork.InternetStatus
+import com.example.shopify.CheckNetwork.NetworkConectivityObserver
+import com.example.shopify.CheckNetwork.NetworkObservation
+
 import com.example.shopify.Models.products.CollectProductsModel
 import com.example.shopify.model.Address
 import com.example.shopify.model.Brands.SmartCollection
@@ -30,10 +49,19 @@ import com.example.shopify.model.category.CustomCollection
 import com.example.shopify.model.category.SubCustomCollections
 import com.example.shopify.network.ShopifyRemoteDataSourceImp
 import com.example.shopify.productdetails.view.ProductDetailsFragment
-import com.example.shopify.ShoppingCart.model.ShoppingCardRepo
 import com.example.shopify.ShoppingCart.viewModel.PriceRuleViewModelFactory
 import com.example.shopify.ShoppingCart.viewModel.ShoppingCardViewModel
+import com.example.shopify.model.productDetails.Product
+import com.example.shopify.signup.viewmodel.SignUpViewModel
+import com.example.shopify.signup.viewmodel.SignUpViewModelFactory
 import com.example.shopify.utility.ApiState
+
+import com.example.shopify.utility.SharedPreference
+
+import com.google.android.material.snackbar.Snackbar
+import com.mikhaellopez.circularimageview.CircularImageView
+
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class CategoryFragment : Fragment() , OnCategoryClickListener {
@@ -44,10 +72,10 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
     private lateinit var tvKids: TextView
     private lateinit var tvSale: TextView
 
-    private lateinit var ivTShirts: ImageView
-    private lateinit var ivShoes: ImageView
-    private lateinit var ivAccessories: ImageView
-    private lateinit var ivBlock: ImageView
+    private lateinit var ivTShirts: CircularImageView
+    private lateinit var ivShoes: CircularImageView
+    private lateinit var ivAccessories: CircularImageView
+    private lateinit var ivBlock: CircularImageView
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: CategoryProductsAdapter
@@ -55,6 +83,9 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
     lateinit var categoryViewModel: CategoryViewModel
     lateinit var categoryViewModelFactory: CategoryViewModelFactory
     private lateinit var progressBar: ProgressBar
+    lateinit var signUpViewModel: SignUpViewModel
+    lateinit var signUpViewModelFactory: SignUpViewModelFactory
+
 
 
     private lateinit var shoppingCartViewModel: ShoppingCardViewModel
@@ -62,6 +93,13 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
     private var selectedCollectionId: Long? = null
     private var selectedProductType: SubCustomCollections? = null
     private lateinit var editTextSearch: EditText
+
+    private lateinit var favoriteViewModel: FavoriteViewModel
+    private lateinit var favoriteViewModelFactory: FavoriteViewModelFactory
+    private lateinit var lottieAnimationView: LottieAnimationView
+
+
+
 
 
 
@@ -81,7 +119,8 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
         ivAccessories = view.findViewById(R.id.iv_sub_cat_bags)
         ivBlock = view.findViewById(R.id.iv_sub_cat_block)
         editTextSearch = view.findViewById(R.id.search_edit_text)
-
+        lottieAnimationView = view.findViewById(R.id.lottie_no_data3)
+        lottieAnimationView.visibility = View.GONE
 
         recyclerView = view.findViewById(R.id.rv_products_in_category)
 
@@ -105,10 +144,30 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
             categoryViewModelFactory
         ).get(CategoryViewModel::class.java)
 
+        signUpViewModelFactory = SignUpViewModelFactory(
+            ShopifyRepositoryImp.getInstance(
+                ShopifyRemoteDataSourceImp.getInstance()
+            )
+        )
+
+        signUpViewModel = ViewModelProvider(this, signUpViewModelFactory).get(SignUpViewModel::class.java)
+
+
 
         //shopping card view model initilization
-        val factory = PriceRuleViewModelFactory(ShoppingCardRepo())
+        val shopifyRemoteDataSource = ShopifyRemoteDataSourceImp()
+        val repository = ShopifyRepositoryImp(shopifyRemoteDataSource)
+        val factory = PriceRuleViewModelFactory(repository)
         shoppingCartViewModel = ViewModelProvider(this, factory).get(ShoppingCardViewModel::class.java)
+
+        favoriteViewModelFactory = FavoriteViewModelFactory(
+            ShopifyRepositoryImp.getInstance(
+                ShopifyRemoteDataSourceImp.getInstance()
+            )
+        )
+
+        favoriteViewModel = ViewModelProvider(this, favoriteViewModelFactory).get(FavoriteViewModel::class.java)
+
 
         // Click listeners for sub category
         ivTShirts.setOnClickListener {
@@ -141,8 +200,21 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
         setupSearch()
 
 
-
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        var email =SharedPreference.getUserEmail(requireContext())
+        val draftID = SharedPreference.getDraftOrderId(requireContext(),email)
+
+        if (draftID != 10000000000) {
+            favoriteViewModel.getFavorites(draftID.toLong())
+            Log.d("DraftOrder", "Draft Order ID: $draftID")
+        } else {
+
+            Log.e("DraftOrder", "Draft Order ID not found")
+        }
     }
         
    
@@ -193,56 +265,6 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
     }
 
     
-//    private fun addProductToCart(product: Product) {
-//        val currentUser = FirebaseAuth.getInstance().currentUser
-//        val userEmail = currentUser?.email
-//
-//        Log.d("AddToCart", "Attempting to add product to cart: $product")
-//
-//        if (currentUser != null) {
-//            val variantId = product.variants?.get(0)?.id
-//            if (variantId != null && !categoryViewModel.addedProductIds.contains(variantId)) {
-//                Log.d("AddToCart", "Product not already in cart. Proceeding to add.")
-//                var order = DraftOrder()
-//                order.email = userEmail
-//                var draft_orders = DraftOrderResponse()
-//                order.note = "cart"
-//                var lineItems = LineItem()
-//                lineItems.quantity = 1
-//                lineItems.variant_id = product.variants!![0].id
-//                order.line_items = listOf(lineItems)
-//                var note_attribute = NoteAttribute()
-//                note_attribute.name = "image"
-//                note_attribute.value = product.images!![0].src
-//                order.note_attributes = listOf(note_attribute)
-//                draft_orders = DraftOrderResponse(order)
-//
-//
-//                Log.d("DraftOrder", "Creating Draft Order: $draft_orders")
-//
-//                shoppingCartViewModel.createDraftOrder(draft_orders)
-//
-//                lifecycleScope.launch {
-//                    shoppingCartViewModel.draftOrderResponse.collect { draftOrderResponse ->
-//                        if (draftOrderResponse != null) {
-//                            //add the id
-//                            variantId.let { categoryViewModel.addedProductIds.add(it) }
-//                            Toast.makeText(requireContext(), "Added to cart", Toast.LENGTH_LONG)
-//                                .show()
-//                        } else {
-//                            Toast.makeText(
-//                                requireContext(),
-//                                "Failed to add to cart",
-//                                Toast.LENGTH_LONG
-//                            ).show()
-//                        }
-//                    }
-//                }
-//            }
-//        } else {
-//            Toast.makeText(requireContext(), "User not logged in", Toast.LENGTH_SHORT).show()
-//        }
-//    }
 
     fun setProductList() {
         lifecycleScope.launch {
@@ -251,23 +273,30 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
                     is ApiState.Success<*> -> {
                         progressBar.visibility = View.GONE
                         recyclerView.visibility = View.VISIBLE
+                        lottieAnimationView.visibility = View.GONE
 
 
-                        var products = result.data as CollectProductsModel?
-                        products?.let {
-                            adapter.updateData(it.products)
+                        val products = (result.data as? CollectProductsModel)?.products
+                        if (products.isNullOrEmpty()) {
+                            lottieAnimationView.visibility = View.VISIBLE
+                            recyclerView.visibility = View.GONE
+                        } else {
+                            lottieAnimationView.visibility = View.GONE
+                            recyclerView.visibility = View.VISIBLE
+                            adapter.updateData(products)
                         }
                     }
 
                     is ApiState.Failure -> {
                         progressBar.visibility = View.GONE
                         recyclerView.visibility = View.GONE
-
+                        lottieAnimationView.visibility = View.VISIBLE
                     }
 
                     is ApiState.Loading -> {
                         progressBar.visibility = View.VISIBLE
                         recyclerView.visibility = View.GONE
+                        lottieAnimationView.visibility = View.GONE
 
                     }
 
@@ -283,9 +312,10 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
     private fun selectImageView(selectedImageView: ImageView) {
         val imageViews = listOf(ivTShirts, ivShoes, ivAccessories , ivBlock)
         imageViews.forEach { imageView ->
+            imageView.setPadding(0, 0, 0, 0)
             imageView.setBackgroundResource(R.drawable.rounded_unselected_image_view_filter)
         }
-
+        selectedImageView.setPadding(4, 4, 4, 4)
         selectedImageView.setBackgroundResource(R.drawable.rounded_selected_image_view_filter)
     }
 
@@ -293,6 +323,8 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
 
         val bundle = Bundle()
         bundle.putLong("product_id",id)
+        bundle.putLong("category_id",id)
+
         val fragmentDetails = ProductDetailsFragment()
         fragmentDetails.arguments = bundle
 
@@ -304,6 +336,172 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
 //        transaction.replace(R.id.frame_layout, ProductDetailsFragment() )
 //        transaction.addToBackStack(null)
 //        transaction.commit()
+    }
+
+    override fun onFavBtnClick(product: Product) {
+
+        var email = SharedPreference.getUserEmail(requireContext())
+        var draftID = SharedPreference.getDraftOrderId(requireContext(), email)
+        if (draftID == 10000000000) {
+            val lineItems = listOf(
+                ItemLine(quantity = 1, variant_id = product.variants?.get(0)?.id, sku = "")
+            )
+            val draftOrder = FavDraftOrder(
+
+                line_items = lineItems,
+            )
+
+            var order = FavDraftOrderResponse(draftOrder)
+
+            signUpViewModel.createFavDraftOrders(order)
+            lifecycleScope.launch {
+                signUpViewModel.wishList.collectLatest { result ->
+                    when (result) {
+                        is ApiState.Loading -> {
+
+                        }
+
+                        is ApiState.Success<*> -> {
+                            val wishList = result.data as? FavDraftOrderResponse
+                            wishList?.draft_order?.id?.let {
+                                SharedPreference.saveDraftOrderId(
+                                    requireContext(),
+                                    it, email
+                                )
+                            }
+                            Log.i(
+                                "TAG",
+                                "onViewCreated: draft order in  = ${wishList?.draft_order?.id}"
+                            )
+                            if (wishList != null) {
+
+                                Log.i(
+                                    "TAG",
+                                    "onViewCreated: draft order in  product fragment = ${wishList?.draft_order?.id}"
+                                )
+                            }
+                        }
+
+                        else -> {
+
+                        }
+                    }
+                }
+            }
+        }
+
+        else {
+            fetchDraftOrder(draftID) { draftOrder ->
+                val productTitle = product.title
+                val productVariantId = product.variants?.get(0)?.id
+                val productImageSrc = product.image?.src
+
+                Log.i(
+                    "TAG",
+                    "Product details: title=$productTitle, variantId=$productVariantId, imageSrc=$productImageSrc"
+                )
+
+                if (productTitle != null && productVariantId != null && productImageSrc != null) {
+                    val newLineItem = ItemLine(
+                        title = productTitle,
+                        variant_id = productVariantId,
+                        quantity = 1,
+                        sku = productImageSrc
+                    )
+
+
+                    Log.i("TAG", "New Line Item: $newLineItem")
+
+                    val updatedLineItems =
+                        draftOrder?.line_items?.toMutableList() ?: mutableListOf()
+
+
+                    val itemExists =
+                        updatedLineItems.any { it.variant_id == newLineItem.variant_id }
+
+                    if (!itemExists) {
+                        updatedLineItems.add(newLineItem)
+                        Log.i(
+                            "TAG",
+                            "onViewCreated: updatedLineItems22222 ${updatedLineItems}"
+                        )
+                        val favDraftOrder = FavDraftOrder(
+                            id = draftID,
+                            line_items = updatedLineItems
+                        )
+                        val favDraftOrderResponse = FavDraftOrderResponse(favDraftOrder)
+
+                        Log.i(
+                            "TAG",
+                            "onFavBtnClick: favDraftOrderResponse${favDraftOrderResponse}"
+                        )
+
+                        favoriteViewModel.updateFavorite(
+                            draftID,
+                            favDraftOrderResponse
+                        )
+                    }
+
+                    Log.i("TAG", "Before update: $updatedLineItems")
+
+
+
+                } else {
+                    Log.e(
+                        "TAG",
+                        "Product details are incomplete. Title: $productTitle, VariantId: $productVariantId, ImageSrc: $productImageSrc"
+                    )
+                }
+            }
+        }
+
+
+
+            }
+
+
+
+    override fun onClickToRemove(id: Long) {
+        var email = SharedPreference.getUserEmail(requireContext())
+        var draftID = SharedPreference.getDraftOrderId(requireContext(),email)
+
+        if (draftID != 10000000000) {
+            fetchDraftOrder(draftID) { draftOrder ->
+                val updatedLineItems = draftOrder?.line_items?.toMutableList() ?: mutableListOf()
+                Log.i("TAG", "Initial updatedLineItems: $updatedLineItems")
+
+                val itemToRemove = updatedLineItems.find { it.variant_id == id }
+
+                if (itemToRemove != null) {
+                    updatedLineItems.remove(itemToRemove)
+                    Log.i("TAG", "Updated updatedLineItems after removal: $updatedLineItems")
+
+                    val favDraftOrder = FavDraftOrder(
+                        id = draftID,
+                        line_items = updatedLineItems
+                    )
+                    val favDraftOrderResponse = FavDraftOrderResponse(favDraftOrder)
+
+                    favoriteViewModel.updateFavorite(draftID, favDraftOrderResponse)
+                    favoriteViewModel.deleteFavorite(id)
+                } else {
+                    Log.i("TAG", "Item not found in updatedLineItems")
+                }
+
+                if (draftOrder?.id == null) {
+                    Log.i("TAG", "deleteFav: draftOrder.id is null, saving default id")
+                    SharedPreference.saveDraftOrderId(requireContext(), 10000000000, email)
+                } else {
+                    Log.i("TAG", "deleteFav: draft order id is ${draftOrder.id}")
+
+                    SharedPreference.saveDraftOrderId(requireContext(), draftOrder.id, email)
+                }
+            }
+        } else {
+            Log.e("DraftOrder", "Draft Order ID not found")
+        }
+
+
     }
 
     fun setupSearch(){
@@ -333,4 +531,37 @@ class CategoryFragment : Fragment() , OnCategoryClickListener {
         }
 
     }
+    private fun fetchDraftOrder(draftOrderId: Long, callback: (FavDraftOrder?) -> Unit) {
+        favoriteViewModel.getFavorites(draftOrderId)
+        lifecycleScope.launch {
+            favoriteViewModel.fav.collectLatest { result ->
+                when (result) {
+                    is ApiState.Success<*> -> {
+                        val data = result.data as? FavDraftOrderResponse
+                        callback(data?.draft_order)
+                    }
+
+                    else -> {
+                        callback(null)
+                    }
+                }
+            }
+        }
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
